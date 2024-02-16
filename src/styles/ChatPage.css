@@ -1,0 +1,109 @@
+.chat_container{
+    /* From https://css.glass */
+    background: rgba(255, 255, 255, 0.57);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(6.6px);
+    -webkit-backdrop-filter: blur(6.6px);
+    padding: 15px;
+    height: 80vh;
+    width: 70vw;
+    margin: 20px auto;
+    /* border: 2px solid black; */
+    border-radius: 30px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.chat{
+    /* background-color: gainsboro; */
+    height: 87%;
+    overflow: auto; /* This property adds a scrollbar when content overflows */
+}
+
+.input_container{
+    /* background-color: green; */
+    margin-top: 20px;
+    padding: 10px;
+    height: 13%;
+
+    display: flex;
+}
+
+
+.input{
+    height: 60px;
+    border: none;
+    outline: none;
+    width: 85%;
+    font-size: 25px;
+    padding: 10px 30px;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+    background-color: rgb(238, 238, 238);
+}
+
+.button{
+    /* background-color: rgb(151, 129, 31); */
+    width: 15%;
+    border: none;
+    cursor: pointer;
+    height: 80px;
+    padding: 0 20px;
+
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+
+    transition: all ease .4s;
+}
+
+.button:hover{
+    font-size: 40px;
+    /* transform: scale(2); */
+}
+
+.user_messages_container{
+    /* background-color: aquamarine; */
+
+    display: flex;
+    justify-content: flex-end;
+}
+
+.chat_messages_container{
+    /* background-color: blueviolet; */
+
+    display: flex;
+    justify-content: flex-start;
+}
+
+.user_messages{
+    background-color: rgb(247, 178, 51);
+    width: 50%;
+    padding: 10px;
+    margin: 10px;
+    padding-bottom: 30px;
+    padding-left: 30px;
+    padding-right: 15px;
+    text-align: start;
+
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 20px;
+}
+
+.chat_messages{
+    background-color: rgb(230, 230, 230);
+    width: 50%;
+    padding: 10px;
+    margin: 10px;
+
+    padding-bottom: 30px;
+    padding-left: 30px;
+    padding-right: 15px;
+    text-align: start;
+
+    border-bottom-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 20px;
+}
