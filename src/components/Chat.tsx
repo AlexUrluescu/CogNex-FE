@@ -63,7 +63,7 @@ const Chat = () => {
     formData.append("pdf", file);
 
     axios
-      .post("http://127.0.0.1:50000/extract", formData)
+      .post("http://127.0.0.1:5000/extract", formData)
       .then((response) => {
         console.log("PDF uploaded successfully:", response.data);
       })

@@ -27,7 +27,7 @@ const ChatPage = () => {
   };
 
   const handleClick = async () => {
-    const res = await fetch(`${url}/test`);
+    const res = await fetch("http://127.0.0.1:5000/test");
     const data = await res.json();
 
     console.log("data", data);
