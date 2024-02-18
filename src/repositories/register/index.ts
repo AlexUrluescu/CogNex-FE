@@ -15,6 +15,10 @@ export class RegisterRepository {
 
       const data = await res.json();
 
+      if (data.user === undefined || data.sucess === false) {
+        return;
+      }
+
       return data;
     } catch (error) {
       return error;

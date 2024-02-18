@@ -35,6 +35,7 @@ const Register = () => {
     console.log("contentRegisterForm", contentRegisterForm);
 
     RegisterFlow.registerNewUser(contentRegisterForm);
+    setContentRegisterForm(initialContentRegisterForm);
   };
 
   return (
@@ -45,22 +46,26 @@ const Register = () => {
           onChange={handleRegisterFormChange}
           name="firstName"
           placeholder="firstName"
+          value={contentRegisterForm.firstName}
         />
         <input
           onChange={handleRegisterFormChange}
           name="lastName"
           placeholder="lastName"
+          value={contentRegisterForm.lastName}
         />
         <input
           onChange={handleRegisterFormChange}
           name="email"
           placeholder="email"
+          value={contentRegisterForm.email}
         />
         <input
           onChange={handleRegisterFormChange}
           type="number"
           name="age"
           placeholder="age"
+          value={contentRegisterForm.age}
         />
 
         <input
@@ -68,6 +73,7 @@ const Register = () => {
           type="password"
           name="password"
           placeholder="password"
+          value={contentRegisterForm.password}
         />
 
         <button type="submit">Register</button>

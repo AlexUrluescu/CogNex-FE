@@ -8,7 +8,7 @@ class RegisterFlow {
 
     const newUser = await this.registerRepository.registerNewUser(user);
 
-    console.log("newUser", newUser);
+    console.log("newUser", newUser.user);
   }
 }
 
