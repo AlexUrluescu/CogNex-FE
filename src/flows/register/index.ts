@@ -6,10 +6,13 @@ class RegisterFlow {
   registerRepository = new RegisterRepository();
   async registerNewUser(user: IUser) {
     const newUser = await this.registerRepository.registerNewUser(user);
+
+    return newUser;
   }
 
   async loginUser(user: UserLogin) {
     const loggedUser = await this.registerRepository.loginUser(user);
+    return loggedUser;
   }
 }
 

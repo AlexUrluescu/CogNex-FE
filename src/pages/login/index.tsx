@@ -1,4 +1,5 @@
 import { RegisterFlow } from "@/flows/register";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 interface IForm {
@@ -13,10 +14,15 @@ const initialFormValues = {
 
 const Login = () => {
   const [inputs, setInputs] = useState<IForm>(initialFormValues);
-  const handleLogin = (e: any) => {
-    e.preventDefault();
+  const router = useRouter();
 
-    RegisterFlow.loginUser(inputs);
+  const handleLogin = async (e: any) => {
+    e.preventDefault();
+    const loggedUser = await RegisterFlow.loginUser(inputs);
+
+    if (loggedUser !== undefined) {
+      router.push("/");
+    }
   };
 
   const handleInputsChange = (e: React.ChangeEvent<HTMLInputElement>) => {

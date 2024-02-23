@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import Chat from "../components/Chat";
+import { useRouter } from "next/router";
 
 const ChatPage = () => {
   const [pdfUrl, setPdfUrl] = useState<any>(null);
+  const router = useRouter();
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {};
 
   const url = process.env.NEXT_PUBLIC_ROUTE;
@@ -54,6 +56,7 @@ const ChatPage = () => {
         <input type="text" onChange={handleChange}></input>
         <button onClick={handleSend}>send</button>
       </div>
+      <button onClick={() => router.push("/login")}>Login</button>
       <Chat />
     </div>
   );

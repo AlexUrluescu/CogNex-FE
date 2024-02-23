@@ -1,4 +1,5 @@
 import { RegisterFlow } from "@/flows/register";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 type ICcontentRegisterForm = {
@@ -23,19 +24,23 @@ const Register = () => {
   const [contentRegisterForm, setContentRegisterForm] =
     useState<ICcontentRegisterForm>(initialContentRegisterForm);
 
+  const router = useRouter();
+
   const handleRegisterFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
     setContentRegisterForm({ ...contentRegisterForm, [name]: value });
   };
 
-  const handleRegisterFormSubmit = (e: any) => {
+  const handleRegisterFormSubmit = async (e: any) => {
     e.preventDefault();
 
-    console.log("contentRegisterForm", contentRegisterForm);
+    const newUser = await RegisterFlow.registerNewUser(contentRegisterForm);
 
-    RegisterFlow.registerNewUser(contentRegisterForm);
-    setContentRegisterForm(initialContentRegisterForm);
+    if (newUser !== undefined) {
+      router.push("/login");
+      setContentRegisterForm(initialContentRegisterForm);
+    }
   };
 
   return (

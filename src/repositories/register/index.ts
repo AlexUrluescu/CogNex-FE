@@ -3,6 +3,8 @@ import { UserLogin } from "@/types";
 
 export class RegisterRepository {
   async registerNewUser(user: IUser) {
+    console.log("intra");
+
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/register`, {
         method: "POST",
