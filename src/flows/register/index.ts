@@ -1,14 +1,15 @@
 import { IUser } from "@/domain/user";
 import { RegisterRepository } from "@/repositories/register";
+import { UserLogin } from "@/types";
 
 class RegisterFlow {
   registerRepository = new RegisterRepository();
   async registerNewUser(user: IUser) {
-    console.log("user", user);
-
     const newUser = await this.registerRepository.registerNewUser(user);
+  }
 
-    console.log("newUser", newUser.user);
+  async loginUser(user: UserLogin) {
+    const loggedUser = await this.registerRepository.loginUser(user);
   }
 }
 
