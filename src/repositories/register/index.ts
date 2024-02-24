@@ -38,6 +38,12 @@ export class RegisterRepository {
 
       const data = await res.json();
 
+      if (data.user === null) {
+        alert(data.message);
+      }
+
+      console.log(data);
+
       if (data.user === undefined || data.ok === false) {
         return;
       }
