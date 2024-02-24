@@ -2,7 +2,7 @@ import React, { useReducer, useState } from "react";
 import Chat from "../components/Chat";
 import { useRouter } from "next/router";
 
-const ChatPage = () => {
+const ChatPage = ({ currentUser }: any) => {
   const [pdfUrl, setPdfUrl] = useState<any>(null);
   const router = useRouter();
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {};
@@ -42,10 +42,24 @@ const ChatPage = () => {
     }
   };
 
+  if (currentUser === undefined) {
+    return;
+  }
+
   return (
     <div>
       <div>
         <h1>CogNex</h1>
+        <span>Files</span>
+        {currentUser.files.length > 0 ? (
+          <div>
+            {currentUser.files.map((fileName: any) => (
+              <span key={fileName}>{fileName}</span>
+            ))}
+          </div>
+        ) : (
+          "no files uploaded"
+        )}
         {pdfUrl ? (
           <a href={pdfUrl} target="_blank" rel="noopener noreferrer">
             View PDF

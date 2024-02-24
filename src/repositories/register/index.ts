@@ -5,13 +5,15 @@ export class RegisterRepository {
   async registerNewUser(user: IUser) {
     console.log("intra");
 
+    const resgiterUser = { ...user, files: [] };
+
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ user }),
+        body: JSON.stringify({ resgiterUser }),
       });
 
       const data = await res.json();

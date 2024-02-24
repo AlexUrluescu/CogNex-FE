@@ -35,7 +35,9 @@ const Chat = () => {
       return;
     }
 
-    setCurrentUser(JSON.parse(user));
+    console.log("user", user);
+
+    // setCurrentUser(JSON.parse(user));
   }, []);
 
   const handleCheckboxChange = () => {
