@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import pdfjs from 'pdfjs-dist/build/pdf';
+import React, { useState } from "react";
+import pdfjs from "pdfjs-dist/build/pdf";
 
 const PdfContentExtractor = () => {
-  const [extractedContent, setExtractedContent] = useState('');
+  const [extractedContent, setExtractedContent] = useState("");
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -16,13 +16,13 @@ const PdfContentExtractor = () => {
 
           loadingTask.promise
             .then((pdf) => {
-              let textContent = '';
+              let textContent = "";
               const numPages = pdf.numPages;
               const getPageText = (pageNum) => {
                 return pdf.getPage(pageNum).then((page) => {
                   return page.getTextContent().then((content) => {
                     const pageText = content.items.map((item) => item.str);
-                    return pageText.join(' ');
+                    return pageText.join(" ");
                   });
                 });
               };
@@ -33,25 +33,23 @@ const PdfContentExtractor = () => {
               }
 
               Promise.all(promises).then((pageTexts) => {
-                textContent = pageTexts.join(' ');
+                textContent = pageTexts.join(" ");
                 setExtractedContent(textContent);
               });
             })
             .catch((error) => {
-              console.error('Error reading PDF:', error);
+              console.error("Error reading PDF:", error);
             });
         };
 
         reader.readAsArrayBuffer(file);
       } catch (error) {
-        console.error('Error reading or extracting PDF content:', error);
+        console.error("Error reading or extracting PDF content:", error);
       }
     }
   };
 
-  const handleLogContent = () => {
-    console.log('Extracted text content:', extractedContent);
-  };
+  const handleLogContent = () => {};
 
   return (
     <div>
