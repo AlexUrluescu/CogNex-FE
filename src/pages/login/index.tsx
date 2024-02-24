@@ -23,6 +23,10 @@ const Login = () => {
     if (loggedUser !== undefined) {
       router.push("/");
     }
+
+    const loggedUserSerialized = JSON.stringify(loggedUser);
+
+    localStorage.setItem("user", loggedUserSerialized);
   };
 
   const handleInputsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
