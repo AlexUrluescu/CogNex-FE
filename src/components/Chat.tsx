@@ -26,6 +26,18 @@ const Chat = () => {
 
   const [isChecked, setChecked] = useState<boolean>(false);
 
+  const [currentUser, setCurrentUser] = useState<any>();
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+
+    if (user === null) {
+      return;
+    }
+
+    setCurrentUser(JSON.parse(user));
+  }, []);
+
   const handleCheckboxChange = () => {
     setChecked(!isChecked);
   };
@@ -61,6 +73,7 @@ const Chat = () => {
   const uploadPdf = () => {
     const formData = new FormData();
     formData.append("pdf", file);
+    formData.append("userId", currentUser._id);
 
     axios
       .post("http://127.0.0.1:5000/extract", formData)
