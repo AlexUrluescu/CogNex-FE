@@ -2,11 +2,48 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import ChatPage from "@/components/ChatPage";
 import { useEffect, useState } from "react";
+import { UserFlow } from "@/flows/users";
+import { IUser, User } from "@/domain/user";
+import { useDispatch } from "react-redux";
+import { setAllUsers, setCurrentUser } from "@/state/appData/appDataSlice";
+import { useSelector } from "react-redux";
+import { getCurrentUser } from "@/state/appData/selectors";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const [currentUser, setCurrentUser] = useState<any>();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchAllUsers = async () => {
+      try {
+        const res = await fetch("http://127.0.0.1:5000/users");
+        const data = await res.json();
+
+        // console.log("users", data.users);
+        const users: User[] = data.users;
+        UserFlow.userList = Array.from(new Set([...users])).reduce(
+          (acc, user) => {
+            acc[user._id] = new User(user);
+            return acc;
+          },
+          {} as Record<any, IUser>
+        );
+
+        dispatch(setAllUsers(data.users));
+
+        const user = users[0];
+
+        const test = UserFlow.userList[user._id];
+
+        // console.log("test", test);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchAllUsers();
+  }, []);
+  // const [currentUser, setCurrentUser] = useState<any>();
   useEffect(() => {
     const fetchCurrentUser = async (userId: string) => {
       const res = await fetch(
@@ -14,25 +51,31 @@ export default function Home() {
       );
       const data = await res.json();
 
-      setCurrentUser(data.user);
+      // console.log("data", data);
 
-      const loggedUserSerialized = JSON.stringify(data.user);
+      dispatch(setCurrentUser(data.user._id));
 
-      localStorage.setItem("user", loggedUserSerialized);
+      const userLoggedId = JSON.stringify(data.user._id);
+
+      // console.log("loggedUserSerialized", userLoggedId);
+
+      localStorage.setItem("user", userLoggedId);
     };
 
     const user = localStorage.getItem("user");
 
-    console.log("user", user);
+    // console.log("user", user);
 
     if (user !== null) {
-      const testUser = JSON.parse(user);
-      fetchCurrentUser(testUser._id);
+      const userId = JSON.parse(user);
+      fetchCurrentUser(userId);
     }
   }, []);
+
+  const user = useSelector(getCurrentUser);
   return (
     <main>
-      <ChatPage currentUser={currentUser} />
+      <ChatPage />
     </main>
   );
 }

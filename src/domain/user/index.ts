@@ -7,6 +7,7 @@ export interface IUser {
   email: string;
   age: string;
   password: string;
+  files?: string[];
 }
 
 export class User implements IUser {

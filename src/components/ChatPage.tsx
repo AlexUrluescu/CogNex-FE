@@ -4,11 +4,11 @@ import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
 import { useDispatch } from "react-redux";
-import { decrement, increment } from "@/state/counter/counterSlice";
+import { getAllUsers, getCurrentUser } from "@/state/appData/selectors";
 
-const ChatPage = ({ currentUser }: any) => {
-  const counter = useSelector((state: RootState) => state.counter.value);
-  const dispatch = useDispatch();
+const ChatPage = () => {
+  const currentUser = useSelector(getCurrentUser);
+  const allUsers = useSelector(getAllUsers);
   const [pdfUrl, setPdfUrl] = useState<any>(null);
   const router = useRouter();
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {};
@@ -29,7 +29,7 @@ const ChatPage = ({ currentUser }: any) => {
 
       const data = await res.json();
 
-      console.log("data", data);
+      // console.log("data", data);
     } catch (error) {
       console.log(error);
     }
@@ -40,7 +40,7 @@ const ChatPage = ({ currentUser }: any) => {
       const response = await fetch("http://127.0.0.1:5000/pdfs/ro_test.pdf");
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
-      console.log("url", url);
+      // console.log("url", url);
 
       setPdfUrl(url);
     } catch (error) {
@@ -52,25 +52,18 @@ const ChatPage = ({ currentUser }: any) => {
     return;
   }
 
-  const handleIncrement = () => {
-    console.log("incremnet");
-    dispatch(increment());
-  };
-
-  const handleDecrement = () => {
-    console.log("decrement");
-    dispatch(decrement());
-  };
+  console.log("currentUser", currentUser);
+  console.log("allUsers", allUsers);
 
   return (
     <div>
       <div>
         <h1>CogNex</h1>
-        <button onClick={handleIncrement}>increment</button>
-        <button onClick={handleDecrement}>decrement</button>
-        <span>{counter}</span>
+        <span>
+          WELCOME {currentUser.firstName} {currentUser.lastName}
+        </span>
         <span>Files</span>
-        {currentUser.files.length > 0 ? (
+        {/* {currentUser.files.length > 0 ? (
           <div>
             {currentUser.files.map((fileName: any) => (
               <span key={fileName}>{fileName}</span>
@@ -78,7 +71,7 @@ const ChatPage = ({ currentUser }: any) => {
           </div>
         ) : (
           "no files uploaded"
-        )}
+        )} */}
         {pdfUrl ? (
           <a href={pdfUrl} target="_blank" rel="noopener noreferrer">
             View PDF
