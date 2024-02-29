@@ -1,8 +1,14 @@
 import React, { useReducer, useState } from "react";
 import Chat from "../components/Chat";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { RootState } from "@/state/store";
+import { useDispatch } from "react-redux";
+import { decrement, increment } from "@/state/counter/counterSlice";
 
 const ChatPage = ({ currentUser }: any) => {
+  const counter = useSelector((state: RootState) => state.counter.value);
+  const dispatch = useDispatch();
   const [pdfUrl, setPdfUrl] = useState<any>(null);
   const router = useRouter();
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {};
@@ -46,10 +52,23 @@ const ChatPage = ({ currentUser }: any) => {
     return;
   }
 
+  const handleIncrement = () => {
+    console.log("incremnet");
+    dispatch(increment());
+  };
+
+  const handleDecrement = () => {
+    console.log("decrement");
+    dispatch(decrement());
+  };
+
   return (
     <div>
       <div>
         <h1>CogNex</h1>
+        <button onClick={handleIncrement}>increment</button>
+        <button onClick={handleDecrement}>decrement</button>
+        <span>{counter}</span>
         <span>Files</span>
         {currentUser.files.length > 0 ? (
           <div>
