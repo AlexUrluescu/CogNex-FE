@@ -6,6 +6,8 @@ import { RootState } from '@/state/store'
 import { useDispatch } from 'react-redux'
 import { getAllUsers, getCurrentUser } from '@/state/appData/selectors'
 
+import { Button } from 'antd'
+
 const ChatPage = () => {
   const currentUser = useSelector(getCurrentUser)
   const allUsers = useSelector(getAllUsers)
@@ -68,6 +70,7 @@ const ChatPage = () => {
         ) : (
           "no files uploaded"
         )} */}
+        <Button onClick={() => console.log('is working')}>Click me</Button>
         {pdfUrl ? (
           <a href={pdfUrl} target="_blank" rel="noopener noreferrer">
             View PDF
