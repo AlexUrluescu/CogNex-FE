@@ -1,37 +1,37 @@
-import { IUser } from "@/domain/user";
-import { UserFlow } from "@/flows/users";
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { IUser, User } from '@/domain/user'
+import { UserFlow } from '@/flows/users'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 interface IAppDataState {
-  currentUser: IUser;
-  users: IUser[];
+  currentUser: IUser
+  users: IUser[]
 }
 
 const initialState: IAppDataState = {
   currentUser: {
     _id: undefined,
-    email: "",
+    email: '',
     files: [],
-    firstName: "",
-    lastName: "",
-    age: "",
-    password: "",
+    firstName: '',
+    lastName: '',
+    age: '',
+    password: '',
   },
   users: [],
-};
+}
 
 const appDataSlice = createSlice({
-  name: "appData",
+  name: 'appData',
   initialState,
   reducers: {
-    setCurrentUser: (state, action: PayloadAction<string>) => {
-      state.currentUser = UserFlow.userList[action.payload];
+    setCurrentUser: (state, action: PayloadAction<IUser>) => {
+      state.currentUser = action.payload
     },
     setAllUsers: (state, action: PayloadAction<IUser[]>) => {
-      state.users = action.payload;
+      state.users = action.payload
     },
   },
-});
+})
 
-export const { setCurrentUser, setAllUsers } = appDataSlice.actions;
-export default appDataSlice.reducer;
+export const { setCurrentUser, setAllUsers } = appDataSlice.actions
+export default appDataSlice.reducer
