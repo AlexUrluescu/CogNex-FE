@@ -1,17 +1,17 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React from 'react'
+import { useState, useEffect } from 'react'
 
 // import pdfjs from 'pdfjs-dist/build/pdf';
 
 //styles
 // import "@/styles/ChatPage.css";
 // COMPONENTS ---------------------------
-import Input from "./Input";
-import ButtonCustom from "./ButtonCustom";
-import UploadFile from "./UploadFile";
-import PdfContentExtractor from "./PdfContentExtractor";
+import Input from './Input'
+import ButtonCustom from './ButtonCustom'
+import UploadFile from './UploadFile'
+import PdfContentExtractor from './PdfContentExtractor'
 // import YourComponent from "./YourComponent";
-import axios from "axios";
+import axios from 'axios'
 
 // import { useState } from "react";
 // import { io } from "socket.io-client";
@@ -19,34 +19,32 @@ import axios from "axios";
 // const socket = io("ws://localhost:50000");
 
 const Chat = () => {
-  const [inputValue, setInputValue] = useState<any>("");
-  const [serverMessage, setServerMessage] = useState<any>({});
-  const [chatMessages, setChatMessages] = useState<any>([]);
-  const [file, setFile] = useState<any>();
+  const [inputValue, setInputValue] = useState<any>('')
+  const [serverMessage, setServerMessage] = useState<any>({})
+  const [chatMessages, setChatMessages] = useState<any>([])
+  const [file, setFile] = useState<any>()
 
-  const [isChecked, setChecked] = useState<boolean>(false);
+  const [isChecked, setChecked] = useState<boolean>(false)
 
-  const [currentUser, setCurrentUser] = useState<any>();
+  const [currentUser, setCurrentUser] = useState<any>()
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
+    const user = localStorage.getItem('user')
 
     if (user === null) {
-      return;
+      return
     }
 
-    console.log("user", user);
-
     // setCurrentUser(JSON.parse(user));
-  }, []);
+  }, [])
 
   const handleCheckboxChange = () => {
-    setChecked(!isChecked);
-  };
+    setChecked(!isChecked)
+  }
 
   const handleChangeInput = (e: any) => {
-    setInputValue(e.target.value);
-  };
+    setInputValue(e.target.value)
+  }
 
   const handleButtonSend = async () => {
     // const formData = new FormData();
@@ -64,7 +62,7 @@ const Chat = () => {
     // console.log(data);
     // // const res = await data.json()
     // // console.log(res.message);
-  };
+  }
 
   // socket.on("from-server", (chatMessage) => {
   //   setServerMessage(chatMessage);
@@ -73,65 +71,65 @@ const Chat = () => {
   // });
 
   const uploadPdf = () => {
-    const formData = new FormData();
-    formData.append("pdf", file);
-    formData.append("userId", currentUser._id);
+    const formData = new FormData()
+    formData.append('pdf', file)
+    formData.append('userId', currentUser._id)
 
     axios
-      .post("http://127.0.0.1:5000/extract", formData)
+      .post('http://127.0.0.1:5000/extract', formData)
       .then((response) => {
-        console.log("PDF uploaded successfully:", response.data);
+        console.log('PDF uploaded successfully:', response.data)
       })
       .catch((error) => {
-        console.error("Error uploading PDF:", error);
-      });
-  };
+        console.error('Error uploading PDF:', error)
+      })
+  }
 
   const sendToServer = async (e: any) => {
     try {
-      e.preventDefault();
+      e.preventDefault()
       let clientMessage = {
-        role: "client",
+        role: 'client',
         message: inputValue,
-      };
+      }
       // socket.emit("to-server", clientMessage);
 
-      setChatMessages((prevMessages: any) => [...prevMessages, clientMessage]);
-      setInputValue("");
+      setChatMessages((prevMessages: any) => [...prevMessages, clientMessage])
+      setInputValue('')
 
-      const res = await fetch("http://127.0.0.1:50000/chat", {
-        method: "POST",
+      const res = await fetch('http://127.0.0.1:50000/chat', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(clientMessage),
-      });
+      })
 
-      const data = await res.json();
+      const data = await res.json()
 
-      setServerMessage(data);
+      setServerMessage(data)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
   useEffect(() => {
     try {
       if (serverMessage.role === undefined) {
-        return;
+        return
       }
-      setChatMessages((prevMessages: any) => [...prevMessages, serverMessage]);
+      setChatMessages((prevMessages: any) => [...prevMessages, serverMessage])
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  }, [serverMessage]);
+  }, [serverMessage])
 
   return (
     <div className="chat_container">
       <div className="chat">
         {chatMessages.map((message: any, index: any) => (
           <div key={index}>
-            {message.role === "chat" ? (
+            {message.role === 'chat' ? (
               <div className="chat_messages_container">
                 <div className="chat_messages">{message.message}</div>
               </div>
@@ -165,16 +163,12 @@ const Chat = () => {
 
       <div>
         <label>
-          <input
-            type="checkbox"
-            checked={isChecked}
-            onChange={handleCheckboxChange}
-          />
+          <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} />
           Share your data
         </label>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Chat;
+export default Chat

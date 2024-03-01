@@ -1,38 +1,39 @@
-import { RegisterFlow } from "@/flows/register";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
+import { IUser } from '@/domain/user'
+import { RegisterFlow } from '@/flows/register'
+import { useRouter } from 'next/router'
+import React, { useState } from 'react'
 
 interface IForm {
-  email: string;
-  password: string;
+  email: string
+  password: string
 }
 
 const initialFormValues = {
-  email: "",
-  password: "",
-};
+  email: '',
+  password: '',
+}
 
 const Login = () => {
-  const [inputs, setInputs] = useState<IForm>(initialFormValues);
-  const router = useRouter();
+  const [inputs, setInputs] = useState<IForm>(initialFormValues)
+  const router = useRouter()
 
   const handleLogin = async (e: any) => {
-    e.preventDefault();
-    const loggedUser = await RegisterFlow.loginUser(inputs);
+    e.preventDefault()
+    const loggedUser: IUser = await RegisterFlow.loginUser(inputs)
 
     if (loggedUser !== undefined) {
-      router.push("/");
+      router.push('/')
     }
 
-    const loggedUserSerialized = JSON.stringify(loggedUser);
+    const loggedUserSerialized = JSON.stringify(loggedUser)
 
-    localStorage.setItem("user", loggedUserSerialized);
-  };
+    localStorage.setItem('user', loggedUserSerialized)
+  }
 
   const handleInputsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setInputs({ ...inputs, [name]: value });
-  };
+    const { name, value } = e.target
+    setInputs({ ...inputs, [name]: value })
+  }
 
   return (
     <div>
@@ -54,7 +55,7 @@ const Login = () => {
         <button type="submit">Login</button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login
