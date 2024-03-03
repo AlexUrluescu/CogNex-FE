@@ -12,6 +12,8 @@ import UploadFile from './UploadFile'
 import PdfContentExtractor from './PdfContentExtractor'
 // import YourComponent from "./YourComponent";
 import axios from 'axios'
+import { getCurrentUser } from '@/state/appData/selectors'
+import { useSelector } from 'react-redux'
 
 // import { useState } from "react";
 // import { io } from "socket.io-client";
@@ -26,7 +28,7 @@ const Chat = () => {
 
   const [isChecked, setChecked] = useState<boolean>(false)
 
-  const [currentUser, setCurrentUser] = useState<any>()
+  const currentUser = useSelector(getCurrentUser)
 
   useEffect(() => {
     const user = localStorage.getItem('user')
@@ -70,10 +72,19 @@ const Chat = () => {
   //   // setChatMessages( prevMessages => [...prevMessages, chatMessage])
   // });
 
+  useEffect(() => {
+    console.log('file2', file)
+  }, [file])
+
   const uploadPdf = () => {
     const formData = new FormData()
+
+    console.log('file', file)
+
     formData.append('pdf', file)
-    formData.append('userId', currentUser._id)
+    formData.append('userId', currentUser._id as string)
+
+    console.log('formData2', formData)
 
     axios
       .post('http://127.0.0.1:5000/extract', formData)

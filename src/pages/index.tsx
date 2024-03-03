@@ -9,6 +9,7 @@ import { setAllUsers, setCurrentUser } from '@/state/appData/appDataSlice'
 import { useSelector } from 'react-redux'
 import { getCurrentUser } from '@/state/appData/selectors'
 import router from 'next/router'
+import HomeView from '@/views/home'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -36,6 +37,10 @@ export default function Home() {
       }
     }
 
+    fetchAllUsers()
+  }, [])
+
+  useEffect(() => {
     const fetchCurrentUser = async (userId: string) => {
       const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/currentUser/${userId}`)
       const data = await res.json()
@@ -57,14 +62,12 @@ export default function Home() {
     } else {
       router.replace('/login')
     }
-
-    fetchAllUsers()
   }, [])
 
   const user = useSelector(getCurrentUser)
   return (
     <main>
-      <ChatPage />
+      <HomeView />
     </main>
   )
 }

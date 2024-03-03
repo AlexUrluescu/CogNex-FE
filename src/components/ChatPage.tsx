@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react'
+import React, { FormEvent, useReducer, useState } from 'react'
 import Chat from '../components/Chat'
 import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
@@ -6,12 +6,32 @@ import { RootState } from '@/state/store'
 import { useDispatch } from 'react-redux'
 import { getAllUsers, getCurrentUser } from '@/state/appData/selectors'
 
-import { Button } from 'antd'
+import { Button, Flex } from 'antd'
+import UploadFile from './UploadFile'
+import DraggerUpload from './DraggerUpload'
+import { ChatFlow } from '@/flows/chat'
+import { IChat } from '@/domain/chat'
+
+interface IChatFormValues {
+  name: string
+  category: string
+  vizibility: string
+  files: any[]
+}
+
+const initialChatFormValues: IChatFormValues = {
+  name: '',
+  category: '',
+  vizibility: '',
+  files: [],
+}
 
 const ChatPage = () => {
   const currentUser = useSelector(getCurrentUser)
   const allUsers = useSelector(getAllUsers)
   const [pdfUrl, setPdfUrl] = useState<any>(null)
+  const [files, setFiles] = useState<any[]>([])
+  const [chatFormValues, setChatFormValues] = useState<IChatFormValues>(initialChatFormValues)
   const router = useRouter()
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {}
 
@@ -53,6 +73,40 @@ const ChatPage = () => {
     return
   }
 
+  const handleCreateChat = (e: FormEvent) => {
+    e.preventDefault()
+
+    console.log('chatFormValues', chatFormValues)
+
+    const files2 = files.map((fil: any) => fil.originFileObj)
+
+    if (currentUser._id === undefined) {
+      return
+    }
+
+    const test = {
+      ...chatFormValues,
+      files: files2,
+      creator: currentUser._id,
+      users: [],
+      reviews: [],
+    }
+
+    ChatFlow.createNewChat(test)
+  }
+
+  const handleFormCreateChatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target
+
+    setChatFormValues({ ...chatFormValues, [name]: value })
+  }
+
+  // const handleChangeFile = (e: any) => {
+  //   console.log(e.target.files[0])
+
+  //   setFile(e.target.files[0])
+  // }
+
   return (
     <div>
       <div>
@@ -83,6 +137,33 @@ const ChatPage = () => {
       </div>
       <button onClick={() => router.push('/login')}>Login</button>
       <Chat />
+      <Flex vertical>
+        <h3>Create chat</h3>
+        <form onSubmit={handleCreateChat}>
+          <input
+            onChange={handleFormCreateChatChange}
+            name="name"
+            value={chatFormValues.name}
+            placeholder="chat name"
+          />
+          <input
+            onChange={handleFormCreateChatChange}
+            name="category"
+            value={chatFormValues.category}
+            placeholder="chat type"
+          />
+          <input
+            onChange={handleFormCreateChatChange}
+            name="vizibility"
+            placeholder="chat visibility"
+            value={chatFormValues.vizibility}
+          />
+          {/* <input onChange={handleChangeFile} name="file" type="file" accept=".pdf" /> */}
+          {/* <UploadFile onChange={handleFormCreateChatChange} name="file" setFile={setFile} /> */}
+          <DraggerUpload setFile={setFiles} file={files} />
+          <button type="submit">Create</button>
+        </form>
+      </Flex>
     </div>
   )
 }

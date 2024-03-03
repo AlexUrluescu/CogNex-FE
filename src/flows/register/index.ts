@@ -1,21 +1,24 @@
-import { IUser } from "@/domain/user";
-import { RegisterRepository } from "@/repositories/register";
-import { UserLogin } from "@/types";
+import { IUser } from '@/domain/user'
+import { RegisterRepository } from '@/repositories/register'
+import { UserLogin } from '@/types'
 
 class RegisterFlow {
-  registerRepository = new RegisterRepository();
+  registerRepository = new RegisterRepository()
   async registerNewUser(user: IUser) {
-    const newUser = await this.registerRepository.registerNewUser(user);
+    const newUser = await this.registerRepository.registerNewUser(user)
 
-    return newUser;
+    return newUser
   }
 
   async loginUser(user: UserLogin) {
-    const loggedUser = await this.registerRepository.loginUser(user);
-    return loggedUser;
+    const loggedUser = await this.registerRepository.loginUser(user)
+
+    console.log('loggedUser', loggedUser)
+
+    return loggedUser
   }
 }
 
-const registerFlow = new RegisterFlow();
+const registerFlow = new RegisterFlow()
 
-export { registerFlow as RegisterFlow };
+export { registerFlow as RegisterFlow }
