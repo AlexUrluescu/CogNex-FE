@@ -95,10 +95,10 @@ const DraggerUpload: React.FC<IDraggerUpload> = ({ file, setFile }) => {
           other banned files.
         </p>
       </Dragger>
-
+      {/* 
       <Button disabled={buttonDisabled} onClick={uploadPdf}>
         Send
-      </Button>
+      </Button> */}
     </Flex>
   )
 }

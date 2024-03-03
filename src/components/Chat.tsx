@@ -81,7 +81,7 @@ const Chat = () => {
 
     console.log('file', file)
 
-    formData.append('pdf', file)
+    formData.append('pdfs', file)
     formData.append('userId', currentUser._id as string)
 
     console.log('formData2', formData)

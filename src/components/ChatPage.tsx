@@ -2,15 +2,12 @@ import React, { FormEvent, useReducer, useState } from 'react'
 import Chat from '../components/Chat'
 import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
-import { RootState } from '@/state/store'
-import { useDispatch } from 'react-redux'
 import { getAllUsers, getCurrentUser } from '@/state/appData/selectors'
 
 import { Button, Flex } from 'antd'
-import UploadFile from './UploadFile'
 import DraggerUpload from './DraggerUpload'
 import { ChatFlow } from '@/flows/chat'
-import { IChat } from '@/domain/chat'
+import MyChatsAsCreator from './MyChatsAsCreator'
 
 interface IChatFormValues {
   name: string
@@ -36,6 +33,10 @@ const ChatPage = () => {
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {}
 
   const url = process.env.NEXT_PUBLIC_ROUTE
+
+  if (currentUser === undefined || currentUser._id === undefined) {
+    return
+  }
 
   const handleSend = async (event: any) => {
     event.preventDefault()
@@ -69,10 +70,6 @@ const ChatPage = () => {
     }
   }
 
-  if (currentUser === undefined) {
-    return
-  }
-
   const handleCreateChat = (e: FormEvent) => {
     e.preventDefault()
 
@@ -80,13 +77,24 @@ const ChatPage = () => {
 
     const files2 = files.map((fil: any) => fil.originFileObj)
 
+    const allFilesToBeUploaded = files2.map((fil: any) => {
+      const obj = {
+        name: fil.name,
+        size: fil.size,
+        type: fil.type,
+        lastModified: fil.lastModified,
+        lastModifiedDate: fil.lastModifiedDate,
+      }
+      return obj
+    })
+
     if (currentUser._id === undefined) {
       return
     }
 
     const test = {
       ...chatFormValues,
-      files: files2,
+      files: allFilesToBeUploaded,
       creator: currentUser._id,
       users: [],
       reviews: [],
@@ -100,12 +108,6 @@ const ChatPage = () => {
 
     setChatFormValues({ ...chatFormValues, [name]: value })
   }
-
-  // const handleChangeFile = (e: any) => {
-  //   console.log(e.target.files[0])
-
-  //   setFile(e.target.files[0])
-  // }
 
   return (
     <div>
@@ -158,11 +160,12 @@ const ChatPage = () => {
             placeholder="chat visibility"
             value={chatFormValues.vizibility}
           />
-          {/* <input onChange={handleChangeFile} name="file" type="file" accept=".pdf" /> */}
-          {/* <UploadFile onChange={handleFormCreateChatChange} name="file" setFile={setFile} /> */}
+          {/* <input onChange={handleChangeFile} name="file" type="file" accept=".pdf" />
+          <UploadFile onChange={handleFormCreateChatChange} name="file" setFile={setFile} /> */}
           <DraggerUpload setFile={setFiles} file={files} />
           <button type="submit">Create</button>
         </form>
+        <MyChatsAsCreator />
       </Flex>
     </div>
   )

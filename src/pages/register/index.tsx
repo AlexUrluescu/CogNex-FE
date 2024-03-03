@@ -1,47 +1,48 @@
-import { RegisterFlow } from "@/flows/register";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
+import { RegisterFlow } from '@/flows/register'
+import { useRouter } from 'next/router'
+import React, { useState } from 'react'
 
 type ICcontentRegisterForm = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  age: string;
-  password: string;
-};
+  firstName: string
+  lastName: string
+  email: string
+  age: string
+  password: string
+}
 
 const initialContentRegisterForm = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  age: "",
-  password: "",
-};
+  firstName: '',
+  lastName: '',
+  email: '',
+  age: '',
+  password: '',
+}
 
-const url = process.env.NEXT_PUBLIC_ROUTE;
+const url = process.env.NEXT_PUBLIC_ROUTE
 
 const Register = () => {
-  const [contentRegisterForm, setContentRegisterForm] =
-    useState<ICcontentRegisterForm>(initialContentRegisterForm);
+  const [contentRegisterForm, setContentRegisterForm] = useState<ICcontentRegisterForm>(
+    initialContentRegisterForm
+  )
 
-  const router = useRouter();
+  const router = useRouter()
 
   const handleRegisterFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
 
-    setContentRegisterForm({ ...contentRegisterForm, [name]: value });
-  };
+    setContentRegisterForm({ ...contentRegisterForm, [name]: value })
+  }
 
   const handleRegisterFormSubmit = async (e: any) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const newUser = await RegisterFlow.registerNewUser(contentRegisterForm);
+    const newUser = await RegisterFlow.registerNewUser(contentRegisterForm)
 
     if (newUser !== undefined) {
-      router.push("/login");
-      setContentRegisterForm(initialContentRegisterForm);
+      router.push('/login')
+      setContentRegisterForm(initialContentRegisterForm)
     }
-  };
+  }
 
   return (
     <div>
@@ -84,7 +85,7 @@ const Register = () => {
         <button type="submit">Register</button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register
