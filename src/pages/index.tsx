@@ -5,10 +5,13 @@ import { useEffect, useState } from 'react'
 import { UserFlow } from '@/flows/users'
 import { IUser, User } from '@/domain/user'
 import { useDispatch } from 'react-redux'
-import { setAllUsers, setCurrentUser } from '@/state/appData/appDataSlice'
+import { setAllChats, setAllUsers, setCurrentUser } from '@/state/appData/appDataSlice'
 import { useSelector } from 'react-redux'
 import { getCurrentUser } from '@/state/appData/selectors'
 import router from 'next/router'
+import HomeView from '@/views/home'
+import { Chat, IChat } from '@/domain/chat'
+import { ChatFlow } from '@/flows/chat'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -35,7 +38,30 @@ export default function Home() {
         console.log(error)
       }
     }
+    const fetchAllChats = async () => {
+      try {
+        const res = await fetch('http://127.0.0.1:5000/chats')
+        const data = await res.json()
 
+        const chats: Chat[] = data.chats
+        console.log('chats', chats)
+
+        ChatFlow.chatList = Array.from(new Set([...chats])).reduce((acc, chat) => {
+          acc[chat._id] = new Chat(chat)
+          return acc
+        }, {} as Record<any, IChat>)
+
+        dispatch(setAllChats(chats))
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    fetchAllUsers()
+    fetchAllChats()
+  }, [])
+
+  useEffect(() => {
     const fetchCurrentUser = async (userId: string) => {
       const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/currentUser/${userId}`)
       const data = await res.json()
@@ -57,14 +83,12 @@ export default function Home() {
     } else {
       router.replace('/login')
     }
-
-    fetchAllUsers()
   }, [])
 
   const user = useSelector(getCurrentUser)
   return (
     <main>
-      <ChatPage />
+      <HomeView />
     </main>
   )
 }
