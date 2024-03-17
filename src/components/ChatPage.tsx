@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 import { getAllUsers, getCurrentUser } from '@/state/appData/selectors'
 
-import { Button, Flex } from 'antd'
+import { Button, Flex, ColorPicker } from 'antd'
 import DraggerUpload from './DraggerUpload'
 import { ChatFlow } from '@/flows/chat'
 import MyChatsAsCreator from './MyChatsAsCreator'
@@ -28,6 +28,7 @@ const ChatPage = () => {
   const allUsers = useSelector(getAllUsers)
   const [pdfUrl, setPdfUrl] = useState<any>(null)
   const [files, setFiles] = useState<any[]>([])
+  const [chatColor, setChatColor] = useState<string>('')
   const [chatFormValues, setChatFormValues] = useState<IChatFormValues>(initialChatFormValues)
   const router = useRouter()
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {}
@@ -51,8 +52,6 @@ const ChatPage = () => {
       })
 
       const data = await res.json()
-
-      // console.log("data", data);
     } catch (error) {
       console.log(error)
     }
@@ -72,8 +71,6 @@ const ChatPage = () => {
 
   const handleCreateChat = (e: FormEvent) => {
     e.preventDefault()
-
-    console.log('chatFormValues', chatFormValues)
 
     const files2 = files.map((fil: any) => fil.originFileObj)
 
@@ -96,6 +93,7 @@ const ChatPage = () => {
       ...chatFormValues,
       files: allFilesToBeUploaded,
       creator: currentUser._id,
+      color: chatColor,
       users: [],
       reviews: [],
     }
@@ -107,6 +105,17 @@ const ChatPage = () => {
     const { value, name } = e.target
 
     setChatFormValues({ ...chatFormValues, [name]: value })
+  }
+
+  const createDisabled =
+    chatFormValues.category === '' ||
+    files.length === 0 ||
+    chatFormValues.name === '' ||
+    chatFormValues.vizibility == '' ||
+    chatColor === ''
+
+  const handleColoChange = (hex: string) => {
+    setChatColor(hex)
   }
 
   return (
@@ -126,7 +135,6 @@ const ChatPage = () => {
         ) : (
           "no files uploaded"
         )} */}
-        <Button onClick={() => console.log('is working')}>Click me</Button>
         {pdfUrl ? (
           <a href={pdfUrl} target="_blank" rel="noopener noreferrer">
             View PDF
@@ -160,12 +168,19 @@ const ChatPage = () => {
             placeholder="chat visibility"
             value={chatFormValues.vizibility}
           />
+          <ColorPicker
+            onChange={(color_, hex) => handleColoChange(hex)}
+            defaultValue="#1677ff"
+            showText
+          />
           {/* <input onChange={handleChangeFile} name="file" type="file" accept=".pdf" />
           <UploadFile onChange={handleFormCreateChatChange} name="file" setFile={setFile} /> */}
           <DraggerUpload setFile={setFiles} file={files} />
-          <button type="submit">Create</button>
+          <button disabled={createDisabled} style={{ cursor: 'pointer' }} type="submit">
+            Create
+          </button>
         </form>
-        <MyChatsAsCreator />
+        <MyChatsAsCreator currentUser={currentUser._id} />
       </Flex>
     </div>
   )

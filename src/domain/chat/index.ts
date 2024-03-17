@@ -10,6 +10,7 @@ export interface IChat {
   vizibility: string
   users?: IUser[]
   reviews?: any[]
+  color: string
 }
 
 export class Chat implements IChat {
@@ -21,6 +22,7 @@ export class Chat implements IChat {
   vizibility: string
   users: IUser[]
   reviews: any[]
+  color: string
 
   constructor(chat: IChat) {
     this._id = chat._id || v4()
@@ -31,6 +33,7 @@ export class Chat implements IChat {
     this.vizibility = chat.vizibility
     this.users = chat.users || []
     this.reviews = chat.reviews || []
+    this.color = chat.color
   }
 
   toJSON = () => {
