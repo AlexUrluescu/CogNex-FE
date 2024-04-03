@@ -135,8 +135,9 @@ const ChatPage = () => {
     <div style={{ width: '85%' }}>
       <Flex vertical gap={15} style={{ height: '100vh', padding: 40 }}>
         <div style={{ height: '85%', width: '100%', borderRadius: 15 }}>
-          {messages.map((message) => (
+          {messages.map((message, index) => (
             <Flex
+              key={index}
               style={{ marginTop: 20 }}
               gap={10}
               align="center"
