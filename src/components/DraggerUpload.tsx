@@ -21,7 +21,7 @@ const DraggerUpload: React.FC<IDraggerUpload> = ({ file, setFile }) => {
   const props: UploadProps = {
     name: 'file',
     multiple: true,
-    action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
+    // action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
 
     onDrop(e) {
       console.log('Dropped files', e.dataTransfer.files)
@@ -95,9 +95,9 @@ const DraggerUpload: React.FC<IDraggerUpload> = ({ file, setFile }) => {
           other banned files.
         </p>
       </Dragger>
-      {/* 
-      <Button disabled={buttonDisabled} onClick={uploadPdf}>
-        Send
+
+      {/* <Button disabled={buttonDisabled} onClick={uploadPdf}>
+        Sende
       </Button> */}
     </Flex>
   )

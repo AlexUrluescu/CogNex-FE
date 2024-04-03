@@ -1,13 +1,15 @@
-import React, { FormEvent, useReducer, useState } from 'react'
+import React, { FormEvent, useState } from 'react'
 import Chat from '../components/Chat'
 import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 import { getAllUsers, getCurrentUser } from '@/state/appData/selectors'
 
-import { Button, Flex, ColorPicker } from 'antd'
+import { Button, Flex, ColorPicker, Input } from 'antd'
 import DraggerUpload from './DraggerUpload'
 import { ChatFlow } from '@/flows/chat'
 import MyChatsAsCreator from './MyChatsAsCreator'
+import TextArea from 'antd/es/input/TextArea'
+import { RobotOutlined, SendOutlined, UserOutlined } from '@ant-design/icons'
 
 interface IChatFormValues {
   name: string
@@ -118,13 +120,66 @@ const ChatPage = () => {
     setChatColor(hex)
   }
 
+  const messages = [
+    {
+      type: 'chat',
+      message: 'Hello Alex, how can i help you?',
+    },
+    {
+      type: 'user',
+      message: 'I want to learn how to make a pizza',
+    },
+  ]
+
   return (
-    <div>
+    <div style={{ width: '85%' }}>
+      <Flex vertical gap={15} style={{ height: '100vh', padding: 40 }}>
+        <div style={{ height: '85%', width: '100%', borderRadius: 15 }}>
+          {messages.map((message, index) => (
+            <Flex
+              key={index}
+              style={{ marginTop: 20 }}
+              gap={10}
+              align="center"
+              justify={message.type === 'user' ? 'start' : 'end'}
+            >
+              {message.type === 'user' && (
+                <span
+                  style={{
+                    padding: 7,
+                    backgroundColor: 'gray',
+                    borderRadius: '50%',
+                    color: 'white',
+                  }}
+                >
+                  <UserOutlined />
+                </span>
+              )}
+              {message.message}
+
+              {message.type === 'chat' && (
+                <span
+                  style={{
+                    padding: 7,
+                    backgroundColor: 'gray',
+                    borderRadius: '50%',
+                    color: 'white',
+                  }}
+                >
+                  <RobotOutlined />
+                </span>
+              )}
+            </Flex>
+          ))}
+        </div>
+        <Flex gap={10}>
+          <TextArea size="large" placeholder="Type your question ..." autoSize />
+          <Button size="large" type="primary">
+            <SendOutlined />
+          </Button>
+        </Flex>
+      </Flex>
       <div>
-        <h1>CogNex</h1>
-        <span>
-          WELCOME {currentUser.firstName} {currentUser.lastName}
-        </span>
         <span>Files</span>
         {/* {currentUser.files.length > 0 ? (
           <div>
