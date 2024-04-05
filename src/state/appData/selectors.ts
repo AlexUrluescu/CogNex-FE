@@ -14,6 +14,12 @@ export const getAllChats = (state: RootState) => {
   return state.appData.chats
 }
 
+export const getChatById = (chatId: string | string[] | undefined) => {
+  return createSelector([getAllChats], (chats) => {
+    return chats.find((chat) => chat._id === chatId)
+  })
+}
+
 export const getChatsAsCreator = (userId: string) => {
   return createSelector([getAllChats], (chats) => {
     return chats.filter((chat) => chat.creator === userId)

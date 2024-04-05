@@ -88,7 +88,7 @@ export const CustomMenu = ({ currentUserId }: any) => {
             >
               {' '}
             </div>
-            {chat.name}
+            <span onClick={() => router.push(`/private-chats/${chat._id}`)}>{chat.name}</span>
           </Flex>,
           chat._id
         )
