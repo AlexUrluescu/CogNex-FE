@@ -17,6 +17,7 @@ export class User implements IUser {
   email: string
   age: string
   password: string
+  files?: string[] | undefined
 
   constructor(user: IUser) {
     this._id = user._id || v4()
@@ -25,6 +26,7 @@ export class User implements IUser {
     this.email = user.email
     this.age = user.age
     this.password = user.password
+    this.files = user.files || []
   }
 
   toJSON = () => {
@@ -35,6 +37,7 @@ export class User implements IUser {
       email: this.email,
       age: this.age,
       password: this.password,
+      files: this.files,
     }
   }
 }

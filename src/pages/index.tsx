@@ -68,6 +68,8 @@ export default function Home() {
 
       const userLogged = new User({ ...data.user })
 
+      console.log('userLogged', userLogged)
+
       dispatch(setCurrentUser(userLogged.toJSON()))
 
       const userLoggedToString = JSON.stringify(data.user)
