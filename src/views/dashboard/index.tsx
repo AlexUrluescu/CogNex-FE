@@ -6,11 +6,109 @@ import { useSelector } from 'react-redux'
 
 export const DashboardView = () => {
   const currentUser = useSelector(getCurrentUser)
+  const myChatsAsCreator = useSelector(getChatsAsCreator(currentUser._id))
+
+  console.log('chats', myChatsAsCreator)
+  console.log('currentuser', currentUser._id)
+
+  const myPrivateChats = myChatsAsCreator.filter((chat) => chat.vizibility === 'private')
+  const myPublicChats = myChatsAsCreator.filter((chat) => chat.vizibility === 'public')
+
   const router = useRouter()
 
   return (
     <Flex vertical gap={50}>
       <h1>Dashboard</h1>
+      <Flex vertical gap={50}>
+        <Card title={<h2>My Public Chats</h2>}>
+          <Flex gap={30}>
+            {myPublicChats.map((chat) => (
+              <Flex
+                vertical
+                gap={30}
+                key={chat._id}
+                style={{
+                  // backgroundColor: 'blue',
+                  padding: '20px',
+                  borderRadius: '8px',
+                  border: '1px solid #F1F0F0',
+                }}
+                align="center"
+              >
+                <Flex gap={10}>
+                  <span
+                    style={{
+                      width: 20,
+                      height: 20,
+                      backgroundColor: chat.color,
+                      borderRadius: '50%',
+                    }}
+                  ></span>
+                  <span>{chat.name}</span>
+                </Flex>
+
+                <Flex>
+                  <Button type="primary" onClick={() => router.push(`/public-chats/${chat._id}`)}>
+                    View
+                  </Button>
+                </Flex>
+              </Flex>
+            ))}
+          </Flex>
+        </Card>
+        <Card title={<h2>My Private Chats</h2>}>
+          <Flex
+            gap={30}
+            style={
+              {
+                // backgroundColor: 'red'
+              }
+            }
+          >
+            {myPrivateChats.map((chat) => (
+              <Flex
+                vertical
+                gap={30}
+                key={chat._id}
+                style={{
+                  // backgroundColor: 'blue',
+                  padding: '20px',
+                  borderRadius: '8px',
+                  border: '1px solid #F1F0F0',
+                }}
+                align="center"
+              >
+                <Flex align="center" gap={10}>
+                  <span
+                    style={{
+                      width: 20,
+                      height: 20,
+                      backgroundColor: chat.color,
+                      borderRadius: '50%',
+                    }}
+                  ></span>
+                  <span>{chat.name}</span>
+                </Flex>
+
+                <Flex justify="end">
+                  <Button type="primary" onClick={() => router.push(`/public-chats/${chat._id}`)}>
+                    View
+                  </Button>
+                </Flex>
+              </Flex>
+            ))}
+          </Flex>
+        </Card>
+        <Card title={<h2>My knowledge</h2>}>
+          <Flex>
+            {currentUser.files?.map((file, index) => (
+              <Flex key={index}>
+                <span>{file}</span>
+              </Flex>
+            ))}
+          </Flex>
+        </Card>
+      </Flex>
     </Flex>
   )
 }

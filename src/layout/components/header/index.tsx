@@ -1,4 +1,6 @@
+import { resetCurrentUser } from '@/state/appData/appDataSlice'
 import { getCurrentUser } from '@/state/appData/selectors'
+import { store } from '@/state/store'
 import { UserOutlined } from '@ant-design/icons'
 import { Button, Dropdown, Flex, MenuProps } from 'antd'
 import { useRouter } from 'next/router'
@@ -21,8 +23,26 @@ const Header = () => {
     {
       label:
         currentUser !== undefined ? (
-          <Button type="primary" onClick={() => router.push('/register')}>
-            Log out
+          <Button
+            type="primary"
+            onClick={() => {
+              store.dispatch(
+                resetCurrentUser({
+                  _id: '',
+                  email: '',
+                  files: [],
+                  firstName: '',
+                  lastName: '',
+                  age: '',
+                  password: '',
+                })
+              )
+
+              localStorage.removeItem('user')
+              router.push('/register')
+            }}
+          >
+            Log oouut
           </Button>
         ) : (
           'Log in'
