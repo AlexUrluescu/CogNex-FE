@@ -1,5 +1,7 @@
-import { IUser } from '@/domain/user'
+import { IUser, User } from '@/domain/user'
 import { RegisterFlow } from '@/flows/register'
+import { setCurrentUser } from '@/state/appData/appDataSlice'
+import { store } from '@/state/store'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 
@@ -26,6 +28,12 @@ const Login = () => {
     }
 
     const loggedUserSerialized = JSON.stringify(loggedUser)
+
+    const userLogged = new User({ ...loggedUser })
+
+    console.log('userLogged', userLogged)
+
+    store.dispatch(setCurrentUser(userLogged.toJSON()))
 
     localStorage.setItem('user', loggedUserSerialized)
   }
