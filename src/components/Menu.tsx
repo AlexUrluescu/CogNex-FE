@@ -1,10 +1,9 @@
-import ChatPage from '@/components/ChatPage'
-import { getChatsAsCreator, getCurrentUser } from '@/state/appData/selectors'
+import { getChatsAsCreator } from '@/state/appData/selectors'
 import { Flex, Menu } from 'antd'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { AppstoreOutlined, RobotOutlined, GlobalOutlined, LockOutlined } from '@ant-design/icons'
-import type { MenuProps, MenuTheme } from 'antd'
+import type { MenuProps } from 'antd'
 import { useRouter } from 'next/router'
 
 type MenuItem = Required<MenuProps>['items'][number]
@@ -63,7 +62,7 @@ export const CustomMenu = ({ currentUserId }: any) => {
             >
               {' '}
             </div>
-            {chat.name}
+            <span onClick={() => router.push(`/public-chats/${chat._id}`)}>{chat.name}</span>
           </Flex>,
           chat._id
         )

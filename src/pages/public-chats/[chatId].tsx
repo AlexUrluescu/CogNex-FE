@@ -1,10 +1,10 @@
 import Layout from '@/layout'
 import { getChatById } from '@/state/appData/selectors'
-import { PrivateChatIdView } from '@/views/private-chats/PrivateChatIdView'
+import { PublicChatIdView } from '@/views/public-chats'
 import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 
-const PrivateChatIdPage = () => {
+const PublicChatIdPage = () => {
   const router = useRouter()
   const { chatId } = router.query
 
@@ -16,9 +16,9 @@ const PrivateChatIdPage = () => {
 
   return (
     <Layout>
-      <PrivateChatIdView chat={chat} />
+      <PublicChatIdView chat={chat} />
     </Layout>
   )
 }
 
-export default PrivateChatIdPage
+export default PublicChatIdPage
