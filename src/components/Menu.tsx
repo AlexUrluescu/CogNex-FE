@@ -43,6 +43,11 @@ export const CustomMenu = ({ currentUserId }: any) => {
 
   const items: MenuItem[] = [
     getItem(<span onClick={() => router.push('/')}>Main Chat</span>, 'sub1', <RobotOutlined />),
+    getItem(
+      <span onClick={() => router.push('/dashboard')}>Dashboard</span>,
+      'sub5',
+      <RobotOutlined />
+    ),
 
     getItem(
       'Public Chats',
