@@ -8,7 +8,7 @@ export interface IChat {
   category: string
   files: any[]
   vizibility: string
-  users?: IUser[]
+  users: IUser[]
   reviews?: any[]
   color: string
 }

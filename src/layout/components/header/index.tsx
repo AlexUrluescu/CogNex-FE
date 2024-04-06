@@ -91,7 +91,7 @@ const Header = () => {
         <Select
           style={{ width: '80%' }}
           showSearch={true}
-          placeholder="Select a person"
+          placeholder="Explore"
           optionFilterProp="children"
           onChange={onChange}
           onSearch={onSearch}
