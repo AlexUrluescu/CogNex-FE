@@ -10,6 +10,7 @@ import { ChatFlow } from '@/flows/chat'
 import MyChatsAsCreator from './MyChatsAsCreator'
 import TextArea from 'antd/es/input/TextArea'
 import { RobotOutlined, SendOutlined, UserOutlined } from '@ant-design/icons'
+import axios from 'axios'
 
 import { format } from 'date-fns'
 
@@ -108,6 +109,7 @@ const ChatPage = () => {
       dateCreated: dateCreated,
     }
 
+    uploadPdf()
     ChatFlow.createNewChat(test)
   }
 
@@ -138,6 +140,55 @@ const ChatPage = () => {
       message: 'I want to learn how to make a pizza',
     },
   ]
+
+  const uploadPdf = () => {
+    const formData = new FormData()
+
+    const test = files.map((fil: any) => fil.originFileObj)
+
+    // console.log('file', test)
+
+    // formData.append('pdf', file[0].originFileObj)
+    // formData.append('pdf', test)
+    files.forEach((fil: any) => {
+      formData.append('pdfs', fil.originFileObj)
+    })
+    formData.append('userId', currentUser._id as string)
+
+    console.log('formData', formData)
+
+    axios
+      .post('http://127.0.0.1:5000/extract', formData)
+      .then((response) => {
+        console.log('PDF uploaded successfully:', response.data)
+        if (response.status === 200) {
+          setFiles([])
+        }
+      })
+      .catch((error) => {
+        console.error('Error uploading PDF:', error)
+      })
+  }
+
+  const onChange = (info: any) => {
+    const { status } = info.file
+    console.log('intra in change')
+
+    if (status === 'uploading') {
+      console.log('uploading')
+      setFiles(info.fileList)
+    }
+
+    if (status !== 'uploading') {
+      console.log(info.fileList)
+      setFiles(info.fileList)
+    }
+    if (status === 'done') {
+      // message.success(`${info.file.name} file uploaded successfully.`)
+    } else if (status === 'error') {
+      // message.error(`${info.file.name} file upload failed.`)
+    }
+  }
 
   return (
     <div>
@@ -244,7 +295,7 @@ const ChatPage = () => {
           />
           {/* <input onChange={handleChangeFile} name="file" type="file" accept=".pdf" />
           <UploadFile onChange={handleFormCreateChatChange} name="file" setFile={setFile} /> */}
-          <DraggerUpload setFile={setFiles} file={files} />
+          <DraggerUpload setFile={setFiles} file={files} onChange={onChange} />
           <button disabled={createDisabled} style={{ cursor: 'pointer' }} type="submit">
             Create
           </button>
