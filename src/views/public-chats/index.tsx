@@ -26,6 +26,13 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
 
   const hasRights = !!isChatUser && isChatOwner === false
 
+  const handleGetDocs = () => {
+    if (chat._id === undefined) {
+      return
+    }
+    ChatFlow.getInfoFromChromaDb(chat.creator, chat._id)
+  }
+
   const items: TabsProps['items'] = isChatOwner
     ? [
         {
@@ -41,7 +48,7 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
         {
           key: '3',
           label: 'Settings',
-          children: 'Settings',
+          children: <Button onClick={handleGetDocs}>GET DOCUMENTS</Button>,
         },
       ]
     : [
