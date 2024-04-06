@@ -20,6 +20,12 @@ export const getChatById = (chatId: string | string[] | undefined) => {
   })
 }
 
+export const getUserById = (userId: string | string[] | undefined) => {
+  return createSelector([getAllUsers], (users) => {
+    return users.find((user) => user._id === userId)
+  })
+}
+
 export const getChatsAsCreator = (userId: string) => {
   return createSelector([getAllChats], (chats) => {
     return chats.filter((chat) => chat.creator === userId)
