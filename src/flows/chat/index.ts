@@ -18,6 +18,15 @@ class ChatFlow {
 
     this.chatList[newChat._id] = newChat
   }
+
+  storeIntoList(chats: IChat[]) {
+    chats.forEach((chat) => {
+      if (chat._id === undefined) {
+        return
+      }
+      this.chatList[chat._id] = chat
+    })
+  }
 }
 
 const chatFlow = new ChatFlow()

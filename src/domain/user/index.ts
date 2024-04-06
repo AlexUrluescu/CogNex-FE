@@ -10,6 +10,16 @@ export interface IUser {
   files?: string[]
 }
 
+export interface IUser2 {
+  _id: string
+  firstName: string
+  lastName: string
+  email: string
+  age: string
+  password: string
+  files?: string[]
+}
+
 export class User implements IUser {
   _id: string
   firstName: string
