@@ -1,3 +1,4 @@
+import { CustomChat } from '@/components/CustomChat'
 import { getChatsAsCreator, getCurrentUser } from '@/state/appData/selectors'
 import { Button, Card, Flex } from 'antd'
 import { useRouter } from 'next/router'
@@ -23,36 +24,7 @@ export const DashboardView = () => {
         <Card title={<h2>My Public Chats</h2>}>
           <Flex gap={30}>
             {myPublicChats.map((chat) => (
-              <Flex
-                vertical
-                gap={30}
-                key={chat._id}
-                style={{
-                  // backgroundColor: 'blue',
-                  padding: '20px',
-                  borderRadius: '8px',
-                  border: '1px solid #F1F0F0',
-                }}
-                align="center"
-              >
-                <Flex gap={10}>
-                  <span
-                    style={{
-                      width: 20,
-                      height: 20,
-                      backgroundColor: chat.color,
-                      borderRadius: '50%',
-                    }}
-                  ></span>
-                  <span>{chat.name}</span>
-                </Flex>
-
-                <Flex>
-                  <Button type="primary" onClick={() => router.push(`/public-chats/${chat._id}`)}>
-                    View
-                  </Button>
-                </Flex>
-              </Flex>
+              <CustomChat key={chat._id} chat={chat} />
             ))}
           </Flex>
         </Card>
@@ -66,36 +38,7 @@ export const DashboardView = () => {
             }
           >
             {myPrivateChats.map((chat) => (
-              <Flex
-                vertical
-                gap={30}
-                key={chat._id}
-                style={{
-                  // backgroundColor: 'blue',
-                  padding: '20px',
-                  borderRadius: '8px',
-                  border: '1px solid #F1F0F0',
-                }}
-                align="center"
-              >
-                <Flex align="center" gap={10}>
-                  <span
-                    style={{
-                      width: 20,
-                      height: 20,
-                      backgroundColor: chat.color,
-                      borderRadius: '50%',
-                    }}
-                  ></span>
-                  <span>{chat.name}</span>
-                </Flex>
-
-                <Flex justify="end">
-                  <Button type="primary" onClick={() => router.push(`/public-chats/${chat._id}`)}>
-                    View
-                  </Button>
-                </Flex>
-              </Flex>
+              <CustomChat key={chat._id} chat={chat} />
             ))}
           </Flex>
         </Card>

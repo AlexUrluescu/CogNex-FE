@@ -4,7 +4,7 @@ import { store } from '@/state/store'
 import { UserOutlined } from '@ant-design/icons'
 import { Button, Dropdown, Flex, MenuProps, Select } from 'antd'
 import { useRouter } from 'next/router'
-import React, { useReducer } from 'react'
+import React, { useReducer, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 const Header = () => {
@@ -112,7 +112,7 @@ const Header = () => {
       <Flex align="center" justify="space-between" style={{ width: '82%' }}>
         <Select
           style={{ width: '80%' }}
-          showSearch
+          showSearch={true}
           placeholder="Select a person"
           optionFilterProp="children"
           onChange={onChange}
