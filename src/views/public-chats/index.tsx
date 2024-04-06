@@ -7,6 +7,7 @@ import type { TabsProps } from 'antd'
 import { getCurrentUser } from '@/state/appData/selectors'
 import { useSelector } from 'react-redux'
 import { ChatDisplay } from '@/components/ChatDisplay'
+import { ChatFlow } from '@/flows/chat'
 
 interface IPublicChatIdView {
   chat: IChat
@@ -19,7 +20,7 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
     console.log(key)
   }
 
-  const isChatUser = chat.users.find((user) => user._id === currentUser._id)
+  const isChatUser = chat.users.find((userId) => userId === currentUser._id)
   const isChatOwner = currentUser._id === chat.creator
 
   const hasRights = !!isChatUser && isChatOwner === false
@@ -55,6 +56,17 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
         },
       ]
 
+  const handleSubcribe = () => {
+    const userId = currentUser._id
+    const chatId = chat._id
+
+    if (chatId === undefined) {
+      return
+    }
+
+    ChatFlow.userSubscribed(userId, chatId)
+  }
+
   return (
     <Flex vertical gap={30}>
       <Flex justify="space-between">
@@ -65,8 +77,10 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
           <h2>{chat.name}</h2>
         </Flex>
         <Flex>
-          {isChatUser !== null && isChatOwner === false ? (
-            <Button type="primary">Subscribe</Button>
+          {isChatUser === undefined && isChatOwner === false ? (
+            <Button type="primary" onClick={handleSubcribe}>
+              Subscribe
+            </Button>
           ) : null}
         </Flex>
       </Flex>

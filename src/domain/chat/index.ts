@@ -8,7 +8,7 @@ export interface IChat {
   category: string
   files: any[]
   vizibility: string
-  users: IUser[]
+  users: string[]
   reviews?: any[]
   color: string
 }
@@ -20,7 +20,7 @@ export class Chat implements IChat {
   category: string
   files: any[]
   vizibility: string
-  users: IUser[]
+  users: string[]
   reviews: any[]
   color: string
 
