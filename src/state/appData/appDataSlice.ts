@@ -5,7 +5,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 interface IAppDataState {
   currentUser: IUser2
-  users: IUser[]
+  users: IUser2[]
   chats: IChat[]
 }
 
@@ -30,7 +30,7 @@ const appDataSlice = createSlice({
     setCurrentUser: (state, action: PayloadAction<IUser2>) => {
       state.currentUser = action.payload
     },
-    setAllUsers: (state, action: PayloadAction<IUser[]>) => {
+    setAllUsers: (state, action: PayloadAction<IUser2[]>) => {
       state.users = action.payload
     },
     setAllChats: (state, action: PayloadAction<IChat[]>) => {
