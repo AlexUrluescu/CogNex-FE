@@ -44,7 +44,7 @@ export const ChatDisplay: React.FC<IChatDisplay> = ({ chatColor, hasRights }) =>
         {hasRights === false ? (
           <Flex gap={10}>
             <WarningOutlined style={{ color: 'red' }} />
-            <span style={{ color: 'red' }}>To use the Chat, you have to be subscribed</span>
+            <span style={{ color: 'red' }}>To use the Chat, you have to subscribe !</span>
           </Flex>
         ) : null}
       </Flex>

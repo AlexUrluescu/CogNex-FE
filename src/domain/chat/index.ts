@@ -11,6 +11,8 @@ export interface IChat {
   users: string[]
   reviews?: any[]
   color: string
+  dateCreated: string
+  description: string
 }
 
 export class Chat implements IChat {
@@ -23,6 +25,8 @@ export class Chat implements IChat {
   users: string[]
   reviews: any[]
   color: string
+  dateCreated: string
+  description: string
 
   constructor(chat: IChat) {
     this._id = chat._id || v4()
@@ -34,6 +38,8 @@ export class Chat implements IChat {
     this.users = chat.users || []
     this.reviews = chat.reviews || []
     this.color = chat.color
+    this.dateCreated = chat.dateCreated
+    this.description = chat.description
   }
 
   toJSON = () => {
@@ -46,6 +52,8 @@ export class Chat implements IChat {
       vizibilty: this.vizibility,
       users: this.users,
       reviews: this.reviews,
+      dateCreated: this.dateCreated,
+      description: this.description,
     }
   }
 }

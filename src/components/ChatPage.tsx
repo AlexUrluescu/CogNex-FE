@@ -11,11 +11,14 @@ import MyChatsAsCreator from './MyChatsAsCreator'
 import TextArea from 'antd/es/input/TextArea'
 import { RobotOutlined, SendOutlined, UserOutlined } from '@ant-design/icons'
 
+import { format } from 'date-fns'
+
 interface IChatFormValues {
   name: string
   category: string
   vizibility: string
   files: any[]
+  description: string
 }
 
 const initialChatFormValues: IChatFormValues = {
@@ -23,6 +26,7 @@ const initialChatFormValues: IChatFormValues = {
   category: '',
   vizibility: '',
   files: [],
+  description: '',
 }
 
 const ChatPage = () => {
@@ -87,6 +91,9 @@ const ChatPage = () => {
       return obj
     })
 
+    const currentDate = new Date()
+    const dateCreated = format(currentDate, 'dd-MM-yyyy')
+
     if (currentUser._id === undefined) {
       return
     }
@@ -98,6 +105,7 @@ const ChatPage = () => {
       color: chatColor,
       users: [],
       reviews: [],
+      dateCreated: dateCreated,
     }
 
     ChatFlow.createNewChat(test)
@@ -222,6 +230,12 @@ const ChatPage = () => {
             name="vizibility"
             placeholder="chat visibility"
             value={chatFormValues.vizibility}
+          />
+          <input
+            onChange={handleFormCreateChatChange}
+            name="description"
+            placeholder="description"
+            value={chatFormValues.description}
           />
           <ColorPicker
             onChange={(color_, hex) => handleColoChange(hex)}
