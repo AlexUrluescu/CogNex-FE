@@ -15,7 +15,6 @@ export const CustomChat: React.FC<ICustomChat> = ({ chat }) => {
       gap={30}
       key={chat._id}
       style={{
-        // backgroundColor: 'blue',
         padding: '20px',
         borderRadius: '8px',
         border: '1px solid #F1F0F0',

@@ -9,13 +9,11 @@ import { useSelector } from 'react-redux'
 
 const Header = () => {
   const currentUser = useSelector(getCurrentUser)
-  const allUsers2 = useSelector(getAllUsers)
-
-  console.log('allUsers2', allUsers2)
+  const allUsers = useSelector(getAllUsers)
 
   const router = useRouter()
 
-  const allUsers3 = allUsers2
+  const allUsersForSearch = allUsers
     .map((user) => {
       const obj = {
         value: user._id,
@@ -26,23 +24,6 @@ const Header = () => {
       return obj
     })
     .filter((user) => user.id !== currentUser._id)
-
-  console.log('allUsers3', allUsers3)
-
-  const allUsers = [
-    {
-      value: 'jack',
-      label: 'Jack',
-    },
-    {
-      value: 'lucy',
-      label: 'Lucy',
-    },
-    {
-      value: 'tom',
-      label: 'Tom',
-    },
-  ]
 
   const items: MenuProps['items'] = [
     {
@@ -88,16 +69,13 @@ const Header = () => {
   ]
 
   const onChange = (value: string) => {
-    console.log(`selected ${value}`)
     router.push(`/my-account/${value}`)
   }
 
   const onSearch = (value: string) => {
-    console.log('search:', value)
     router.push(`/my-account/${value}`)
   }
 
-  // Filter `option.label` match the user type `input`
   const filterOption = (input: string, option?: { label: string; value: string }) =>
     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
 
@@ -118,7 +96,7 @@ const Header = () => {
           onChange={onChange}
           onSearch={onSearch}
           filterOption={filterOption}
-          options={allUsers3}
+          options={allUsersForSearch}
         />
         <span style={{ width: '20%' }}>
           <Dropdown

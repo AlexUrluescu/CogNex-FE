@@ -8,14 +8,8 @@ import { useSelector } from 'react-redux'
 export const DashboardView = () => {
   const currentUser = useSelector(getCurrentUser)
   const myChatsAsCreator = useSelector(getChatsAsCreator(currentUser._id))
-
-  console.log('chats', myChatsAsCreator)
-  console.log('currentuser', currentUser._id)
-
   const myPrivateChats = myChatsAsCreator.filter((chat) => chat.vizibility === 'private')
   const myPublicChats = myChatsAsCreator.filter((chat) => chat.vizibility === 'public')
-
-  const router = useRouter()
 
   return (
     <Flex vertical gap={50}>
@@ -29,14 +23,7 @@ export const DashboardView = () => {
           </Flex>
         </Card>
         <Card title={<h2>My Private Chats</h2>}>
-          <Flex
-            gap={30}
-            style={
-              {
-                // backgroundColor: 'red'
-              }
-            }
-          >
+          <Flex gap={30}>
             {myPrivateChats.map((chat) => (
               <CustomChat key={chat._id} chat={chat} />
             ))}

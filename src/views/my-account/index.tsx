@@ -11,8 +11,6 @@ interface IMyAccountView {
 }
 
 export const MyAccountView: React.FC<IMyAccountView> = ({ user }) => {
-  console.log('user', user)
-
   const chats = useSelector(getChatsAsCreator(user._id))
 
   return (
