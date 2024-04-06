@@ -1,6 +1,5 @@
 import { IChat } from '@/domain/chat'
-import { IUser, IUser2, User } from '@/domain/user'
-import { UserFlow } from '@/flows/users'
+import { IUser2 } from '@/domain/user'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 interface IAppDataState {
@@ -36,6 +35,11 @@ const appDataSlice = createSlice({
     setAllChats: (state, action: PayloadAction<IChat[]>) => {
       state.chats = action.payload
     },
+
+    updateChatById(state, action: { type: string; payload: IChat }) {
+      const chatUpdated = action.payload
+      state.chats = state.chats.map((chat) => (chat._id === chatUpdated._id ? chatUpdated : chat))
+    },
     addNewChat: (state, action: PayloadAction<IChat>) => {
       state.chats.push(action.payload)
     },
@@ -46,6 +50,12 @@ const appDataSlice = createSlice({
   },
 })
 
-export const { setCurrentUser, setAllUsers, setAllChats, addNewChat, resetCurrentUser } =
-  appDataSlice.actions
+export const {
+  setCurrentUser,
+  setAllUsers,
+  setAllChats,
+  updateChatById,
+  addNewChat,
+  resetCurrentUser,
+} = appDataSlice.actions
 export default appDataSlice.reducer

@@ -1,9 +1,6 @@
 import { IChat } from '@/domain/chat'
-import { IUser } from '@/domain/user'
 import { ChatRepository } from '@/repositories/chat'
-import { addNewChat } from '@/state/appData/appDataSlice'
-// import { RegisterRepository } from '@/repositories/register'
-// import { UserLogin } from '@/types'
+import { addNewChat, updateChatById } from '@/state/appData/appDataSlice'
 import { store } from '@/state/store'
 
 class ChatFlow {
@@ -17,6 +14,32 @@ class ChatFlow {
     store.dispatch(addNewChat(newChat.chat))
 
     this.chatList[newChat._id] = newChat
+  }
+
+  async userSubscribed(userId: string, chatId: string) {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/subscribed`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, chatId }),
+      })
+
+      const data = await res.json()
+
+      if (data.chat === null) {
+        alert(data.message)
+      }
+
+      if (data.chat === undefined || data.ok === false) {
+        return
+      }
+
+      store.dispatch(updateChatById({ ...data.chat }))
+    } catch (error) {
+      return error
+    }
   }
 
   storeIntoList(chats: IChat[]) {
