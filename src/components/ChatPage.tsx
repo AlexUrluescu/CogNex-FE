@@ -144,12 +144,6 @@ const ChatPage = () => {
   const uploadPdf = () => {
     const formData = new FormData()
 
-    const test = files.map((fil: any) => fil.originFileObj)
-
-    // console.log('file', test)
-
-    // formData.append('pdf', file[0].originFileObj)
-    // formData.append('pdf', test)
     files.forEach((fil: any) => {
       formData.append('pdfs', fil.originFileObj)
     })
@@ -295,7 +289,9 @@ const ChatPage = () => {
           />
           {/* <input onChange={handleChangeFile} name="file" type="file" accept=".pdf" />
           <UploadFile onChange={handleFormCreateChatChange} name="file" setFile={setFile} /> */}
+
           <DraggerUpload setFile={setFiles} file={files} onChange={onChange} />
+
           <button disabled={createDisabled} style={{ cursor: 'pointer' }} type="submit">
             Create
           </button>

@@ -30,7 +30,11 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
     if (chat._id === undefined) {
       return
     }
-    ChatFlow.getInfoFromChromaDb(chat.creator, chat._id)
+    // ChatFlow.getInfoFromChromaDb(chat.creator, chat._id)
+  }
+
+  if (chat._id === undefined) {
+    return
   }
 
   const items: TabsProps['items'] = isChatOwner
@@ -38,7 +42,7 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
         {
           key: '1',
           label: 'Chat',
-          children: <ChatDisplay chatColor={chat.color} />,
+          children: <ChatDisplay chatColor={chat.color} chatId={chat._id} />,
         },
         {
           key: '2',
@@ -55,7 +59,7 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
         {
           key: '1',
           label: 'Chat',
-          children: <ChatDisplay chatColor={chat.color} hasRights={hasRights} />,
+          children: <ChatDisplay chatColor={chat.color} chatId={chat._id} hasRights={hasRights} />,
         },
         {
           key: '2',

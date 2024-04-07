@@ -42,14 +42,14 @@ class ChatFlow {
     }
   }
 
-  async getInfoFromChromaDb(creatorId: string, chatId: string) {
+  async getInfoFromChromaDb(query: string, chatId: string) {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/info-chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ creatorId, chatId }),
+        body: JSON.stringify({ query, chatId }),
       })
 
       const data = await res.json()
