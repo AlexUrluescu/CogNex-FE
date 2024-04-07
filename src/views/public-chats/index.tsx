@@ -26,12 +26,23 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
 
   const hasRights = !!isChatUser && isChatOwner === false
 
+  const handleGetDocs = () => {
+    if (chat._id === undefined) {
+      return
+    }
+    // ChatFlow.getInfoFromChromaDb(chat.creator, chat._id)
+  }
+
+  if (chat._id === undefined) {
+    return
+  }
+
   const items: TabsProps['items'] = isChatOwner
     ? [
         {
           key: '1',
           label: 'Chat',
-          children: <ChatDisplay chatColor={chat.color} />,
+          children: <ChatDisplay chatColor={chat.color} chatId={chat._id} />,
         },
         {
           key: '2',
@@ -41,14 +52,14 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
         {
           key: '3',
           label: 'Settings',
-          children: 'Settings',
+          children: <Button onClick={handleGetDocs}>GET DOCUMENTS</Button>,
         },
       ]
     : [
         {
           key: '1',
           label: 'Chat',
-          children: <ChatDisplay chatColor={chat.color} hasRights={hasRights} />,
+          children: <ChatDisplay chatColor={chat.color} chatId={chat._id} hasRights={hasRights} />,
         },
         {
           key: '2',

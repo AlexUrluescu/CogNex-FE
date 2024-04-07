@@ -11,9 +11,10 @@ const { Dragger } = Upload
 interface IDraggerUpload {
   file: any
   setFile: any
+  onChange: any
 }
 
-const DraggerUpload: React.FC<IDraggerUpload> = ({ file, setFile }) => {
+const DraggerUpload: React.FC<IDraggerUpload> = ({ file, setFile, onChange }) => {
   useEffect(() => {
     console.log('file', file)
   }, [file])
@@ -29,26 +30,6 @@ const DraggerUpload: React.FC<IDraggerUpload> = ({ file, setFile }) => {
   }
 
   const currentUser = useSelector(getCurrentUser)
-
-  const onChange = (info: any) => {
-    const { status } = info.file
-    console.log('intra in change')
-
-    if (status === 'uploading') {
-      console.log('uploading')
-      setFile(info.fileList)
-    }
-
-    if (status !== 'uploading') {
-      console.log(info.fileList)
-      setFile(info.fileList)
-    }
-    if (status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully.`)
-    } else if (status === 'error') {
-      message.error(`${info.file.name} file upload failed.`)
-    }
-  }
 
   console.log('currentUser', currentUser)
 

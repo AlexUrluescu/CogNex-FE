@@ -15,8 +15,6 @@ export class ChatRepository {
 
       const data = await res.json()
 
-      console.log('chat', data)
-
       //   if (data.user === undefined || data.sucess === false) {
       //     return
       //   }

@@ -42,6 +42,32 @@ class ChatFlow {
     }
   }
 
+  async getInfoFromChromaDb(query: string, chatId: string) {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/info-chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query, chatId }),
+      })
+
+      const data = await res.json()
+
+      if (data.documents === null) {
+        alert(data.message)
+      }
+
+      if (data.documents === undefined || data.ok === false) {
+        return
+      }
+
+      console.log('documenst', data.documents)
+    } catch (error) {
+      return error
+    }
+  }
+
   storeIntoList(chats: IChat[]) {
     chats.forEach((chat) => {
       if (chat._id === undefined) {
