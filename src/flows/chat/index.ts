@@ -9,11 +9,11 @@ class ChatFlow {
   async createNewChat(chat: IChat) {
     const newChat = await this.chatRepository.createChat(chat)
 
-    console.log('t', newChat)
-
     store.dispatch(addNewChat(newChat.chat))
 
     this.chatList[newChat._id] = newChat
+
+    return newChat
   }
 
   async userSubscribed(userId: string, chatId: string) {
