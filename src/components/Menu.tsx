@@ -1,10 +1,11 @@
 import { getChatsAsCreator } from '@/state/appData/selectors'
-import { Flex, Menu } from 'antd'
+import { Button, Flex, Menu } from 'antd'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { AppstoreOutlined, RobotOutlined, GlobalOutlined, LockOutlined } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { useRouter } from 'next/router'
+import { CreateChatModal } from './CreateChatModal'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -26,12 +27,9 @@ function getItem(
 
 export const CustomMenu = ({ currentUserId }: any) => {
   const [current, setCurrent] = useState('1')
-
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const router = useRouter()
-
   const myChatsAsCreator = useSelector(getChatsAsCreator(currentUserId))
-
-  console.log('myChatsAsCreator', myChatsAsCreator)
 
   const myPrivateChats = myChatsAsCreator.filter((chat) => chat.vizibility === 'private')
   const myPublicChats = myChatsAsCreator.filter((chat) => chat.vizibility === 'public')
@@ -41,8 +39,20 @@ export const CustomMenu = ({ currentUserId }: any) => {
     setCurrent(e.key)
   }
 
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const handleOk = () => {
+    setIsModalOpen(false)
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
+
   const items: MenuItem[] = [
-    getItem(<span onClick={() => router.push('/')}>Main Chat</span>, 'sub1', <RobotOutlined />),
+    // getItem(<span onClick={() => router.push('/')}>Main Chat</span>, 'sub1', <RobotOutlined />),
     getItem(
       <span onClick={() => router.push('/dashboard')}>Dashboard</span>,
       'sub5',
@@ -56,7 +66,6 @@ export const CustomMenu = ({ currentUserId }: any) => {
       myPublicChats.map((chat) =>
         getItem(
           <Flex align="center" gap={10}>
-            {/* <span style={{ backgroundColor: 'red', width: 10, height: 10 }}></span> */}
             <div
               style={{
                 backgroundColor: chat.color,
@@ -81,7 +90,6 @@ export const CustomMenu = ({ currentUserId }: any) => {
       myPrivateChats.map((chat) =>
         getItem(
           <Flex align="center" gap={10}>
-            {/* <span style={{ backgroundColor: 'red', width: 10, height: 10 }}></span> */}
             <div
               style={{
                 backgroundColor: chat.color,
@@ -103,15 +111,25 @@ export const CustomMenu = ({ currentUserId }: any) => {
       'my-knowledge',
       <AppstoreOutlined />
     ),
+    getItem(<Button onClick={showModal}>New Chat</Button>),
   ]
   return (
-    <Menu
-      onClick={onClick}
-      style={{ width: '100%', height: '100vh', backgroundColor: '#ECF8F8', overflowY: 'scroll' }}
-      defaultOpenKeys={['sub1']}
-      selectedKeys={[current]}
-      mode="inline"
-      items={items}
-    />
+    <>
+      <Menu
+        onClick={onClick}
+        style={{ width: '100%', height: '100vh', backgroundColor: '#ECF8F8', overflowY: 'scroll' }}
+        defaultOpenKeys={['sub1']}
+        selectedKeys={[current]}
+        mode="inline"
+        items={items}
+      />
+
+      <CreateChatModal
+        handleOk={handleOk}
+        handleCancel={handleCancel}
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      />
+    </>
   )
 }
