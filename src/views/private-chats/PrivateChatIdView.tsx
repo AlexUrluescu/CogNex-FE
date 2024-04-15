@@ -52,7 +52,11 @@ export const PrivateChatIdView: React.FC<IPrivateChatIdView> = ({ chat }) => {
         {
           key: '3',
           label: 'Settings',
-          children: <Button onClick={handleGetDocs}>GET DOCUMENTS</Button>,
+          children: (
+            <Button disabled={true} onClick={handleGetDocs}>
+              GET DOCUMENTS
+            </Button>
+          ),
         },
       ]
     : [

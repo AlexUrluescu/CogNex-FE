@@ -99,10 +99,11 @@ export const ChatDisplay: React.FC<IChatDisplay> = ({ chatColor, chatId, hasRigh
         />
         <Button
           onClick={handleSend}
-          disabled={hasRights === false ? true : false}
+          disabled={true}
+          // disabled={hasRights === false ? true : false}
           style={{ width: '10%' }}
         >
-          Send
+          Sendd
         </Button>
       </Flex>
     </Flex>
