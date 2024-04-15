@@ -54,15 +54,18 @@ class ChatFlow {
 
       const data = await res.json()
 
-      if (data.documents === null) {
-        alert(data.message)
-      }
+      console.log(data)
 
-      if (data.documents === undefined || data.ok === false) {
-        return
-      }
+      // if (data.documents === null) {
+      //   alert(data.message)
+      // }
 
-      console.log('documenst', data.documents)
+      // if (data.response === undefined || data.ok === false) {
+      //   return
+      // }
+
+      console.log('response', data.response)
+      return
     } catch (error) {
       return error
     }

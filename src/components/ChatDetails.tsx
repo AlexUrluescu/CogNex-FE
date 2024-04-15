@@ -44,7 +44,7 @@ export const ChatDetails: React.FC<IChatDetails> = ({ chat }) => {
 
       <Flex gap={10} align="center">
         <span className="title">Vizibilty: </span>
-        <span>{chat.vizibility}</span>
+        <span>{chat.vizibility.charAt(0).toUpperCase() + chat.vizibility.slice(1)}</span>
       </Flex>
 
       <Flex gap={10} align="center">

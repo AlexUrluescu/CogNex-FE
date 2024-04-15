@@ -30,7 +30,7 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
     if (chat._id === undefined) {
       return
     }
-    // ChatFlow.getInfoFromChromaDb(chat.creator, chat._id)
+    ChatFlow.getInfoFromChromaDb(chat.creator, chat._id)
   }
 
   if (chat._id === undefined) {
@@ -52,7 +52,11 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
         {
           key: '3',
           label: 'Settings',
-          children: <Button onClick={handleGetDocs}>GET DOCUMENTS</Button>,
+          children: (
+            <Button disabled={true} onClick={handleGetDocs}>
+              GET DOCUMENTS
+            </Button>
+          ),
         },
       ]
     : [
