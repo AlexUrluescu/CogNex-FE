@@ -1,6 +1,20 @@
 import { v4 } from 'uuid'
 import { IUser } from '../user'
 
+export const defaultChatValues = {
+  _id: '',
+  creator: '',
+  name: '',
+  category: '',
+  files: [],
+  vizibility: '',
+  users: [],
+  reviews: [],
+  color: '',
+  dateCreated: '',
+  description: '',
+}
+
 export interface IChat {
   _id?: string
   creator: string

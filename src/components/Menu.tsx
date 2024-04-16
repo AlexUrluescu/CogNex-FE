@@ -111,6 +111,11 @@ export const CustomMenu = ({ currentUserId }: any) => {
       'my-knowledge',
       <AppstoreOutlined />
     ),
+    getItem(
+      <span onClick={() => router.push('/teleports')}>Teleports</span>,
+      'teleports',
+      <AppstoreOutlined />
+    ),
     getItem(<Button onClick={showModal}>New Chat</Button>),
   ]
   return (

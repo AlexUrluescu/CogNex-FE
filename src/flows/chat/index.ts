@@ -6,6 +6,16 @@ import { store } from '@/state/store'
 class ChatFlow {
   chatRepository = new ChatRepository()
   chatList: Record<string, IChat> = {}
+
+  getChatsByCreatorId(id: string) {
+    console.log(Object.values(this.chatList))
+
+    const allChats = Object.values(this.chatList)
+
+    const chatsFound = allChats.filter((chat) => chat.creator === id)
+    return chatsFound
+  }
+
   async createNewChat(chat: IChat) {
     const newChat = await this.chatRepository.createChat(chat)
 
@@ -37,6 +47,7 @@ class ChatFlow {
       }
 
       store.dispatch(updateChatById({ ...data.chat }))
+      this.chatList[data.chat._id] = { ...data.chat }
     } catch (error) {
       return error
     }
