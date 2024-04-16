@@ -9,8 +9,9 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import type { CheckboxProps } from 'antd'
 import { CollapsibleSection } from '@/components/collapsibleSection'
+import { CloseCircleOutlined } from '@ant-design/icons'
 
-const testColor = 'gray'
+const testColor = '#C0BFBF'
 
 export const TeleportsView = () => {
   const currentUser = useSelector(getCurrentUser)
@@ -114,16 +115,57 @@ export const TeleportsView = () => {
         />
       </Flex>
 
-      <Flex style={{ height: 300, border: '1px solid gray', padding: 20 }}>
+      <Flex style={{ height: 300, border: '1px solid #EDEDED', padding: 20, borderRadius: 8 }}>
         <Flex vertical align="center" style={{ width: '33%' }}>
-          <h4>My Chats selected</h4>
-          {myChatsSelected.length !== 0 ? (
-            myChatsSelected.map((chat) => (
-              <div key={ChatFlow.chatList[chat]._id}>{ChatFlow.chatList[chat].name}</div>
-            ))
-          ) : (
-            <span>No chats selected</span>
-          )}
+          <Flex justify="center" style={{ width: '80%' }} gap={10}>
+            <div>image</div>
+            <span>
+              {currentUser.firstName.charAt(0).toUpperCase() + currentUser.firstName.slice(1)}{' '}
+              {currentUser.lastName.charAt(0).toUpperCase() + currentUser.lastName.slice(1)}
+            </span>
+          </Flex>
+          <Flex
+            vertical
+            align="center"
+            style={{
+              //  backgroundColor: 'red',
+              height: '100%',
+              width: '100%',
+              padding: '20px 0',
+            }}
+          >
+            {myChatsSelected.length !== 0 ? (
+              myChatsSelected.map((chat) => (
+                <Flex
+                  justify="space-between"
+                  style={{
+                    // backgroundColor: 'blue',
+                    padding: 15,
+                    width: '70%',
+                    borderRadius: 8,
+                    border: '1px solid #EDEDED',
+                  }}
+                  key={ChatFlow.chatList[chat]._id}
+                >
+                  <Flex gap={10}>
+                    <div
+                      style={{
+                        backgroundColor: ChatFlow.chatList[chat].color,
+                        height: 20,
+                        width: 20,
+                        borderRadius: '50%',
+                      }}
+                    ></div>
+                    {ChatFlow.chatList[chat].name}
+                  </Flex>
+                </Flex>
+              ))
+            ) : (
+              <Flex justify="center" align="center" style={{ width: '100%', height: '100%' }}>
+                No chats selected
+              </Flex>
+            )}
+          </Flex>
         </Flex>
         <Flex justify="center" style={{ width: '33%' }}>
           <div style={{ marginTop: 100, perspective: 1000, perspectiveOrigin: '50% 50%' }}>
@@ -138,19 +180,57 @@ export const TeleportsView = () => {
           </div>
         </Flex>
         <Flex vertical align="center" style={{ width: '33%' }}>
-          <h4>
-            {' '}
-            {userSelected !== ''
-              ? `${UserFlow.userList[userSelected].firstName}'s chats selected`
-              : 'No user selected'}{' '}
-          </h4>
-          {chatsSelected.length !== 0 ? (
-            chatsSelected.map((chat) => (
-              <div key={ChatFlow.chatList[chat]._id}>{ChatFlow.chatList[chat].name}</div>
-            ))
-          ) : (
-            <span>No chats selected</span>
-          )}
+          <Flex>
+            {userSelected !== '' ? (
+              <Flex gap={10}>
+                <div>image</div> <span>{UserFlow.userList[userSelected].firstName}'s chats</span>
+              </Flex>
+            ) : (
+              'No user selected'
+            )}
+          </Flex>
+          <Flex
+            vertical
+            align="center"
+            style={{
+              //  backgroundColor: 'red',
+              height: '100%',
+              width: '100%',
+              padding: '20px 0',
+            }}
+          >
+            {chatsSelected.length !== 0 ? (
+              chatsSelected.map((chat) => (
+                <Flex
+                  justify="space-between"
+                  style={{
+                    // backgroundColor: 'blue',
+                    padding: 15,
+                    width: '70%',
+                    borderRadius: 8,
+                    border: '1px solid #EDEDED',
+                  }}
+                  key={ChatFlow.chatList[chat]._id}
+                >
+                  <Flex gap={10}>
+                    <div
+                      style={{
+                        backgroundColor: ChatFlow.chatList[chat].color,
+                        height: 20,
+                        width: 20,
+                        borderRadius: '50%',
+                      }}
+                    ></div>
+                    {ChatFlow.chatList[chat].name}
+                  </Flex>
+                </Flex>
+              ))
+            ) : (
+              <Flex justify="center" align="center" style={{ width: '100%', height: '100%' }}>
+                No chats selected
+              </Flex>
+            )}
+          </Flex>
         </Flex>
       </Flex>
 
@@ -171,7 +251,7 @@ export const TeleportsView = () => {
           //   </h2>
           // }
           >
-            <Flex gap={20}>
+            <Flex gap={20} style={{ overflowX: 'scroll' }}>
               {availablePublicChats.length !== 0 ? (
                 availablePublicChats.map((chat) => {
                   const userAllowed = chat.users.find((userId) => userId === currentUser._id)
@@ -212,7 +292,11 @@ export const TeleportsView = () => {
                         >
                           View
                         </Button>
-                        <Checkbox onChange={onChange2} value={chat._id}>
+                        <Checkbox
+                          onChange={onChange2}
+                          checked={!!chatsSelected.find((id) => id === chat._id)}
+                          value={chat._id}
+                        >
                           Checkbox
                         </Checkbox>
                       </Flex>
@@ -313,8 +397,8 @@ export const TeleportsView = () => {
 
         .back {
           transform: translateZ(-100px) rotateY(180deg);
-          background-color: ${ChatFlow.chatList[myChatsSelected[0]] !== undefined
-            ? ChatFlow.chatList[myChatsSelected[0]].color
+          background-color: ${ChatFlow.chatList[myChatsSelected[2]] !== undefined
+            ? ChatFlow.chatList[myChatsSelected[2]].color
             : testColor};
         }
 
@@ -345,8 +429,8 @@ export const TeleportsView = () => {
         .bottom {
           transform: rotateX(270deg) translateY(100px);
           transform-origin: bottom center;
-          background-color: ${ChatFlow.chatList[chatsSelected[0]] !== undefined
-            ? ChatFlow.chatList[chatsSelected[0]].color
+          background-color: ${ChatFlow.chatList[chatsSelected[2]] !== undefined
+            ? ChatFlow.chatList[chatsSelected[2]].color
             : testColor};
         }
 
