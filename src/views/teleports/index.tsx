@@ -3,16 +3,37 @@ import { IChat } from '@/domain/chat'
 import { ChatFlow } from '@/flows/chat'
 import { UserFlow } from '@/flows/users'
 import { getAllUsers, getChatsAsCreator, getCurrentUser } from '@/state/appData/selectors'
-import { Button, Card, Checkbox, Flex, Input, Radio, RadioChangeEvent, Select, Spin } from 'antd'
+import {
+  Button,
+  Card,
+  Checkbox,
+  ColorPicker,
+  Flex,
+  Input,
+  Radio,
+  RadioChangeEvent,
+  Select,
+  Spin,
+} from 'antd'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { CheckboxProps, Modal } from 'antd'
 import { CollapsibleSection } from '@/components/collapsibleSection'
 import { CloseCircleOutlined } from '@ant-design/icons'
+import { format } from 'date-fns'
+import { ITeleport } from '@/domain/teleports'
+import { TeleportsFlow } from '@/flows/teleports'
 
 const testColor = '#C0BFBF'
 const { TextArea } = Input
+
+interface IChatFormValues {
+  name: string
+  category: string
+  description: string
+  color: string
+}
 
 export const TeleportsView = () => {
   const currentUser = useSelector(getCurrentUser)
@@ -27,21 +48,44 @@ export const TeleportsView = () => {
   const [open, setOpen] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
   const [modalText, setModalText] = useState('Content of the modal')
+  const [chatFormValues, setChatFormValues] = useState<IChatFormValues>({
+    name: '',
+    category: '',
+    description: '',
+    color: '',
+  })
 
   const showModal = () => {
     setOpen(true)
   }
-  const handleOk = () => {
-    setModalText('The modal will be closed after two seconds')
-    setConfirmLoading(true)
-    setTimeout(() => {
-      setOpen(false)
-      setConfirmLoading(false)
-    }, 2000)
+  const handleOk = async () => {
+    const allChatsSelected = [...chatsSelected, ...myChatsSelected]
+    const currentDate = new Date()
+    const dateCreated = format(currentDate, 'dd-MM-yyyy')
+
+    const userSelectedId = UserFlow.userList[userSelected]._id
+
+    const finalTeleportObject: ITeleport = {
+      creator: currentUser._id,
+      chats: allChatsSelected,
+      name: chatFormValues.name,
+      category: chatFormValues.category,
+      description: chatFormValues.description,
+      dateCreated: dateCreated,
+      teleportUser: userSelectedId !== undefined ? userSelectedId : '',
+      color: chatFormValues.color,
+    }
+
+    console.log(finalTeleportObject)
+
+    const newChat = await TeleportsFlow.createNewTeleport(finalTeleportObject)
+
+    console.log('newChat', newChat)
   }
 
   const handleCancel = () => {
-    console.log('Clicked cancel button')
+    setChatFormValues({ name: '', category: '', description: '', color: '#4287f5' })
+
     setOpen(false)
   }
 
@@ -117,6 +161,16 @@ export const TeleportsView = () => {
       const filteredChats = myChatsSelected.filter((id) => id !== e.target.value)
       setMyChatsSelected(filteredChats)
     }
+  }
+
+  const handleFormCreateChatChange = (e: any) => {
+    const { value, name } = e.target
+
+    setChatFormValues({ ...chatFormValues, [name]: value })
+  }
+
+  const handleColorChange = (color: string) => {
+    setChatFormValues({ ...chatFormValues, color: color })
   }
 
   const filterOption = (input: string, option?: { label: string; value: string }) =>
@@ -631,9 +685,9 @@ export const TeleportsView = () => {
               <span style={{ fontSize: 18, width: '13%' }}>Name</span>
               <Input
                 style={{ width: 200 }}
-                // onChange={handleFormCreateChatChange}
+                onChange={handleFormCreateChatChange}
                 name="name"
-                // value={chatFormValues.name}
+                value={chatFormValues.name}
                 placeholder="Name"
               />
             </Flex>
@@ -642,20 +696,28 @@ export const TeleportsView = () => {
 
               <Input
                 style={{ width: 200 }}
-                // onChange={handleFormCreateChatChange}
+                onChange={handleFormCreateChatChange}
                 name="category"
-                // value={chatFormValues.category}
+                value={chatFormValues.category}
                 placeholder="Category"
+              />
+            </Flex>
+            <Flex align="start" gap={10}>
+              <span style={{ fontSize: 18, width: '13%' }}>Color</span>
+              <ColorPicker
+                onChange={(color_, hex) => handleColorChange(hex)}
+                defaultValue="#1677ff"
+                showText
               />
             </Flex>
             <Flex align="start" gap={10}>
               <span style={{ fontSize: 18, width: '13%' }}>Description</span>
               <TextArea
                 style={{ width: 400, height: 100 }}
-                // onChange={handleFormCreateChatChange}
+                onChange={handleFormCreateChatChange}
                 name="description"
                 placeholder="Description"
-                // value={chatFormValues.description}
+                value={chatFormValues.description}
               />
             </Flex>
           </Flex>
