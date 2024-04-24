@@ -39,6 +39,10 @@ const appDataSlice = createSlice({
       state.chats = action.payload
     },
 
+    setAllTeleports: (state, action: PayloadAction<ITeleport[]>) => {
+      state.teleports = action.payload
+    },
+
     updateChatById(state, action: { type: string; payload: IChat }) {
       const chatUpdated = action.payload
       state.chats = state.chats.map((chat) => (chat._id === chatUpdated._id ? chatUpdated : chat))
@@ -61,6 +65,7 @@ export const {
   setCurrentUser,
   setAllUsers,
   setAllChats,
+  setAllTeleports,
   updateChatById,
   addNewChat,
   addNewTeleport,

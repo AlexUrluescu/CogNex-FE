@@ -6,12 +6,12 @@ import { store } from '@/state/store'
 
 class TeleportsFlow {
   teleportsRepository = new TeleportsRepository()
-  chatList: Record<string, ITeleport> = {}
+  teleportList: Record<string, ITeleport> = {}
 
   getTeleportsByCreatorId(id: string) {
-    console.log(Object.values(this.chatList))
+    console.log(Object.values(this.teleportList))
 
-    const allChats = Object.values(this.chatList)
+    const allChats = Object.values(this.teleportList)
 
     const chatsFound = allChats.filter((chat) => chat.creator === id)
     return chatsFound
@@ -24,7 +24,7 @@ class TeleportsFlow {
 
     store.dispatch(addNewTeleport(newTeleport.teleport))
 
-    this.chatList[newTeleport._id] = newTeleport
+    this.teleportList[newTeleport._id] = newTeleport
 
     return newTeleport
   }
@@ -50,7 +50,7 @@ class TeleportsFlow {
       }
 
       store.dispatch(updateChatById({ ...data.chat }))
-      this.chatList[data.chat._id] = { ...data.chat }
+      this.teleportList[data.chat._id] = { ...data.chat }
     } catch (error) {
       return error
     }
@@ -90,7 +90,7 @@ class TeleportsFlow {
       if (chat._id === undefined) {
         return
       }
-      this.chatList[chat._id] = chat
+      this.teleportList[chat._id] = chat
     })
   }
 }

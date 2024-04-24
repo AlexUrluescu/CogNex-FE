@@ -5,10 +5,17 @@ import type { AppProps } from 'next/app'
 import { useEffect } from 'react'
 import { UserFlow } from '@/flows/users'
 import { IUser, User } from '@/domain/user'
-import { setAllChats, setAllUsers, setCurrentUser } from '@/state/appData/appDataSlice'
+import {
+  setAllChats,
+  setAllTeleports,
+  setAllUsers,
+  setCurrentUser,
+} from '@/state/appData/appDataSlice'
 import router from 'next/router'
 import { Chat, IChat } from '@/domain/chat'
 import { ChatFlow } from '@/flows/chat'
+import { TeleportsFlow } from '@/flows/teleports'
+import { ITeleport, Teleport } from '@/domain/teleports'
 
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -51,8 +58,28 @@ export default function App({ Component, pageProps }: AppProps) {
       }
     }
 
+    const fetchAllTeleports = async () => {
+      try {
+        const res = await fetch('http://127.0.0.1:5000/teleports')
+        const data = await res.json()
+
+        const teleports: Teleport[] = data.teleports
+        console.log('teleports', teleports)
+
+        TeleportsFlow.teleportList = Array.from(new Set([...teleports])).reduce((acc, chat) => {
+          acc[chat._id] = new Teleport(chat)
+          return acc
+        }, {} as Record<any, ITeleport>)
+
+        store.dispatch(setAllTeleports(teleports))
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
     fetchAllUsers()
     fetchAllChats()
+    fetchAllTeleports()
   }, [])
 
   useEffect(() => {

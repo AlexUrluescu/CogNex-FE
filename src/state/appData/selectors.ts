@@ -14,9 +14,19 @@ export const getAllChats = (state: RootState) => {
   return state.appData.chats
 }
 
+export const getAllTeleports = (state: RootState) => {
+  return state.appData.teleports
+}
+
 export const getChatById = (chatId: string | string[] | undefined) => {
   return createSelector([getAllChats], (chats) => {
     return chats.find((chat) => chat._id === chatId)
+  })
+}
+
+export const getTeleportById = (teleportId: string | string[] | undefined) => {
+  return createSelector([getAllTeleports], (teleports) => {
+    return teleports.find((teleport) => teleport._id === teleportId)
   })
 }
 
@@ -29,5 +39,11 @@ export const getUserById = (userId: string | string[] | undefined) => {
 export const getChatsAsCreator = (userId: string) => {
   return createSelector([getAllChats], (chats) => {
     return chats.filter((chat) => chat.creator === userId)
+  })
+}
+
+export const getTeleportsAsCreator = (userId: string) => {
+  return createSelector([getAllTeleports], (teleports) => {
+    return teleports.filter((teleport) => teleport.creator === userId)
   })
 }

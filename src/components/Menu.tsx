@@ -1,4 +1,4 @@
-import { getChatsAsCreator } from '@/state/appData/selectors'
+import { getChatsAsCreator, getTeleportsAsCreator } from '@/state/appData/selectors'
 import { Button, Flex, Menu } from 'antd'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -30,9 +30,16 @@ export const CustomMenu = ({ currentUserId }: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const router = useRouter()
   const myChatsAsCreator = useSelector(getChatsAsCreator(currentUserId))
+  const myTeleportAsCreator = useSelector(getTeleportsAsCreator(currentUserId))
 
   const myPrivateChats = myChatsAsCreator.filter((chat) => chat.vizibility === 'private')
   const myPublicChats = myChatsAsCreator.filter((chat) => chat.vizibility === 'public')
+
+  const teleportsOptions = [
+    { name: 'My teleports', route: '/my-teleports' },
+    { name: 'Explore', route: '/teleports' },
+  ]
+  console.log('myTeleportAsCreator', myTeleportAsCreator)
 
   const onClick: MenuProps['onClick'] = (e) => {
     console.log('click ', e)
@@ -112,9 +119,17 @@ export const CustomMenu = ({ currentUserId }: any) => {
       <AppstoreOutlined />
     ),
     getItem(
-      <span onClick={() => router.push('/teleports')}>Teleports</span>,
       'teleports',
-      <AppstoreOutlined />
+      'sub9',
+      <AppstoreOutlined />,
+      // <span onClick={() => router.push('/teleports')}>Teleports</span>,
+      teleportsOptions.map((tel) =>
+        getItem(
+          <div onClick={() => router.push(tel.route)}>
+            <span>{tel.name}</span>
+          </div>
+        )
+      )
     ),
     getItem(<Button onClick={showModal}>New Chat</Button>),
   ]

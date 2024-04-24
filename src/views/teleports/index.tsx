@@ -55,6 +55,8 @@ export const TeleportsView = () => {
     color: '',
   })
 
+  console.log('availablePublicChats', availablePublicChats)
+
   const showModal = () => {
     setOpen(true)
   }
@@ -344,7 +346,7 @@ export const TeleportsView = () => {
           // }
           >
             <Flex gap={20} style={{ overflowX: 'scroll' }}>
-              {availablePublicChats.length !== 0 ? (
+              {availablePublicChats.length !== 0 && userSelected !== '' ? (
                 availablePublicChats.map((chat) => {
                   const userAllowed = chat.users.find((userId) => userId === currentUser._id)
 
