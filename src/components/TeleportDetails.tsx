@@ -82,7 +82,12 @@ export const TeleportDetails: React.FC<ITeleportDetails> = ({ teleport }) => {
                 const chatFound = ChatFlow.chatList[chat]
 
                 return (
-                  <Flex gap={15} align="center" style={{ border: '1px solid gray', padding: 5 }}>
+                  <Flex
+                    key={chatFound._id}
+                    gap={15}
+                    align="center"
+                    style={{ border: '1px solid gray', padding: 5 }}
+                  >
                     <div
                       style={{
                         width: 15,
@@ -103,7 +108,12 @@ export const TeleportDetails: React.FC<ITeleportDetails> = ({ teleport }) => {
                 const chatFound = ChatFlow.chatList[chat]
 
                 return (
-                  <Flex gap={15} align="center" style={{ border: '1px solid gray', padding: 5 }}>
+                  <Flex
+                    key={chatFound._id}
+                    gap={15}
+                    align="center"
+                    style={{ border: '1px solid gray', padding: 5 }}
+                  >
                     <div
                       style={{
                         width: 15,

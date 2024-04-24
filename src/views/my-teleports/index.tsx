@@ -15,7 +15,7 @@ export const MyTeleportsView = () => {
       <Card title="My teleports">
         {myTeleportAsCreator.length > 0 ? (
           myTeleportAsCreator.map((tel) => (
-            <Card style={{ width: 180 }}>
+            <Card key={tel._id} style={{ width: 180 }}>
               <Flex vertical gap={20}>
                 <Flex justify="center" style={{ borderBottom: '1px solid gray', padding: 10 }}>
                   <div

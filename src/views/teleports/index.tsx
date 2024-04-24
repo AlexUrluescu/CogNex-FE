@@ -269,7 +269,8 @@ export const TeleportsView = () => {
             <Flex>
               {userSelected !== '' ? (
                 <Flex gap={10}>
-                  <div>image</div> <span>{UserFlow.userList[userSelected].firstName}'s chats</span>
+                  <div>image</div>{' '}
+                  <span>{UserFlow.userList[userSelected].firstName}&apos chats</span>
                 </Flex>
               ) : (
                 'No user selected'
