@@ -1,6 +1,12 @@
 import { v4 } from 'uuid'
 import { IUser } from '../user'
 
+interface IUserReview {
+  rate: number
+  message: string
+  userId: string
+}
+
 export const defaultChatValues = {
   _id: '',
   creator: '',
@@ -23,10 +29,10 @@ export interface IChat {
   files: any[]
   vizibility: string
   users: string[]
-  reviews?: any[]
   color: string
   dateCreated: string
   description: string
+  reviews?: IUserReview[]
 }
 
 export class Chat implements IChat {
@@ -37,7 +43,7 @@ export class Chat implements IChat {
   files: any[]
   vizibility: string
   users: string[]
-  reviews: any[]
+  reviews: IUserReview[]
   color: string
   dateCreated: string
   description: string
