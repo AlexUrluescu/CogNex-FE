@@ -17,7 +17,6 @@ export const TeleportDisplay: React.FC<ITeleportDisplay> = ({ color, id }) => {
   const [userMessage, setUserMessage] = useState<IMessage>({ entity: 'user', message: '' })
 
   useEffect(() => {
-    console.log('intra')
     setMessages([{ entity: 'bot', message: 'Hello there' }])
     setUserMessage({ entity: 'user', message: '' })
   }, [id])

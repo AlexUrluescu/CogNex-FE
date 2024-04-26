@@ -46,8 +46,7 @@ export const TeleportDetails: React.FC<ITeleportDetails> = ({ teleport }) => {
         <span className="title">Owner: </span>
         <span>
           <Link href={`/my-account/${UserFlow.userList[teleport.creator]._id}`}>
-            {UserFlow.userList[teleport.creator].firstName}{' '}
-            {UserFlow.userList[teleport.creator].lastName}
+            {UserFlow.userList[teleport.creator].name}
           </Link>
         </span>
       </Flex>
@@ -64,10 +63,7 @@ export const TeleportDetails: React.FC<ITeleportDetails> = ({ teleport }) => {
 
       <Flex gap={10} align="center">
         <span className="title">User teleported: </span>
-        <span>
-          {UserFlow.userList[teleport.teleportUser].firstName}{' '}
-          {UserFlow.userList[teleport.teleportUser].lastName}
-        </span>
+        <span>{UserFlow.userList[teleport.teleportUser].name}</span>
       </Flex>
 
       <Flex gap={10} align="start">

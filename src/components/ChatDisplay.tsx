@@ -19,7 +19,6 @@ export const ChatDisplay: React.FC<IChatDisplay> = ({ chatColor, chatId, hasRigh
   const [userMessage, setUserMessage] = useState<IMessage>({ entity: 'user', message: '' })
 
   useEffect(() => {
-    console.log('intra')
     setMessages([{ entity: 'bot', message: 'Hello there' }])
     setUserMessage({ entity: 'user', message: '' })
   }, [chatId])

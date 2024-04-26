@@ -18,7 +18,7 @@ export const PrivateChatIdView: React.FC<IPrivateChatIdView> = ({ chat }) => {
   const currentUser = useSelector(getCurrentUser)
 
   const onChange = (key: string) => {
-    console.log(key)
+    // console.log(key)
   }
 
   const isChatUser = chat.users.find((userId) => userId === currentUser._id)

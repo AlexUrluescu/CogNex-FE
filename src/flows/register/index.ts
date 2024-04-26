@@ -13,7 +13,11 @@ class RegisterFlow {
   async loginUser(user: UserLogin) {
     const loggedUser = await this.registerRepository.loginUser(user)
 
-    console.log('loggedUser', loggedUser)
+    return loggedUser
+  }
+
+  async loginUser2(user: any) {
+    const loggedUser = await this.registerRepository.loginUser2(user)
 
     return loggedUser
   }

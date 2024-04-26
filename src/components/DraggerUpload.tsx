@@ -15,9 +15,9 @@ interface IDraggerUpload {
 }
 
 const DraggerUpload: React.FC<IDraggerUpload> = ({ file, setFile, onChange }) => {
-  useEffect(() => {
-    console.log('file', file)
-  }, [file])
+  // useEffect(() => {
+  //   console.log('file', file)
+  // }, [file])
 
   const props: UploadProps = {
     name: 'file',
@@ -30,8 +30,6 @@ const DraggerUpload: React.FC<IDraggerUpload> = ({ file, setFile, onChange }) =>
   }
 
   const currentUser = useSelector(getCurrentUser)
-
-  console.log('currentUser', currentUser)
 
   const uploadPdf = () => {
     const formData = new FormData()
@@ -47,8 +45,6 @@ const DraggerUpload: React.FC<IDraggerUpload> = ({ file, setFile, onChange }) =>
     })
     formData.append('userId', currentUser._id as string)
 
-    console.log('formData', formData)
-
     axios
       .post('http://127.0.0.1:5000/extract', formData)
       .then((response) => {
@@ -61,8 +57,6 @@ const DraggerUpload: React.FC<IDraggerUpload> = ({ file, setFile, onChange }) =>
         console.error('Error uploading PDF:', error)
       })
   }
-
-  const buttonDisabled = file.length === 0
 
   return (
     <Flex vertical>

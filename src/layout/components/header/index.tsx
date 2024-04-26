@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux'
 
 const Header = () => {
   const currentUser = useSelector(getCurrentUser)
+
   const allUsers = useSelector(getAllUsers)
 
   const router = useRouter()
@@ -17,7 +18,7 @@ const Header = () => {
     .map((user) => {
       const obj = {
         value: user._id,
-        label: user.firstName + ' ' + user.lastName,
+        label: user.name,
         id: user._id,
       }
 
@@ -48,15 +49,14 @@ const Header = () => {
                   _id: '',
                   email: '',
                   files: [],
-                  firstName: '',
-                  lastName: '',
+                  name: '',
                   age: '',
-                  password: '',
+                  photo: '',
                 })
               )
 
               localStorage.removeItem('user')
-              router.push('/register')
+              router.push('/login')
             }}
           >
             Log oouut
@@ -106,9 +106,13 @@ const Header = () => {
             trigger={['click']}
           >
             <Flex justify="end" style={{ cursor: 'pointer' }} onClick={(e) => e.preventDefault()}>
-              <Flex gap={10}>
-                <UserOutlined />
-                {currentUser.firstName} {currentUser.lastName}
+              <Flex gap={10} align="center">
+                {/* <UserOutlined /> */}
+                {currentUser.name}
+                <img
+                  src={currentUser.photo}
+                  style={{ width: 35, height: 35, borderRadius: '50%' }}
+                ></img>
               </Flex>
             </Flex>
           </Dropdown>

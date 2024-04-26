@@ -55,8 +55,6 @@ export const TeleportsView = () => {
     color: '',
   })
 
-  console.log('availablePublicChats', availablePublicChats)
-
   const showModal = () => {
     setOpen(true)
   }
@@ -78,11 +76,7 @@ export const TeleportsView = () => {
       color: chatFormValues.color,
     }
 
-    console.log(finalTeleportObject)
-
     const newChat = await TeleportsFlow.createNewTeleport(finalTeleportObject)
-
-    console.log('newChat', newChat)
   }
 
   const handleCancel = () => {
@@ -94,16 +88,10 @@ export const TeleportsView = () => {
   const myChats = useSelector(getChatsAsCreator(currentUser._id))
   // const publicChats = myChats.filter((chat) => chat.vizibility === 'public')
 
-  console.log('myChats', myChats)
-
-  console.log(currentUser)
-
-  console.log('re-render')
-
   const allUsersForSearch = allUsers.map((user) => {
     const obj = {
       value: user._id,
-      label: user.firstName + ' ' + user.lastName,
+      label: user.name,
       id: user._id,
     }
 
@@ -124,24 +112,20 @@ export const TeleportsView = () => {
   }
 
   const onChange = (value: string) => {
-    console.log(value)
     setUserSelected(value)
     const chats = ChatFlow.getChatsByCreatorId(value)
-    console.log('chats', chats)
+
     const publicChats = chats.filter((chat) => chat.vizibility === 'public')
-    console.log(publicChats)
 
     setAvailablePublicChats(publicChats)
   }
 
   const onSearch = (value: string) => {
     // router.push(`/my-account/${value}`)
-    console.log(value)
+    // console.log(value)
   }
 
   const onChange2: CheckboxProps['onChange'] = (e) => {
-    console.log(`value = ${e.target.value}`)
-    console.log(`checked = ${e.target.checked}`)
     const checked = e.target.checked
 
     if (checked) {
@@ -153,8 +137,6 @@ export const TeleportsView = () => {
   }
 
   const onChange3: CheckboxProps['onChange'] = (e) => {
-    console.log(`value = ${e.target.value}`)
-    console.log(`checked = ${e.target.checked}`)
     const checked = e.target.checked
 
     if (checked) {
@@ -203,12 +185,14 @@ export const TeleportsView = () => {
           }}
         >
           <Flex vertical align="center" style={{ width: '33%' }}>
-            <Flex justify="center" style={{ width: '80%' }} gap={10}>
-              <div>image</div>
-              <span>
-                {currentUser.firstName.charAt(0).toUpperCase() + currentUser.firstName.slice(1)}{' '}
-                {currentUser.lastName.charAt(0).toUpperCase() + currentUser.lastName.slice(1)}
-              </span>
+            <Flex align="center" justify="center" style={{ width: '80%' }} gap={10}>
+              <Flex>
+                <img
+                  style={{ width: 35, height: 35, borderRadius: '50%' }}
+                  src={currentUser.photo}
+                />
+              </Flex>
+              <span>{currentUser.name}</span>
             </Flex>
             <Flex
               vertical
@@ -268,9 +252,14 @@ export const TeleportsView = () => {
           <Flex vertical align="center" style={{ width: '33%' }}>
             <Flex>
               {userSelected !== '' ? (
-                <Flex gap={10}>
-                  <div>image</div>{' '}
-                  <span>{UserFlow.userList[userSelected].firstName}&apos chats</span>
+                <Flex align="center" gap={10}>
+                  <Flex>
+                    <img
+                      style={{ width: 35, height: 35, borderRadius: '50%' }}
+                      src={UserFlow.userList[userSelected].photo}
+                    ></img>
+                  </Flex>
+                  <span>{UserFlow.userList[userSelected].name}</span>
                 </Flex>
               ) : (
                 'No user selected'
@@ -333,7 +322,7 @@ export const TeleportsView = () => {
         <CollapsibleSection
           title={
             userSelected !== ''
-              ? `${UserFlow.userList[userSelected].firstName}'s chats`
+              ? `${UserFlow.userList[userSelected].name}'s chats`
               : 'No user selected'
           }
         >

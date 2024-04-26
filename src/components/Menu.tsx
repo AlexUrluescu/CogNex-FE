@@ -39,10 +39,8 @@ export const CustomMenu = ({ currentUserId }: any) => {
     { name: 'My teleports', route: '/my-teleports' },
     { name: 'Explore', route: '/teleports' },
   ]
-  console.log('myTeleportAsCreator', myTeleportAsCreator)
 
   const onClick: MenuProps['onClick'] = (e) => {
-    console.log('click ', e)
     setCurrent(e.key)
   }
 

@@ -8,7 +8,6 @@ export const MyTeleportsView = () => {
   const router = useRouter()
   const currentUser = useSelector(getCurrentUser)
   const myTeleportAsCreator = useSelector(getTeleportsAsCreator(currentUser._id))
-  console.log('myTeleportAsCreator', myTeleportAsCreator)
 
   return (
     <Flex vertical>

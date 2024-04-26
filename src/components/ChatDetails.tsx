@@ -26,7 +26,7 @@ export const ChatDetails: React.FC<IChatDetails> = ({ chat }) => {
   const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value)
   const onChange = (e: any) => {
     const { value } = e.target
-    const usersFound = chatUsers.filter((user) => user.firstName.includes(value))
+    const usersFound = chatUsers.filter((user) => user.name.includes(value))
     setManagedtUsers(usersFound)
   }
 
@@ -51,7 +51,7 @@ export const ChatDetails: React.FC<IChatDetails> = ({ chat }) => {
         <span className="title">Owner: </span>
         <span>
           <Link href={`/my-account/${UserFlow.userList[chat.creator]._id}`}>
-            {UserFlow.userList[chat.creator].firstName} {UserFlow.userList[chat.creator].lastName}
+            {UserFlow.userList[chat.creator].name}
           </Link>
         </span>
       </Flex>
@@ -85,11 +85,9 @@ export const ChatDetails: React.FC<IChatDetails> = ({ chat }) => {
             managedUsers.map((user) => (
               <Flex key={user._id} justify="space-between" align="center">
                 <Flex gap={10}>
-                  <Flex>image</Flex>
+                  <Flex>{user.photo}</Flex>
 
-                  <span>
-                    {user.firstName} {user.lastName}
-                  </span>
+                  <span>{user.name}</span>
                 </Flex>
 
                 <Button onClick={() => router.push(`/my-account/${user._id}`)} type="primary">

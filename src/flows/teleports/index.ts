@@ -9,8 +9,6 @@ class TeleportsFlow {
   teleportList: Record<string, ITeleport> = {}
 
   getTeleportsByCreatorId(id: string) {
-    console.log(Object.values(this.teleportList))
-
     const allChats = Object.values(this.teleportList)
 
     const chatsFound = allChats.filter((chat) => chat.creator === id)
@@ -19,8 +17,6 @@ class TeleportsFlow {
 
   async createNewTeleport(teleport: ITeleport) {
     const newTeleport = await this.teleportsRepository.createTeleport(teleport)
-
-    console.log('newTeleport', newTeleport)
 
     store.dispatch(addNewTeleport(newTeleport.teleport))
 
@@ -67,8 +63,6 @@ class TeleportsFlow {
       })
 
       const data = await res.json()
-
-      console.log(data)
 
       // if (data.documents === null) {
       //   alert(data.message)

@@ -149,8 +149,6 @@ const ChatPage = () => {
     })
     formData.append('userId', currentUser._id as string)
 
-    console.log('formData', formData)
-
     axios
       .post('http://127.0.0.1:5000/extract', formData)
       .then((response) => {
@@ -166,15 +164,12 @@ const ChatPage = () => {
 
   const onChange = (info: any) => {
     const { status } = info.file
-    console.log('intra in change')
 
     if (status === 'uploading') {
-      console.log('uploading')
       setFiles(info.fileList)
     }
 
     if (status !== 'uploading') {
-      console.log(info.fileList)
       setFiles(info.fileList)
     }
     if (status === 'done') {

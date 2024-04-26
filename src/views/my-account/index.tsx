@@ -16,12 +16,10 @@ export const MyAccountView: React.FC<IMyAccountView> = ({ user }) => {
   return (
     <Flex vertical gap={30}>
       <Flex align="center">
-        <Flex style={{ width: 60, height: 60 }}>
-          <UserOutlined style={{ fontSize: 30 }} />
+        <Flex align="center" style={{ width: 60, height: 60 }}>
+          <img style={{ width: 45, height: 45, borderRadius: '50%' }} src={user.photo} />
         </Flex>
-        <h2>
-          {user.firstName} {user.lastName}
-        </h2>
+        <h2>{user.name}</h2>
       </Flex>
       <Flex>
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aut et sit harum officiis

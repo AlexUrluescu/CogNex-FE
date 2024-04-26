@@ -8,8 +8,6 @@ class ChatFlow {
   chatList: Record<string, IChat> = {}
 
   getChatsByCreatorId(id: string) {
-    console.log(Object.values(this.chatList))
-
     const allChats = Object.values(this.chatList)
 
     const chatsFound = allChats.filter((chat) => chat.creator === id)
@@ -18,7 +16,6 @@ class ChatFlow {
 
   async createNewChat(chat: IChat) {
     const newChat = await this.chatRepository.createChat(chat)
-
     store.dispatch(addNewChat(newChat.chat))
 
     this.chatList[newChat._id] = newChat
@@ -65,8 +62,6 @@ class ChatFlow {
 
       const data = await res.json()
 
-      console.log(data)
-
       // if (data.documents === null) {
       //   alert(data.message)
       // }
@@ -74,8 +69,6 @@ class ChatFlow {
       // if (data.response === undefined || data.ok === false) {
       //   return
       // }
-
-      console.log('response', data.response)
       return
     } catch (error) {
       return error
