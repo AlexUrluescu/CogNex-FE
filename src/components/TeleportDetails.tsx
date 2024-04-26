@@ -14,8 +14,6 @@ interface ITeleportDetails {
 export const TeleportDetails: React.FC<ITeleportDetails> = ({ teleport }) => {
   const router = useRouter()
 
-  console.log('teleport', teleport)
-
   if (teleport._id === undefined) {
     return
   }
@@ -27,8 +25,6 @@ export const TeleportDetails: React.FC<ITeleportDetails> = ({ teleport }) => {
   const otherTeleportedChats = teleport.chats.filter(
     (chat) => ChatFlow.chatList[chat].creator !== teleport.creator
   )
-
-  console.log('myChats', myChats)
 
   return (
     <Flex vertical gap={20}>
