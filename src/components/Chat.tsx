@@ -72,19 +72,15 @@ const Chat = () => {
   //   // setChatMessages( prevMessages => [...prevMessages, chatMessage])
   // });
 
-  useEffect(() => {
-    console.log('file2', file)
-  }, [file])
+  // useEffect(() => {
+  //   console.log('file2', file)
+  // }, [file])
 
   const uploadPdf = () => {
     const formData = new FormData()
 
-    console.log('file', file)
-
     formData.append('pdfs', file)
     formData.append('userId', currentUser._id as string)
-
-    console.log('formData2', formData)
 
     axios
       .post('http://127.0.0.1:5000/extract', formData)

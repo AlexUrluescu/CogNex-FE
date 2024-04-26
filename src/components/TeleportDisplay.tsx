@@ -1,27 +1,25 @@
-import { ChatFlow } from '@/flows/chat'
 import { RobotOutlined, UserOutlined, WarningOutlined } from '@ant-design/icons'
 import { Button, Flex, Input } from 'antd'
 import React, { useEffect, useState } from 'react'
+
+interface ITeleportDisplay {
+  color: string
+  id: string
+}
 
 interface IMessage {
   entity: 'user' | 'bot'
   message: string
 }
 
-interface IChatDisplay {
-  chatColor: string
-  chatId: string
-  hasRights?: boolean | undefined
-}
-
-export const ChatDisplay: React.FC<IChatDisplay> = ({ chatColor, chatId, hasRights }) => {
+export const TeleportDisplay: React.FC<ITeleportDisplay> = ({ color, id }) => {
   const [messages, setMessages] = useState<IMessage[]>([{ entity: 'bot', message: 'Hello there' }])
   const [userMessage, setUserMessage] = useState<IMessage>({ entity: 'user', message: '' })
 
   useEffect(() => {
     setMessages([{ entity: 'bot', message: 'Hello there' }])
     setUserMessage({ entity: 'user', message: '' })
-  }, [chatId])
+  }, [id])
   const handleInputChange = (e: any) => {
     const { value } = e.target
 
@@ -36,7 +34,7 @@ export const ChatDisplay: React.FC<IChatDisplay> = ({ chatColor, chatId, hasRigh
   const handleSend = () => {
     setMessages([...messages, userMessage])
 
-    ChatFlow.getInfoFromChromaDb(userMessage.message, chatId)
+    //   ChatFlow.getInfoFromChromaDb(userMessage.message, chatId) to dooooo
 
     setUserMessage({ entity: 'user', message: '' })
   }
@@ -59,7 +57,7 @@ export const ChatDisplay: React.FC<IChatDisplay> = ({ chatColor, chatId, hasRigh
                 style={{
                   padding: 10,
                   borderRadius: '50%',
-                  backgroundColor: chatColor,
+                  backgroundColor: color,
                 }}
               >
                 <RobotOutlined style={{ color: 'white' }} />
@@ -73,7 +71,7 @@ export const ChatDisplay: React.FC<IChatDisplay> = ({ chatColor, chatId, hasRigh
                 style={{
                   padding: 10,
                   borderRadius: '50%',
-                  backgroundColor: chatColor,
+                  backgroundColor: color,
                 }}
               >
                 <UserOutlined style={{ color: 'white' }} />
@@ -81,17 +79,11 @@ export const ChatDisplay: React.FC<IChatDisplay> = ({ chatColor, chatId, hasRigh
             ) : null}
           </Flex>
         ))}
-        {hasRights === false ? (
-          <Flex gap={10}>
-            <WarningOutlined style={{ color: 'red' }} />
-            <span style={{ color: 'red' }}>To use the Chat, you have to subscribe !</span>
-          </Flex>
-        ) : null}
       </Flex>
       <Flex gap={10}>
         <Input
           onChange={handleInputChange}
-          disabled={hasRights === false ? true : false}
+          // disabled={hasRights === false ? true : false}
           placeholder="Type"
           style={{ width: '90%' }}
           value={userMessage.message}

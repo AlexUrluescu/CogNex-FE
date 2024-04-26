@@ -2,51 +2,46 @@ import { v4 } from 'uuid'
 
 export interface IUser {
   _id?: string
-  firstName: string
-  lastName: string
+  name: string
   email: string
   age: string
-  password: string
+  photo: string
   files?: string[]
 }
 
 export interface IUser2 {
   _id: string
-  firstName: string
-  lastName: string
+  name: string
   email: string
   age: string
-  password: string
+  photo: string
   files?: string[]
 }
 
 export class User implements IUser {
   _id: string
-  firstName: string
-  lastName: string
+  name: string
   email: string
   age: string
-  password: string
+  photo: string
   files?: string[] | undefined
 
   constructor(user: IUser) {
     this._id = user._id || v4()
-    this.firstName = user.firstName
-    this.lastName = user.lastName
+    this.name = user.name
     this.email = user.email
     this.age = user.age
-    this.password = user.password
+    this.photo = user.photo
     this.files = user.files || []
   }
 
   toJSON = () => {
     return {
       _id: this._id,
-      firstName: this.firstName,
-      lastName: this.lastName,
+      name: this.name,
       email: this.email,
       age: this.age,
-      password: this.password,
+      photo: this.photo,
       files: this.files,
     }
   }

@@ -1,26 +1,28 @@
-import { IChat } from '@/domain/chat'
-import { ChatRepository } from '@/repositories/chat'
-import { addNewChat, updateChatById } from '@/state/appData/appDataSlice'
+import { ITeleport } from '@/domain/teleports'
+import { TeleportsRepository } from '@/repositories/teleports'
+
+import { addNewChat, addNewTeleport, updateChatById } from '@/state/appData/appDataSlice'
 import { store } from '@/state/store'
 
-class ChatFlow {
-  chatRepository = new ChatRepository()
-  chatList: Record<string, IChat> = {}
+class TeleportsFlow {
+  teleportsRepository = new TeleportsRepository()
+  teleportList: Record<string, ITeleport> = {}
 
-  getChatsByCreatorId(id: string) {
-    const allChats = Object.values(this.chatList)
+  getTeleportsByCreatorId(id: string) {
+    const allChats = Object.values(this.teleportList)
 
     const chatsFound = allChats.filter((chat) => chat.creator === id)
     return chatsFound
   }
 
-  async createNewChat(chat: IChat) {
-    const newChat = await this.chatRepository.createChat(chat)
-    store.dispatch(addNewChat(newChat.chat))
+  async createNewTeleport(teleport: ITeleport) {
+    const newTeleport = await this.teleportsRepository.createTeleport(teleport)
 
-    this.chatList[newChat._id] = newChat
+    store.dispatch(addNewTeleport(newTeleport.teleport))
 
-    return newChat
+    this.teleportList[newTeleport._id] = newTeleport
+
+    return newTeleport
   }
 
   async userSubscribed(userId: string, chatId: string) {
@@ -44,7 +46,7 @@ class ChatFlow {
       }
 
       store.dispatch(updateChatById({ ...data.chat }))
-      this.chatList[data.chat._id] = { ...data.chat }
+      this.teleportList[data.chat._id] = { ...data.chat }
     } catch (error) {
       return error
     }
@@ -69,22 +71,23 @@ class ChatFlow {
       // if (data.response === undefined || data.ok === false) {
       //   return
       // }
+
+      console.log('response', data.response)
       return
     } catch (error) {
       return error
     }
   }
 
-  storeIntoList(chats: IChat[]) {
+  storeIntoList(chats: ITeleport[]) {
     chats.forEach((chat) => {
       if (chat._id === undefined) {
         return
       }
-      this.chatList[chat._id] = chat
+      this.teleportList[chat._id] = chat
     })
   }
 }
 
-const chatFlow = new ChatFlow()
-
-export { chatFlow as ChatFlow }
+const teleportsFlow = new TeleportsFlow()
+export { teleportsFlow as TeleportsFlow }

@@ -42,7 +42,6 @@ export const CreateChatModal: React.FC<ICreateChatModal> = ({
   const [loading, setLoading] = useState(false)
 
   const onChange2 = (e: RadioChangeEvent) => {
-    console.log('radio checked', e.target.value)
     setValue(e.target.value)
   }
 
@@ -83,8 +82,6 @@ export const CreateChatModal: React.FC<ICreateChatModal> = ({
       reviews: [],
       dateCreated: dateCreated,
     }
-
-    console.log('test', test)
 
     setLoading(true)
 
@@ -134,8 +131,6 @@ export const CreateChatModal: React.FC<ICreateChatModal> = ({
     })
     formData.append('userId', currentUser._id as string)
 
-    console.log('formData', formData)
-
     axios
       .post('http://127.0.0.1:5000/extract', formData)
       .then((response) => {
@@ -151,15 +146,12 @@ export const CreateChatModal: React.FC<ICreateChatModal> = ({
 
   const onChange = (info: any) => {
     const { status } = info.file
-    console.log('intra in change')
 
     if (status === 'uploading') {
-      console.log('uploading')
       setFiles(info.fileList)
     }
 
     if (status !== 'uploading') {
-      console.log(info.fileList)
       setFiles(info.fileList)
     }
     if (status === 'done') {
