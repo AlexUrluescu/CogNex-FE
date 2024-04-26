@@ -30,6 +30,8 @@ export const ChatDetails: React.FC<IChatDetails> = ({ chat }) => {
     setManagedtUsers(usersFound)
   }
 
+  console.log('chat', chat)
+
   return (
     <Flex vertical gap={20}>
       <Flex gap={10} align="center">
@@ -84,8 +86,10 @@ export const ChatDetails: React.FC<IChatDetails> = ({ chat }) => {
           {managedUsers.length > 0 ? (
             managedUsers.map((user) => (
               <Flex key={user._id} justify="space-between" align="center">
-                <Flex gap={10}>
-                  <Flex>{user.photo}</Flex>
+                <Flex align="center" gap={10}>
+                  <Flex>
+                    <img src={user.photo} style={{ width: 35, height: 35, borderRadius: '50%' }} />
+                  </Flex>
 
                   <span>{user.name}</span>
                 </Flex>

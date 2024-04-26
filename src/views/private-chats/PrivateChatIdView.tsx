@@ -1,6 +1,6 @@
 import { IChat } from '@/domain/chat'
 import { height } from '@fortawesome/free-solid-svg-icons/fa0'
-import { Button, Flex } from 'antd'
+import { Button, Flex, message } from 'antd'
 import React from 'react'
 import { Tabs } from 'antd'
 import type { TabsProps } from 'antd'
@@ -16,6 +16,14 @@ interface IPrivateChatIdView {
 
 export const PrivateChatIdView: React.FC<IPrivateChatIdView> = ({ chat }) => {
   const currentUser = useSelector(getCurrentUser)
+  const [messageApi, contextHolder] = message.useMessage()
+
+  const success = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'You have successfully subscribed',
+    })
+  }
 
   const onChange = (key: string) => {
     // console.log(key)
@@ -81,10 +89,12 @@ export const PrivateChatIdView: React.FC<IPrivateChatIdView> = ({ chat }) => {
     }
 
     ChatFlow.userSubscribed(userId, chatId)
+    success()
   }
 
   return (
     <Flex vertical gap={30}>
+      {contextHolder}
       <Flex justify="space-between">
         <Flex gap={10}>
           <div
