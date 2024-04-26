@@ -366,7 +366,7 @@ export const TeleportsView = () => {
                         <span>{chat.name}</span>
                       </Flex>
 
-                      <Flex align="center" vertical>
+                      <Flex gap={15} align="center" vertical>
                         {!!userAllowed === false && isChatOwner === false ? (
                           <span style={{ color: 'red' }}>You are not subcribed</span>
                         ) : null}
@@ -376,13 +376,15 @@ export const TeleportsView = () => {
                         >
                           View
                         </Button>
-                        <Checkbox
-                          onChange={onChange2}
-                          checked={!!chatsSelected.find((id) => id === chat._id)}
-                          value={chat._id}
-                        >
-                          Checkbox
-                        </Checkbox>
+                        {!!userAllowed === true ? (
+                          <Checkbox
+                            onChange={onChange2}
+                            checked={!!chatsSelected.find((id) => id === chat._id)}
+                            value={chat._id}
+                          >
+                            Teleport
+                          </Checkbox>
+                        ) : null}
                       </Flex>
                     </Flex>
                   )
@@ -438,7 +440,7 @@ export const TeleportsView = () => {
                           View
                         </Button>
                         <Checkbox onChange={onChange3} value={chat._id}>
-                          Checkbox
+                          Teleport
                         </Checkbox>
                       </Flex>
                     </Flex>
@@ -579,7 +581,7 @@ export const TeleportsView = () => {
             }}
           >
             <Flex align="start" gap={20} style={{ width: '50%', height: '100%' }}>
-              <p>Your photo</p>
+              <img style={{ width: 35, height: 35, borderRadius: '50%' }} src={currentUser.photo} />
               <Flex
                 vertical
                 gap={10}
@@ -669,7 +671,10 @@ export const TeleportsView = () => {
                     ))
                   : null}
               </Flex>
-              <p>Users photo</p>
+              <img
+                style={{ width: 35, height: 35, borderRadius: '50%' }}
+                src={UserFlow.userList[userSelected].photo}
+              />
             </Flex>
           </Flex>
           <Flex vertical gap={20}>
