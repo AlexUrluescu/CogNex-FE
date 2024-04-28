@@ -5,6 +5,7 @@ interface IUserReview {
   rate: number
   message: string
   userId: string
+  date: string
 }
 
 export const defaultChatValues = {

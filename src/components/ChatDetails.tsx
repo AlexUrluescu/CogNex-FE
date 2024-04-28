@@ -6,10 +6,12 @@ import { getCurrentUser } from '@/state/appData/selectors'
 import { store } from '@/state/store'
 import { Button, Card, Flex, Input, Rate } from 'antd'
 import { SearchProps } from 'antd/es/input/Search'
+import { format } from 'date-fns'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { v4 as uuidv4 } from 'uuid'
 
 interface IChatDetails {
   chat: IChat
@@ -19,17 +21,21 @@ interface IUserReview {
   rate: number
   message: string
   userId: string
+  date: string
 }
 
 const { Search } = Input
 
 export const ChatDetails: React.FC<IChatDetails> = ({ chat }) => {
+  const currentDate = new Date()
+  const dateCreated = format(currentDate, 'dd-MM-yyyy')
   const router = useRouter()
   const currentUser = useSelector(getCurrentUser)
   const [userReview, setUserReview] = useState<IUserReview>({
     rate: 1,
     message: '',
     userId: currentUser._id,
+    date: dateCreated,
   })
 
   const chatUsers = chat.users.map((userId) => {
@@ -49,8 +55,6 @@ export const ChatDetails: React.FC<IChatDetails> = ({ chat }) => {
 
   const handleReview = async () => {
     try {
-      console.log(userReview)
-
       const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/add-review`, {
         method: 'POST',
         headers: {
@@ -171,7 +175,7 @@ export const ChatDetails: React.FC<IChatDetails> = ({ chat }) => {
           </Flex>
           <hr></hr>
         </Flex>
-        {chat.reviews !== undefined ? (
+        {chat.reviews !== undefined && chat.vizibility !== 'private' ? (
           <Flex vertical style={{ width: '50%' }}>
             <Flex
               justify="space-between"
@@ -182,15 +186,9 @@ export const ChatDetails: React.FC<IChatDetails> = ({ chat }) => {
             </Flex>
             <Flex vertical gap={20} style={{ padding: 10, maxHeight: 300, overflowY: 'scroll' }}>
               {chat.reviews.length > 0 ? (
-                chat.reviews.map((review) => (
-                  <Flex
-                    gap={10}
-                    vertical
-                    key={review.userId}
-                    align="space-between"
-                    justify="center"
-                  >
-                    <Flex justify="space-between" align="center">
+                chat.reviews.map((review, index) => (
+                  <Flex gap={10} vertical key={index} align="space-between" justify="center">
+                    <Flex justify="space-between" align="start">
                       <Flex align="center" gap={10}>
                         <Flex>
                           <img
@@ -198,8 +196,10 @@ export const ChatDetails: React.FC<IChatDetails> = ({ chat }) => {
                             style={{ width: 35, height: 35, borderRadius: '50%' }}
                           />
                         </Flex>
-
-                        <span>{UserFlow.userList[review.userId].name}</span>
+                        <Flex vertical>
+                          <span>{UserFlow.userList[review.userId].name}</span>
+                          <span style={{ fontSize: 10 }}>{review.date}</span>
+                        </Flex>
                       </Flex>
                       <Flex>
                         <Rate value={review.rate} disabled={true} />

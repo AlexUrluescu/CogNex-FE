@@ -59,6 +59,20 @@ export const CreateChat = ({
                 <Radio value={1}>Public</Radio>
                 <Radio value={2}>Private</Radio>
               </Radio.Group>
+              {value === 1 ? (
+                <span
+                  style={{
+                    color: 'red',
+                    border: '1px solid red',
+                    padding: 5,
+                    borderRadius: 10,
+                    fontSize: 12,
+                    backgroundColor: '#facfd2',
+                  }}
+                >
+                  All the users will be able to see and use your chat
+                </span>
+              ) : null}
             </Flex>
 
             <Flex>
