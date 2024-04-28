@@ -671,10 +671,12 @@ export const TeleportsView = () => {
                     ))
                   : null}
               </Flex>
-              <img
-                style={{ width: 35, height: 35, borderRadius: '50%' }}
-                src={UserFlow.userList[userSelected].photo}
-              />
+              {userSelected !== '' ? (
+                <img
+                  style={{ width: 35, height: 35, borderRadius: '50%' }}
+                  src={UserFlow.userList[userSelected].photo}
+                />
+              ) : null}
             </Flex>
           </Flex>
           <Flex vertical gap={20}>
