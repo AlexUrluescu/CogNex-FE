@@ -50,15 +50,12 @@ const Register = () => {
 
   const onChange = (info: any) => {
     const { status } = info.file
-    console.log('intra in change')
 
     if (status === 'uploading') {
-      console.log('uploading')
       setFiles(info.fileList)
     }
 
     if (status !== 'uploading') {
-      console.log(info.fileList)
       setFiles(info.fileList)
     }
     if (status === 'done') {
@@ -83,7 +80,6 @@ const Register = () => {
       .then((response) => {
         // setImagesWithData(response.data.data);
         setFiles([])
-        console.log(response)
 
         // const customMessage = `${response.data.data.length} images were uploaded successfully`
       })
@@ -98,8 +94,6 @@ const Register = () => {
     const formData = new FormData()
 
     formData.append('file', files)
-
-    console.log('formData', formData)
 
     axios
       .post('http://127.0.0.1:5000/upload-photo', formData)

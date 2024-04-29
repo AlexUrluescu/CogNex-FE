@@ -23,6 +23,19 @@ export const defaultChatValues = {
 }
 
 export interface IChat {
+  _id: string
+  creator: string
+  name: string
+  category: string
+  files: any[]
+  vizibility: string
+  users: string[]
+  color: string
+  dateCreated: string
+  description: string
+  reviews?: IUserReview[]
+}
+export interface IChat2 {
   _id?: string
   creator: string
   name: string

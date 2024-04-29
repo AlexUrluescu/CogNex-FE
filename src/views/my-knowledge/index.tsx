@@ -16,7 +16,7 @@ export const MyKnowledgeView = () => {
       <Flex>My Knowledge</Flex>
       <Flex>
         {currentUser.files?.map((file, index) => (
-          <KnowledgeCard key={index} title={file} />
+          <KnowledgeCard key={index} title={file} userId={currentUser._id} />
         ))}
       </Flex>
     </Flex>

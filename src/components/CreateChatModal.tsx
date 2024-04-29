@@ -49,6 +49,52 @@ export const CreateChatModal: React.FC<ICreateChatModal> = ({
     return
   }
 
+  // const uploadPdf = async () => {
+  //   const formData = new FormData()
+
+  //   files.forEach((fil: any) => {
+  //     formData.append('pdfs', fil.originFileObj)
+  //   })
+  //   formData.append('userId', currentUser._id as string)
+
+  //   axios
+  //     .post('http://127.0.0.1:5000/extract', formData)
+  //     .then((response) => {
+  //       console.log('PDF uploaded successfully:', response.data)
+  //       if (response.status === 200) {
+  //         setFiles([])
+  //         return response.data.ok
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error uploading PDF:', error)
+  //     })
+  // }
+  const uploadPdf = async () => {
+    try {
+      const formData = new FormData()
+
+      // Assuming 'files' is an array of file objects
+      files.forEach((fil) => {
+        formData.append('pdfs', fil.originFileObj)
+      })
+
+      // Assuming 'currentUser._id' contains the user ID
+      formData.append('userId', currentUser._id)
+
+      const response = await axios.post('http://127.0.0.1:5000/extract', formData)
+
+      console.log('PDF uploaded successfully:', response.data)
+
+      if (response.status === 200) {
+        setFiles([])
+        return response.data.ok
+      }
+    } catch (error) {
+      console.error('Error uploading PDF:', error)
+    }
+  }
+
   const handleCreateChat = async (e: FormEvent) => {
     e.preventDefault()
 
@@ -75,7 +121,7 @@ export const CreateChatModal: React.FC<ICreateChatModal> = ({
     const test = {
       ...chatFormValues,
       vizibility: value === 1 ? 'public' : 'private',
-      files: allFilesToBeUploaded,
+      files: [],
       creator: currentUser._id,
       color: chatColor !== '' ? chatColor : '#919191',
       users: [],
@@ -85,14 +131,20 @@ export const CreateChatModal: React.FC<ICreateChatModal> = ({
 
     setLoading(true)
 
-    uploadPdf()
-    const newChat = await ChatFlow.createNewChat(test)
+    const ok = await uploadPdf()
 
-    if (newChat) {
-      setLoading(false)
-      setChatFormValues(initialChatFormValues)
-      setFiles([])
-      setIsModalOpen(false)
+    if (ok) {
+      const newChat = await ChatFlow.createNewChat(test)
+
+      if (newChat) {
+        const success = await ChatFlow.deleteOldPdfs(currentUser._id)
+        if (success) {
+          setLoading(false)
+          setChatFormValues(initialChatFormValues)
+          setFiles([])
+          setIsModalOpen(false)
+        }
+      }
     }
   }
 
@@ -122,27 +174,6 @@ export const CreateChatModal: React.FC<ICreateChatModal> = ({
       message: 'I want to learn how to make a pizza',
     },
   ]
-
-  const uploadPdf = () => {
-    const formData = new FormData()
-
-    files.forEach((fil: any) => {
-      formData.append('pdfs', fil.originFileObj)
-    })
-    formData.append('userId', currentUser._id as string)
-
-    axios
-      .post('http://127.0.0.1:5000/extract', formData)
-      .then((response) => {
-        console.log('PDF uploaded successfully:', response.data)
-        if (response.status === 200) {
-          setFiles([])
-        }
-      })
-      .catch((error) => {
-        console.error('Error uploading PDF:', error)
-      })
-  }
 
   const onChange = (info: any) => {
     const { status } = info.file

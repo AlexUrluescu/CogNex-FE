@@ -1,7 +1,7 @@
 import { v4 } from 'uuid'
 
 export interface IUser {
-  _id?: string
+  _id: string
   name: string
   email: string
   age: string

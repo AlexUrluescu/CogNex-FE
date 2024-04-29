@@ -1,4 +1,4 @@
-import { IChat } from '@/domain/chat'
+import { IChat, IChat2 } from '@/domain/chat'
 import { ChatRepository } from '@/repositories/chat'
 import { addNewChat, updateChatById } from '@/state/appData/appDataSlice'
 import { store } from '@/state/store'
@@ -14,13 +14,22 @@ class ChatFlow {
     return chatsFound
   }
 
-  async createNewChat(chat: IChat) {
+  async createNewChat(chat: IChat2) {
     const newChat = await this.chatRepository.createChat(chat)
     store.dispatch(addNewChat(newChat.chat))
 
     this.chatList[newChat._id] = newChat
 
     return newChat
+  }
+
+  async deleteOldPdfs(currentUserId: string) {
+    const success = await this.chatRepository.deleteOldPdfs(currentUserId)
+    // store.dispatch(addNewChat(newChat.chat))
+
+    // this.chatList[newChat._id] = newChat
+
+    return success
   }
 
   async userSubscribed(userId: string, chatId: string) {
@@ -61,6 +70,8 @@ class ChatFlow {
       })
 
       const data = await res.json()
+
+      console.log(data)
 
       // if (data.documents === null) {
       //   alert(data.message)
