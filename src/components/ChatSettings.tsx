@@ -1,12 +1,16 @@
 import { IChat } from '@/domain/chat'
-import { Button, Card, Flex, Input } from 'antd'
-import React, { useState } from 'react'
+import { Button, Card, Flex, Input, Popconfirm, PopconfirmProps, Spin, message } from 'antd'
+import React, { FormEvent, useState } from 'react'
 import KnowledgeCard from './KnowledgeCard'
 import { IUser } from '@/domain/user'
 import Link from 'next/link'
 import { UserFlow } from '@/flows/users'
 import { useDispatch } from 'react-redux'
 import { updateChatById } from '@/state/appData/appDataSlice'
+import DraggerUpload from './DraggerUpload'
+import axios from 'axios'
+import { ChatFlow } from '@/flows/chat'
+import { store } from '@/state/store'
 
 interface IChatSettings {
   chat: IChat
@@ -21,6 +25,9 @@ interface IFiles {
 export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => {
   const [editDetails, setEditDetails] = useState<boolean>(false)
   const [editDocuments, setEditDocuments] = useState<boolean>(false)
+  const [addDocuments, setAddDocuments] = useState<boolean>(false)
+  const [files, setFiles] = useState<any[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
   const dispatch = useDispatch()
   const handleGetDocs = () => {
     if (chat._id === undefined) {
@@ -30,6 +37,65 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
 
   if (currentUser._id === undefined) {
     return
+  }
+
+  const uploadPdf = async () => {
+    try {
+      const formData = new FormData()
+
+      files.forEach((fil) => {
+        formData.append('pdfs', fil.originFileObj)
+      })
+
+      formData.append('userId', currentUser._id)
+
+      const response = await axios.post('http://127.0.0.1:5000/extract', formData)
+
+      if (response.status === 200) {
+        setFiles([])
+        return response.data.ok
+      }
+    } catch (error) {
+      console.error('Error uploading PDF:', error)
+    }
+  }
+
+  const handleCreateChat = async (e: FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+
+    const ok = await uploadPdf()
+
+    if (ok) {
+      const newChat = await ChatFlow.addPdfs(chat)
+
+      if (newChat) {
+        const success = await ChatFlow.deleteOldPdfs(currentUser._id)
+        if (success) {
+          setLoading(false)
+
+          store.dispatch(updateChatById({ ...newChat.chat }))
+          ChatFlow.chatList[newChat._id] = { ...newChat.chat }
+        }
+      }
+    }
+  }
+
+  const onChange = (info: any) => {
+    const { status } = info.file
+
+    if (status === 'uploading') {
+      setFiles(info.fileList)
+    }
+
+    if (status !== 'uploading') {
+      setFiles(info.fileList)
+    }
+    if (status === 'done') {
+      // message.success(`${info.file.name} file uploaded successfully.`)
+    } else if (status === 'error') {
+      // message.error(`${info.file.name} file upload failed.`)
+    }
   }
 
   const handleEditDetails = () => {
@@ -86,9 +152,15 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
     }
   }
 
+  const handleAddDocuments = () => {
+    setAddDocuments(true)
+  }
+
   if (chat === undefined) {
     return
   }
+
+  const btnUploadDisabled = files.length > 0
 
   return (
     <Flex vertical gap={25} style={{ padding: ' 0 25px' }}>
@@ -103,35 +175,76 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
         >
           <span style={{ fontSize: 25, fontWeight: 600 }}>Documents</span>
           {editDocuments ? (
-            <Button type="primary" onClick={handleFinishDocuments}>
-              FINISH
-            </Button>
+            <Flex>
+              <Button type="primary" onClick={handleFinishDocuments}>
+                FINISH
+              </Button>
+            </Flex>
           ) : (
-            <Button type="primary" onClick={handleEditDocuments}>
-              EDIT
-            </Button>
+            <Flex gap={10}>
+              {addDocuments === false ? (
+                <Button type="primary" onClick={handleAddDocuments}>
+                  ADD
+                </Button>
+              ) : null}
+
+              {addDocuments ? (
+                <Button type="primary" onClick={() => setAddDocuments(false)}>
+                  FINISH
+                </Button>
+              ) : (
+                <Button type="primary" onClick={handleEditDocuments}>
+                  DELETE
+                </Button>
+              )}
+            </Flex>
           )}
         </Flex>
-        <Flex style={{ padding: 20 }}>
-          {chat.files?.map((file, index) => (
-            <Card key={index}>
-              <Flex vertical align="center" gap={20}>
-                <h5>{file.name}</h5>
-                <Flex gap={10}>
-                  <Button onClick={() => handleClick2(file)}>View</Button>
-                  {editDocuments ? (
-                    <Button
-                      type="primary"
-                      danger
-                      onClick={() => handleDelete(file.documentId, chat._id)}
-                    >
-                      Delete
-                    </Button>
-                  ) : null}
-                </Flex>
-              </Flex>
-            </Card>
-          ))}
+        <Flex vertical gap={20} style={{ padding: 20 }}>
+          <Flex gap={15}>
+            {loading === false ? (
+              chat.files?.map((file, index) => (
+                <Card key={index} style={{ maxWidth: 250, minWidth: 200 }}>
+                  <Flex vertical align="center" gap={20}>
+                    <h5>{file.name}</h5>
+                    <Flex gap={10}>
+                      <Button onClick={() => handleClick2(file)}>View</Button>
+                      {editDocuments ? (
+                        <Popconfirm
+                          title={`Delete the ${file.name}`}
+                          description="Are you sure to delete this document?"
+                          onConfirm={() => handleDelete(file.documentId, chat._id)}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <Button type="primary" danger>
+                            Delete
+                          </Button>
+                          {/* <Button
+                          type="primary"
+                          danger
+                          onClick={() => handleDelete(file.documentId, chat._id)}
+                        >
+                          Delete
+                        </Button> */}
+                        </Popconfirm>
+                      ) : null}
+                    </Flex>
+                  </Flex>
+                </Card>
+              ))
+            ) : (
+              <Spin size="large" />
+            )}
+          </Flex>
+          {addDocuments ? (
+            <Flex vertical gap={10}>
+              <DraggerUpload setFile={setFiles} file={files} onChange={onChange} />
+              <Button disabled={!btnUploadDisabled} type="primary" onClick={handleCreateChat}>
+                UPLOAD
+              </Button>
+            </Flex>
+          ) : null}
         </Flex>
       </Flex>
       <Flex vertical gap={10}>

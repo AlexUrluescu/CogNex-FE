@@ -23,11 +23,14 @@ class ChatFlow {
     return newChat
   }
 
+  async addPdfs(chat: IChat2) {
+    const newChat = await this.chatRepository.addPdfs(chat)
+
+    return newChat
+  }
+
   async deleteOldPdfs(currentUserId: string) {
     const success = await this.chatRepository.deleteOldPdfs(currentUserId)
-    // store.dispatch(addNewChat(newChat.chat))
-
-    // this.chatList[newChat._id] = newChat
 
     return success
   }

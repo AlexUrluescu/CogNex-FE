@@ -57,9 +57,11 @@ export const CustomMenu = ({ currentUserId }: any) => {
   }
 
   const items: MenuItem[] = [
-    getItem(<span onClick={() => router.push('/')}>Main Chat</span>, 'sub1', <RobotOutlined />),
+    // getItem(<span onClick={() => router.push('/')}>Main Chat</span>, 'sub1', <RobotOutlined />),
     getItem(
-      <span onClick={() => router.push('/dashboard')}>Dashboard</span>,
+      <div onClick={() => router.push('/dashboard')}>
+        <span>Dashboard</span>
+      </div>,
       'sub5',
       <RobotOutlined />
     ),
@@ -70,7 +72,7 @@ export const CustomMenu = ({ currentUserId }: any) => {
       <GlobalOutlined />,
       myPublicChats.map((chat) =>
         getItem(
-          <Flex align="center" gap={10}>
+          <Flex key={chat._id} align="center" gap={10}>
             <div
               style={{
                 backgroundColor: chat.color,
@@ -81,7 +83,9 @@ export const CustomMenu = ({ currentUserId }: any) => {
             >
               {' '}
             </div>
-            <span onClick={() => router.push(`/public-chats/${chat._id}`)}>{chat.name}</span>
+            <div onClick={() => router.push(`/public-chats/${chat._id}`)}>
+              <span>{chat.name}</span>
+            </div>
           </Flex>,
           chat._id
         )
@@ -105,19 +109,21 @@ export const CustomMenu = ({ currentUserId }: any) => {
             >
               {' '}
             </div>
-            <span onClick={() => router.push(`/private-chats/${chat._id}`)}>{chat.name}</span>
+            <div onClick={() => router.push(`/private-chats/${chat._id}`)}>
+              <span>{chat.name}</span>
+            </div>
           </Flex>,
           chat._id
         )
       )
     ),
     getItem(
-      <span onClick={() => router.push('/my-knowledge')}>My Knowledge</span>,
+      <div onClick={() => router.push('/my-knowledge')}>My Knowledge</div>,
       'my-knowledge',
       <AppstoreOutlined />
     ),
     getItem(
-      'teleports',
+      'Teleports',
       'sub9',
       <AppstoreOutlined />,
       // <span onClick={() => router.push('/teleports')}>Teleports</span>,
