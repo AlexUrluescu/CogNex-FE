@@ -154,6 +154,10 @@ export const CreateChatModal: React.FC<ICreateChatModal> = ({
     setChatFormValues({ ...chatFormValues, [name]: value })
   }
 
+  const handleChangeCategory = (value: string) => {
+    setChatFormValues({ ...chatFormValues, ['category']: value })
+  }
+
   const createDisabled =
     chatFormValues.category === '' ||
     files.length === 0 ||
@@ -212,6 +216,7 @@ export const CreateChatModal: React.FC<ICreateChatModal> = ({
           <CreateChat
             handleCreateChat={handleCreateChat}
             handleFormCreateChatChange={handleFormCreateChatChange}
+            handleChangeCategory={handleChangeCategory}
             chatFormValues={chatFormValues}
             onChange2={onChange2}
             value={value}
