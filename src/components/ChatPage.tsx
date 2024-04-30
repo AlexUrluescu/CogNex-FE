@@ -76,6 +76,27 @@ const ChatPage = () => {
     }
   }
 
+  const handleClick2 = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/pdfs`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ filename: 'Personal Data (2).pdf', userId: currentUser._id }),
+      })
+
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+
+      window.open(url, '_blank')
+
+      setPdfUrl(url)
+    } catch (error) {
+      return error
+    }
+  }
+
   const handleCreateChat = (e: FormEvent) => {
     e.preventDefault()
 
@@ -110,7 +131,7 @@ const ChatPage = () => {
     }
 
     uploadPdf()
-    ChatFlow.createNewChat(test)
+    // ChatFlow.createNewChat(test)
   }
 
   const handleFormCreateChatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -244,7 +265,7 @@ const ChatPage = () => {
           </a>
         ) : null}
 
-        <button onClick={handleClick}>test</button>
+        <button onClick={handleClick2}>test</button>
         <input type="text" onChange={handleChange}></input>
         <button onClick={handleSend}>send</button>
       </div>

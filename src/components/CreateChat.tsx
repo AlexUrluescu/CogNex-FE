@@ -1,13 +1,15 @@
 import React from 'react'
-import { Flex, ColorPicker, Input } from 'antd'
+import { Flex, ColorPicker, Input, Select } from 'antd'
 import DraggerUpload from './DraggerUpload'
 import { Radio } from 'antd'
+import { categoryOptions } from '@/utils'
 
 const { TextArea } = Input
 
 export const CreateChat = ({
   handleCreateChat,
   handleFormCreateChatChange,
+  handleChangeCategory,
   chatFormValues,
   onChange2,
   value,
@@ -16,6 +18,16 @@ export const CreateChat = ({
   setFiles,
   files,
 }: any) => {
+  const onChange3 = (value: string) => {
+    console.log(`selected ${value}`)
+  }
+
+  const onSearch = (value: string) => {
+    console.log('search:', value)
+  }
+  const filterOption = (input: string, option?: { label: string; value: string }) =>
+    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+
   return (
     <div>
       <Flex style={{ marginTop: 30 }} gap={15} vertical>
@@ -34,12 +46,16 @@ export const CreateChat = ({
             <Flex align="center" gap={10}>
               <span style={{ fontSize: 18, width: '13%' }}>Category</span>
 
-              <Input
+              <Select
                 style={{ width: 200 }}
-                onChange={handleFormCreateChatChange}
-                name="category"
                 value={chatFormValues.category}
-                placeholder="Category"
+                showSearch
+                placeholder="Select a person"
+                optionFilterProp="children"
+                onChange={handleChangeCategory}
+                onSearch={onSearch}
+                filterOption={filterOption}
+                options={categoryOptions}
               />
             </Flex>
             <Flex align="start" gap={10}>

@@ -1,10 +1,10 @@
-import { IUser } from '@/domain/user'
+import { IUser, IUser2 } from '@/domain/user'
 import { RegisterRepository } from '@/repositories/register'
 import { UserLogin } from '@/types'
 
 class RegisterFlow {
   registerRepository = new RegisterRepository()
-  async registerNewUser(user: IUser) {
+  async registerNewUser(user: any) {
     const newUser = await this.registerRepository.registerNewUser(user)
 
     return newUser

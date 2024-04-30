@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux'
 import { ChatDisplay } from '@/components/ChatDisplay'
 import { ChatFlow } from '@/flows/chat'
 import { ChatDetails } from '@/components/ChatDetails'
+import { ChatSettings } from '@/components/ChatSettings'
 
 interface IPublicChatIdView {
   chat: IChat
@@ -60,11 +61,7 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
         {
           key: '3',
           label: 'Settings',
-          children: (
-            <Button disabled={true} onClick={handleGetDocs}>
-              GET DOCUMENTS
-            </Button>
-          ),
+          children: <ChatSettings chat={chat} currentUser={currentUser} />,
         },
       ]
     : [
