@@ -8,6 +8,11 @@ import type { SelectProps } from 'antd'
 
 const options: SelectProps['options'] = []
 
+interface IStatistic {
+  name: string
+  repeat: number
+}
+
 export const MyKnowledgeView = () => {
   const currentUser = useSelector(getCurrentUser)
   const myChats = useSelector(getChatsAsCreator(currentUser._id))
@@ -43,9 +48,47 @@ export const MyKnowledgeView = () => {
     }
   }
 
+  function countOccurrences(arr: string[]) {
+    let counts: any = {}
+    arr.forEach(function (item: any) {
+      counts[item] = (counts[item] || 0) + 1
+    })
+
+    let result: any = []
+    Object.keys(counts).forEach(function (key) {
+      result.push({ name: key, repeat: counts[key] })
+    })
+
+    return result
+  }
+
+  let statisticChatsCategories = countOccurrences(categories)
+
   return (
-    <Flex vertical gap={50}>
+    <Flex vertical gap={40}>
       <Flex>My Knowledge</Flex>
+      <Flex gap={25} style={{ padding: 20 }}>
+        {statisticChatsCategories.map((statistic: IStatistic) => (
+          <Flex
+            align="center"
+            vertical
+            style={{
+              padding: 20,
+              minWidth: 200,
+              maxWidth: 250,
+              borderRadius: 8,
+              height: 180,
+              border: '1px solid #F1F0F0',
+            }}
+          >
+            <h4 style={{ height: '20%', fontWeight: 400 }}>{statistic.name}</h4>
+            <Flex justify="center" align="center" style={{ height: '80%', width: '100%' }}>
+              <span style={{ fontSize: 45 }}> {statistic.repeat}</span>
+            </Flex>
+          </Flex>
+        ))}
+      </Flex>
+
       <Flex vertical>
         {uniqueArray.map((category, index) => (
           <CollapsibleSection key={index} title={category}>

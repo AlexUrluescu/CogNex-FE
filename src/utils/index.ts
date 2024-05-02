@@ -1,5 +1,6 @@
 export const categoryOptions = [
   { value: 'Entertainment', label: 'Entertainment' },
+  { value: 'Programming', label: 'Programming' },
   { value: 'Personal', label: 'Personal' },
   { value: 'Science', label: 'Science' },
   { value: 'Technology', label: 'Technology' },
