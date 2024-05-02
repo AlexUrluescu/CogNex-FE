@@ -18,6 +18,8 @@ export const CustomChat: React.FC<ICustomChat> = ({ chat }) => {
         padding: '20px',
         borderRadius: '8px',
         border: '1px solid #F1F0F0',
+        maxWidth: 250,
+        minWidth: 200,
       }}
       align="center"
     >

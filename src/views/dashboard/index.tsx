@@ -13,23 +13,27 @@ export const DashboardView = () => {
 
   return (
     <Flex vertical gap={50}>
-      <h1>Dashboard</h1>
+      <h1 style={{ fontWeight: 400 }}>Dashboard</h1>
       <Flex vertical gap={50}>
-        <Card title={<h2>My Public Chats</h2>}>
+        <Card title={<h2 style={{ fontWeight: 400 }}>Public Chats</h2>}>
           <Flex gap={30}>
-            {myPublicChats.map((chat) => (
-              <CustomChat key={chat._id} chat={chat} />
-            ))}
+            {myPublicChats.length > 0 ? (
+              myPublicChats.map((chat) => <CustomChat key={chat._id} chat={chat} />)
+            ) : (
+              <span>No public chats created</span>
+            )}
           </Flex>
         </Card>
-        <Card title={<h2>My Private Chats</h2>}>
+        <Card title={<h2 style={{ fontWeight: 400 }}>Private Chats</h2>}>
           <Flex gap={30}>
-            {myPrivateChats.map((chat) => (
-              <CustomChat key={chat._id} chat={chat} />
-            ))}
+            {myPrivateChats.length > 0 ? (
+              myPrivateChats.map((chat) => <CustomChat key={chat._id} chat={chat} />)
+            ) : (
+              <span>No private chats created</span>
+            )}
           </Flex>
         </Card>
-        <Card title={<h2>My knowledge</h2>}>
+        {/* <Card title={<h2>My knowledge</h2>}>
           <Flex>
             {currentUser.files?.map((file, index) => (
               <Flex key={index}>
@@ -37,7 +41,7 @@ export const DashboardView = () => {
               </Flex>
             ))}
           </Flex>
-        </Card>
+        </Card> */}
       </Flex>
     </Flex>
   )

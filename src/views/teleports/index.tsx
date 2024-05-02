@@ -24,6 +24,7 @@ import { CloseCircleOutlined } from '@ant-design/icons'
 import { format } from 'date-fns'
 import { ITeleport } from '@/domain/teleports'
 import { TeleportsFlow } from '@/flows/teleports'
+import Image from 'next/image'
 
 const testColor = '#C0BFBF'
 const { TextArea } = Input
@@ -187,9 +188,12 @@ export const TeleportsView = () => {
           <Flex vertical align="center" style={{ width: '33%' }}>
             <Flex align="center" justify="center" style={{ width: '80%' }} gap={10}>
               <Flex>
-                <img
-                  style={{ width: 35, height: 35, borderRadius: '50%' }}
+                <Image
+                  width={35}
+                  height={35}
+                  style={{ borderRadius: '50%' }}
                   src={currentUser.photo}
+                  alt={''}
                 />
               </Flex>
               <span>{currentUser.name}</span>
@@ -254,10 +258,13 @@ export const TeleportsView = () => {
               {userSelected !== '' ? (
                 <Flex align="center" gap={10}>
                   <Flex>
-                    <img
-                      style={{ width: 35, height: 35, borderRadius: '50%' }}
+                    <Image
+                      width={35}
+                      height={35}
+                      style={{ borderRadius: '50%' }}
                       src={UserFlow.userList[userSelected].photo}
-                    ></img>
+                      alt={''}
+                    />
                   </Flex>
                   <span>{UserFlow.userList[userSelected].name}</span>
                 </Flex>
@@ -390,7 +397,7 @@ export const TeleportsView = () => {
                   )
                 })
               ) : (
-                <span>no chats available</span>
+                <span>No public chats available</span>
               )}
             </Flex>
           </Card>
@@ -411,25 +418,35 @@ export const TeleportsView = () => {
                       gap={30}
                       key={chat._id}
                       style={{
-                        padding: '20px',
+                        // backgroundColor: 'blue',
+                        border: myChatsSelected.find((chatId) => chatId === chat._id)
+                          ? '1px solid #1677ff'
+                          : '1px solid #F1F0F0',
+                        padding: '10px',
                         borderRadius: '8px',
-                        border: '1px solid #F1F0F0',
+                        maxWidth: 250,
+                        minWidth: 200,
                       }}
                       align="center"
                     >
-                      <Flex gap={10}>
-                        <span
-                          style={{
-                            width: 20,
-                            height: 20,
-                            backgroundColor: chat.color,
-                            borderRadius: '50%',
-                          }}
-                        ></span>
-                        <span>{chat.name}</span>
+                      <Flex style={{ width: '100%' }} vertical>
+                        <Flex style={{ width: '100%' }} justify="end">
+                          <Checkbox onChange={onChange3} value={chat._id}></Checkbox>
+                        </Flex>
+                        <Flex justify="center" style={{ padding: '10px' }} gap={10}>
+                          <span
+                            style={{
+                              width: 20,
+                              height: 20,
+                              backgroundColor: chat.color,
+                              borderRadius: '50%',
+                            }}
+                          ></span>
+                          <span>{chat.name}</span>
+                        </Flex>
                       </Flex>
 
-                      <Flex align="center" vertical>
+                      <Flex style={{ padding: '10px' }} align="center" vertical>
                         {!!userAllowed === false && isChatOwner === false ? (
                           <span style={{ color: 'red' }}>You are not subcribed</span>
                         ) : null}
@@ -439,9 +456,6 @@ export const TeleportsView = () => {
                         >
                           View
                         </Button>
-                        <Checkbox onChange={onChange3} value={chat._id}>
-                          Teleport
-                        </Checkbox>
                       </Flex>
                     </Flex>
                   )
@@ -581,7 +595,13 @@ export const TeleportsView = () => {
             }}
           >
             <Flex align="start" gap={20} style={{ width: '50%', height: '100%' }}>
-              <img style={{ width: 35, height: 35, borderRadius: '50%' }} src={currentUser.photo} />
+              <Image
+                width={35}
+                height={35}
+                style={{ borderRadius: '50%' }}
+                src={currentUser.photo}
+                alt={''}
+              />
               <Flex
                 vertical
                 gap={10}
