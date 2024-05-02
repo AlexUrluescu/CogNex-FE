@@ -42,6 +42,12 @@ export const getChatsAsCreator = (userId: string) => {
   })
 }
 
+export const getAllChatsCategories = (userId: string) => {
+  return createSelector([getAllChats], (chats) => {
+    return chats.filter((chat) => chat.category === userId).map((chat) => chat.category)
+  })
+}
+
 export const getTeleportsAsCreator = (userId: string) => {
   return createSelector([getAllTeleports], (teleports) => {
     return teleports.filter((teleport) => teleport.creator === userId)

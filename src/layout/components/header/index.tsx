@@ -6,6 +6,7 @@ import { Button, Dropdown, Flex, MenuProps, Select } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useReducer, useState } from 'react'
 import { useSelector } from 'react-redux'
+import Image from 'next/image'
 
 const Header = () => {
   const currentUser = useSelector(getCurrentUser)
@@ -29,7 +30,7 @@ const Header = () => {
   const items: MenuProps['items'] = [
     {
       label: (
-        <Flex gap={10}>
+        <Flex gap={10} justify="center">
           <span onClick={() => router.push(`/my-account/${currentUser._id}`)}>My account</span>
         </Flex>
       ),
@@ -41,26 +42,28 @@ const Header = () => {
     {
       label:
         currentUser !== undefined ? (
-          <Button
-            type="primary"
-            onClick={() => {
-              store.dispatch(
-                resetCurrentUser({
-                  _id: '',
-                  email: '',
-                  files: [],
-                  name: '',
-                  age: '',
-                  photo: '',
-                })
-              )
+          <Flex justify="center">
+            <Button
+              type="primary"
+              onClick={() => {
+                store.dispatch(
+                  resetCurrentUser({
+                    _id: '',
+                    email: '',
+                    files: [],
+                    name: '',
+                    age: '',
+                    photo: '',
+                  })
+                )
 
-              localStorage.removeItem('user')
-              router.push('/login')
-            }}
-          >
-            Log oouut
-          </Button>
+                localStorage.removeItem('user')
+                router.push('/login')
+              }}
+            >
+              Log out
+            </Button>
+          </Flex>
         ) : (
           'Log in'
         ),
@@ -109,10 +112,13 @@ const Header = () => {
               <Flex gap={10} align="center">
                 {/* <UserOutlined /> */}
                 {currentUser.name}
-                <img
+                <Image
+                  width={35}
+                  height={35}
                   src={currentUser.photo}
-                  style={{ width: 35, height: 35, borderRadius: '50%' }}
-                ></img>
+                  style={{ borderRadius: '50%' }}
+                  alt={''}
+                />
               </Flex>
             </Flex>
           </Dropdown>

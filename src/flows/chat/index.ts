@@ -89,6 +89,10 @@ class ChatFlow {
     }
   }
 
+  getChatsList() {
+    return this.chatList
+  }
+
   storeIntoList(chats: IChat[]) {
     chats.forEach((chat) => {
       if (chat._id === undefined) {

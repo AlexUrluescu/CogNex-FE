@@ -5,6 +5,7 @@ import { UserOutlined } from '@ant-design/icons'
 import { Card, Flex } from 'antd'
 import React from 'react'
 import { useSelector } from 'react-redux'
+import Image from 'next/image'
 
 interface IMyAccountView {
   user: IUser2
@@ -17,7 +18,7 @@ export const MyAccountView: React.FC<IMyAccountView> = ({ user }) => {
     <Flex vertical gap={30}>
       <Flex align="center">
         <Flex align="center" style={{ width: 60, height: 60 }}>
-          <img style={{ width: 45, height: 45, borderRadius: '50%' }} src={user.photo} />
+          <Image width={45} height={35} style={{ borderRadius: '50%' }} src={user.photo} alt={''} />
         </Flex>
         <h2>{user.name}</h2>
       </Flex>

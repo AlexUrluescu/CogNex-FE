@@ -114,7 +114,7 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
     setEditDocuments(false)
   }
 
-  const handleClick2 = async (file: any) => {
+  const handleViewDocument = async (file: any) => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/pdfs`, {
         method: 'POST',
@@ -193,7 +193,7 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
                   FINISH
                 </Button>
               ) : (
-                <Button type="primary" onClick={handleEditDocuments}>
+                <Button danger type="primary" onClick={handleEditDocuments}>
                   DELETE
                 </Button>
               )}
@@ -208,7 +208,9 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
                   <Flex vertical align="center" gap={20}>
                     <h5>{file.name}</h5>
                     <Flex gap={10}>
-                      <Button onClick={() => handleClick2(file)}>View</Button>
+                      <Button type="primary" onClick={() => handleViewDocument(file)}>
+                        View
+                      </Button>
                       {editDocuments ? (
                         <Popconfirm
                           title={`Delete the ${file.name}`}
@@ -220,13 +222,6 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
                           <Button type="primary" danger>
                             Delete
                           </Button>
-                          {/* <Button
-                          type="primary"
-                          danger
-                          onClick={() => handleDelete(file.documentId, chat._id)}
-                        >
-                          Delete
-                        </Button> */}
                         </Popconfirm>
                       ) : null}
                     </Flex>
