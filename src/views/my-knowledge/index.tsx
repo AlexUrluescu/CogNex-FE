@@ -70,6 +70,7 @@ export const MyKnowledgeView = () => {
       <Flex gap={25} style={{ padding: 20 }}>
         {statisticChatsCategories.map((statistic: IStatistic) => (
           <Flex
+            key={statistic.name}
             align="center"
             vertical
             style={{
