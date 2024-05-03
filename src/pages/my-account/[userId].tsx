@@ -15,11 +15,7 @@ const MyAccountPage = () => {
     return null
   }
 
-  return (
-    <Layout>
-      <MyAccountView user={user} />
-    </Layout>
-  )
+  return <MyAccountView user={user} />
 }
 
 export default MyAccountPage

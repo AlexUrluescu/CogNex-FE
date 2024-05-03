@@ -22,7 +22,7 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
   const success = () => {
     messageApi.open({
       type: 'success',
-      content: 'This is a success message',
+      content: 'You have subcribed successfully',
     })
   }
 

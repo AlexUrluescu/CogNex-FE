@@ -15,11 +15,7 @@ const TeleportChatIdPage = () => {
     return null
   }
 
-  return (
-    <Layout>
-      <TeleportChatIdView teleport={teleport} />
-    </Layout>
-  )
+  return <TeleportChatIdView teleport={teleport} />
 }
 
 export default TeleportChatIdPage

@@ -85,7 +85,16 @@ const Header = () => {
   return (
     <Flex
       align="center"
-      style={{ backgroundColor: '#02182B', padding: '20px 30px', color: 'white', width: '100%' }}
+      style={{
+        backgroundColor: '#02182B',
+        padding: '20px 30px',
+        color: 'white',
+        width: '100%',
+        height: '70px',
+        position: 'fixed',
+        top: 0,
+        zIndex: 100,
+      }}
     >
       <Flex style={{ width: '18%' }}>
         <h2>Teleport</h2>

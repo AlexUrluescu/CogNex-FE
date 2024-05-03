@@ -16,6 +16,7 @@ import { Chat, IChat } from '@/domain/chat'
 import { ChatFlow } from '@/flows/chat'
 import { TeleportsFlow } from '@/flows/teleports'
 import { ITeleport, Teleport } from '@/domain/teleports'
+import Layout from '@/layout'
 
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -106,7 +107,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <ReduxProvider>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </ReduxProvider>
   )
 }
