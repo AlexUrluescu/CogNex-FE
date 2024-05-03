@@ -14,6 +14,8 @@ import {
   RadioChangeEvent,
   Select,
   Spin,
+  Tag,
+  message,
 } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
@@ -25,6 +27,7 @@ import { format } from 'date-fns'
 import { ITeleport } from '@/domain/teleports'
 import { TeleportsFlow } from '@/flows/teleports'
 import Image from 'next/image'
+import { categoryOptions } from '@/utils'
 
 const testColor = '#C0BFBF'
 const { TextArea } = Input
@@ -49,17 +52,26 @@ export const TeleportsView = () => {
   const [open, setOpen] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
   const [modalText, setModalText] = useState('Content of the modal')
-  const [chatFormValues, setChatFormValues] = useState<IChatFormValues>({
+  const [teleportFormValues, setTeleportFormValues] = useState<IChatFormValues>({
     name: '',
     category: '',
     description: '',
     color: '',
   })
+  const [messageApi, contextHolder] = message.useMessage()
+
+  const successUnsubscribed = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'Your teleport was created successfully',
+    })
+  }
 
   const showModal = () => {
     setOpen(true)
   }
   const handleOk = async () => {
+    setLoading(true)
     const allChatsSelected = [...chatsSelected, ...myChatsSelected]
     const currentDate = new Date()
     const dateCreated = format(currentDate, 'dd-MM-yyyy')
@@ -69,19 +81,27 @@ export const TeleportsView = () => {
     const finalTeleportObject: ITeleport = {
       creator: currentUser._id,
       chats: allChatsSelected,
-      name: chatFormValues.name,
-      category: chatFormValues.category,
-      description: chatFormValues.description,
+      name: teleportFormValues.name,
+      category: teleportFormValues.category,
+      description: teleportFormValues.description,
       dateCreated: dateCreated,
       teleportUser: userSelectedId !== undefined ? userSelectedId : '',
-      color: chatFormValues.color,
+      color: teleportFormValues.color === '' ? '#0ce81a' : teleportFormValues.color,
     }
 
-    const newChat = await TeleportsFlow.createNewTeleport(finalTeleportObject)
+    const newTeleport = await TeleportsFlow.createNewTeleport(finalTeleportObject)
+
+    if (newTeleport) {
+      setLoading(false)
+      setOpen(false)
+      setMyChatsSelected([])
+      setChatsSelected([])
+      successUnsubscribed()
+    }
   }
 
   const handleCancel = () => {
-    setChatFormValues({ name: '', category: '', description: '', color: '#4287f5' })
+    setTeleportFormValues({ name: '', category: '', description: '', color: '#4287f5' })
 
     setOpen(false)
   }
@@ -98,19 +118,6 @@ export const TeleportsView = () => {
 
     return obj
   })
-
-  const handleSubcribe = (chat: IChat) => {
-    setLoading(true)
-    const userId = currentUser._id
-    const chatId = chat._id
-
-    if (chatId === undefined) {
-      return
-    }
-
-    ChatFlow.userSubscribed(userId, chatId)
-    setLoading(false)
-  }
 
   const onChange = (value: string) => {
     setUserSelected(value)
@@ -151,17 +158,22 @@ export const TeleportsView = () => {
   const handleFormCreateChatChange = (e: any) => {
     const { value, name } = e.target
 
-    setChatFormValues({ ...chatFormValues, [name]: value })
+    setTeleportFormValues({ ...teleportFormValues, [name]: value })
+  }
+
+  const handleChangeCategory = (value: string) => {
+    setTeleportFormValues({ ...teleportFormValues, ['category']: value })
   }
 
   const handleColorChange = (color: string) => {
-    setChatFormValues({ ...chatFormValues, color: color })
+    setTeleportFormValues({ ...teleportFormValues, color: color })
   }
 
   const filterOption = (input: string, option?: { label: string; value: string }) =>
     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
   return (
     <Flex vertical gap={20}>
+      {contextHolder}
       <Flex align="center" gap={30}>
         <span> Find a user</span>
         <Select
@@ -333,15 +345,7 @@ export const TeleportsView = () => {
               : 'No user selected'
           }
         >
-          <Card
-          // title={
-          //   <h2>
-          //     {userSelected !== ''
-          //       ? `${UserFlow.userList[userSelected].firstName}'s chats`
-          //       : 'No user selected'}
-          //   </h2>
-          // }
-          >
+          <Card>
             <Flex gap={20} style={{ overflowX: 'scroll' }}>
               {availablePublicChats.length !== 0 && userSelected !== '' ? (
                 availablePublicChats.map((chat) => {
@@ -355,43 +359,56 @@ export const TeleportsView = () => {
                       gap={30}
                       key={chat._id}
                       style={{
-                        padding: '20px',
+                        // backgroundColor: 'blue',
+                        border: chatsSelected.find((chatId) => chatId === chat._id)
+                          ? '1px solid #1677ff'
+                          : '1px solid #F1F0F0',
+                        padding: '10px',
                         borderRadius: '8px',
-                        border: '1px solid #F1F0F0',
+                        maxWidth: 250,
+                        minWidth: 200,
                       }}
                       align="center"
                     >
-                      <Flex gap={10}>
-                        <span
-                          style={{
-                            width: 20,
-                            height: 20,
-                            backgroundColor: chat.color,
-                            borderRadius: '50%',
-                          }}
-                        ></span>
-                        <span>{chat.name}</span>
+                      <Flex style={{ width: '100%' }} vertical>
+                        <Flex style={{ width: '100%' }} justify="end">
+                          <Checkbox
+                            onChange={onChange2}
+                            disabled={!!userAllowed === true ? false : true}
+                            value={chat._id}
+                            checked={!!chatsSelected.find((id) => id === chat._id)}
+                          ></Checkbox>
+                        </Flex>
+                        <Flex justify="center" style={{ padding: '10px' }} gap={10}>
+                          <span
+                            style={{
+                              width: 20,
+                              height: 20,
+                              backgroundColor: chat.color,
+                              borderRadius: '50%',
+                            }}
+                          ></span>
+                          <span>{chat.name}</span>
+                        </Flex>
+                        <Flex justify="center">
+                          <Tag color="cyan">{chat.category}</Tag>
+                        </Flex>
+                        <div style={{ height: 15, marginTop: 5 }}>
+                          {!!userAllowed === false && isChatOwner === false ? (
+                            <p style={{ color: 'red', textAlign: 'center', fontSize: 12 }}>
+                              You are not subcribed
+                            </p>
+                          ) : null}
+                        </div>
                       </Flex>
 
-                      <Flex gap={15} align="center" vertical>
-                        {!!userAllowed === false && isChatOwner === false ? (
-                          <span style={{ color: 'red' }}>You are not subcribed</span>
-                        ) : null}
+                      <Flex align="center" vertical style={{ paddingBottom: 10 }}>
                         <Button
                           type="primary"
                           onClick={() => router.push(`/public-chats/${chat._id}`)}
                         >
                           View
                         </Button>
-                        {!!userAllowed === true ? (
-                          <Checkbox
-                            onChange={onChange2}
-                            checked={!!chatsSelected.find((id) => id === chat._id)}
-                            value={chat._id}
-                          >
-                            Teleport
-                          </Checkbox>
-                        ) : null}
                       </Flex>
                     </Flex>
                   )
@@ -405,7 +422,7 @@ export const TeleportsView = () => {
 
         <CollapsibleSection title="My chats">
           <Card>
-            <Flex gap={20}>
+            <Flex gap={20} style={{ width: '100%', overflowX: 'scroll' }}>
               {myChats.length !== 0 ? (
                 myChats.map((chat) => {
                   const userAllowed = chat.users.find((userId) => userId === currentUser._id)
@@ -431,7 +448,11 @@ export const TeleportsView = () => {
                     >
                       <Flex style={{ width: '100%' }} vertical>
                         <Flex style={{ width: '100%' }} justify="end">
-                          <Checkbox onChange={onChange3} value={chat._id}></Checkbox>
+                          <Checkbox
+                            onChange={onChange3}
+                            value={chat._id}
+                            checked={!!myChatsSelected.find((id) => id === chat._id)}
+                          ></Checkbox>
                         </Flex>
                         <Flex justify="center" style={{ padding: '10px' }} gap={10}>
                           <span
@@ -444,6 +465,10 @@ export const TeleportsView = () => {
                           ></span>
                           <span>{chat.name}</span>
                         </Flex>
+                        <Flex justify="center">
+                          <Tag color="purple">{chat.category}</Tag>
+                        </Flex>
+                        <div style={{ height: 15 }}></div>
                       </Flex>
 
                       <Flex style={{ padding: '10px' }} align="center" vertical>
@@ -577,170 +602,182 @@ export const TeleportsView = () => {
         }
       `}</style>
       <Modal
-        title="Create your Teleport"
+        title="CREATE YOUR TELEPORT"
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
         width={800}
       >
-        <Flex vertical gap={50} style={{ marginTop: 20 }}>
-          <Flex
-            justify="space-between"
-            align="start"
-            style={{
-              height: 100,
-              // backgroundColor: 'red',
-              minHeight: 120,
-            }}
-          >
-            <Flex align="start" gap={20} style={{ width: '50%', height: '100%' }}>
-              <Image
-                width={35}
-                height={35}
-                style={{ borderRadius: '50%' }}
-                src={currentUser.photo}
-                alt={''}
-              />
-              <Flex
-                vertical
-                gap={10}
-                style={{
-                  // backgroundColor: 'purple',
-                  padding: '0 10px',
-                  overflowY: 'scroll',
-                  maxHeight: 100,
-                }}
-              >
-                {myChatsSelected.length !== 0
-                  ? myChatsSelected.map((chat) => (
-                      <Flex
-                        justify="space-between"
-                        align="center"
-                        style={{
-                          // backgroundColor: 'blue',
-                          padding: 5,
-                          width: 150,
-                          borderRadius: 6,
-                          border: '1px solid #EDEDED',
-                        }}
-                        key={ChatFlow.chatList[chat]._id}
-                      >
-                        <Flex gap={10}>
-                          <div
-                            style={{
-                              backgroundColor: ChatFlow.chatList[chat].color,
-                              height: 20,
-                              width: 20,
-                              borderRadius: '50%',
-                            }}
-                          ></div>
-                          {ChatFlow.chatList[chat].name}
-                        </Flex>
-                      </Flex>
-                    ))
-                  : null}
-              </Flex>
-            </Flex>
+        {' '}
+        {loading === false ? (
+          <Flex vertical gap={50} style={{ marginTop: 20 }}>
             <Flex
+              justify="space-between"
               align="start"
-              justify="end"
-              gap={20}
               style={{
-                // backgroundColor: 'green',
-                width: '50%',
-                height: '100%',
+                height: 100,
+                // backgroundColor: 'red',
+                minHeight: 120,
               }}
             >
+              <Flex align="start" gap={20} style={{ width: '50%', height: '100%' }}>
+                <Image
+                  width={35}
+                  height={35}
+                  style={{ borderRadius: '50%' }}
+                  src={currentUser.photo}
+                  alt={''}
+                />
+                <Flex
+                  vertical
+                  gap={10}
+                  style={{
+                    // backgroundColor: 'purple',
+                    padding: '0 10px',
+                    overflowY: 'scroll',
+                    maxHeight: 100,
+                  }}
+                >
+                  {myChatsSelected.length !== 0
+                    ? myChatsSelected.map((chat) => (
+                        <Flex
+                          justify="space-between"
+                          align="center"
+                          style={{
+                            // backgroundColor: 'blue',
+                            padding: 5,
+                            minWidth: 200,
+                            maxWidth: 250,
+                            borderRadius: 6,
+                            border: '1px solid #EDEDED',
+                          }}
+                          key={ChatFlow.chatList[chat]._id}
+                        >
+                          <Flex gap={10}>
+                            <div
+                              style={{
+                                backgroundColor: ChatFlow.chatList[chat].color,
+                                height: 20,
+                                width: 20,
+                                borderRadius: '50%',
+                              }}
+                            ></div>
+                            {ChatFlow.chatList[chat].name}
+                          </Flex>
+                        </Flex>
+                      ))
+                    : null}
+                </Flex>
+              </Flex>
               <Flex
-                gap={10}
-                vertical
+                align="start"
+                justify="end"
+                gap={20}
                 style={{
-                  // backgroundColor: 'pink',
-                  padding: '0 10px',
-                  overflowY: 'scroll',
-                  maxHeight: 130,
+                  // backgroundColor: 'green',
+                  width: '50%',
+                  height: '100%',
                 }}
               >
-                {chatsSelected.length !== 0
-                  ? chatsSelected.map((chat) => (
-                      <Flex
-                        justify="space-between"
-                        align="center"
-                        style={{
-                          // backgroundColor: 'blue',
-                          padding: 5,
-                          width: 150,
-                          borderRadius: 6,
-                          border: '1px solid #EDEDED',
-                        }}
-                        key={ChatFlow.chatList[chat]._id}
-                      >
-                        <Flex gap={10}>
-                          <div
-                            style={{
-                              backgroundColor: ChatFlow.chatList[chat].color,
-                              height: 20,
-                              width: 20,
-                              borderRadius: '50%',
-                            }}
-                          ></div>
-                          {ChatFlow.chatList[chat].name}
+                <Flex
+                  gap={10}
+                  vertical
+                  style={{
+                    // backgroundColor: 'pink',
+                    padding: '0 10px',
+                    overflowY: 'scroll',
+                    maxHeight: 130,
+                  }}
+                >
+                  {chatsSelected.length !== 0
+                    ? chatsSelected.map((chat) => (
+                        <Flex
+                          justify="space-between"
+                          align="center"
+                          style={{
+                            // backgroundColor: 'blue',
+                            padding: 5,
+                            minWidth: 200,
+                            maxWidth: 250,
+                            borderRadius: 6,
+                            border: '1px solid #EDEDED',
+                          }}
+                          key={ChatFlow.chatList[chat]._id}
+                        >
+                          <Flex gap={10}>
+                            <div
+                              style={{
+                                backgroundColor: ChatFlow.chatList[chat].color,
+                                height: 20,
+                                width: 20,
+                                borderRadius: '50%',
+                              }}
+                            ></div>
+                            {ChatFlow.chatList[chat].name}
+                          </Flex>
                         </Flex>
-                      </Flex>
-                    ))
-                  : null}
+                      ))
+                    : null}
+                </Flex>
+                {userSelected !== '' ? (
+                  <img
+                    style={{ width: 35, height: 35, borderRadius: '50%' }}
+                    src={UserFlow.userList[userSelected].photo}
+                  />
+                ) : null}
               </Flex>
-              {userSelected !== '' ? (
-                <img
-                  style={{ width: 35, height: 35, borderRadius: '50%' }}
-                  src={UserFlow.userList[userSelected].photo}
+            </Flex>
+            <Flex vertical gap={20}>
+              <Flex align="center" gap={10}>
+                <span style={{ fontSize: 18, width: '13%' }}>Name</span>
+                <Input
+                  style={{ width: 200 }}
+                  onChange={handleFormCreateChatChange}
+                  name="name"
+                  value={teleportFormValues.name}
+                  placeholder="Name"
                 />
-              ) : null}
+              </Flex>
+              <Flex align="center" gap={10}>
+                <span style={{ fontSize: 18, width: '13%' }}>Category</span>
+                <Select
+                  style={{ width: 200 }}
+                  value={teleportFormValues.category}
+                  showSearch
+                  placeholder="Select a person"
+                  optionFilterProp="children"
+                  onChange={handleChangeCategory}
+                  onSearch={onSearch}
+                  filterOption={filterOption}
+                  options={categoryOptions}
+                />
+              </Flex>
+              <Flex align="start" gap={10}>
+                <span style={{ fontSize: 18, width: '13%' }}>Color</span>
+                <ColorPicker
+                  onChange={(color_, hex) => handleColorChange(hex)}
+                  defaultValue="#1677ff"
+                  showText
+                />
+              </Flex>
+              <Flex align="start" gap={10}>
+                <span style={{ fontSize: 18, width: '13%' }}>Description</span>
+                <TextArea
+                  style={{ width: 400, height: 100 }}
+                  onChange={handleFormCreateChatChange}
+                  name="description"
+                  placeholder="Description"
+                  value={teleportFormValues.description}
+                />
+              </Flex>
             </Flex>
           </Flex>
-          <Flex vertical gap={20}>
-            <Flex align="center" gap={10}>
-              <span style={{ fontSize: 18, width: '13%' }}>Name</span>
-              <Input
-                style={{ width: 200 }}
-                onChange={handleFormCreateChatChange}
-                name="name"
-                value={chatFormValues.name}
-                placeholder="Name"
-              />
-            </Flex>
-            <Flex align="center" gap={10}>
-              <span style={{ fontSize: 18, width: '13%' }}>Category</span>
-
-              <Input
-                style={{ width: 200 }}
-                onChange={handleFormCreateChatChange}
-                name="category"
-                value={chatFormValues.category}
-                placeholder="Category"
-              />
-            </Flex>
-            <Flex align="start" gap={10}>
-              <span style={{ fontSize: 18, width: '13%' }}>Color</span>
-              <ColorPicker
-                onChange={(color_, hex) => handleColorChange(hex)}
-                defaultValue="#1677ff"
-                showText
-              />
-            </Flex>
-            <Flex align="start" gap={10}>
-              <span style={{ fontSize: 18, width: '13%' }}>Description</span>
-              <TextArea
-                style={{ width: 400, height: 100 }}
-                onChange={handleFormCreateChatChange}
-                name="description"
-                placeholder="Description"
-                value={chatFormValues.description}
-              />
-            </Flex>
+        ) : (
+          <Flex justify="center" align="center" style={{ width: '100%', height: 550 }}>
+            <Spin size="large" />
           </Flex>
-        </Flex>
+        )}
       </Modal>
     </Flex>
   )

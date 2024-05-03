@@ -43,7 +43,7 @@ export const ChatDisplay: React.FC<IChatDisplay> = ({ chatColor, chatId, hasRigh
   return (
     <Flex gap={5} vertical style={{ height: '100vh' }}>
       <Flex
-        style={{ height: '65vh', padding: 20, borderRadius: 8, border: '1px solid gray' }}
+        style={{ height: '60vh', padding: 20, borderRadius: 8, border: '1px solid gray' }}
         vertical
         gap={10}
       >

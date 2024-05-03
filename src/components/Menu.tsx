@@ -2,7 +2,14 @@ import { getChatsAsCreator, getTeleportsAsCreator } from '@/state/appData/select
 import { Button, ConfigProvider, Flex, Menu } from 'antd'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { AppstoreOutlined, RobotOutlined, GlobalOutlined, LockOutlined } from '@ant-design/icons'
+import {
+  AppstoreOutlined,
+  RobotOutlined,
+  GlobalOutlined,
+  LockOutlined,
+  CodeSandboxOutlined,
+  FolderOutlined,
+} from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { useRouter } from 'next/router'
 import { CreateChatModal } from './CreateChatModal'
@@ -85,8 +92,8 @@ export const CustomMenu = ({ currentUserId }: any) => {
             <div
               style={{
                 backgroundColor: chat.color,
-                width: '15px',
-                height: '15px',
+                width: '19px',
+                height: '16px',
                 borderRadius: '50%',
               }}
             >
@@ -111,8 +118,8 @@ export const CustomMenu = ({ currentUserId }: any) => {
             <div
               style={{
                 backgroundColor: chat.color,
-                width: '15px',
-                height: '15px',
+                width: '19px',
+                height: '16px',
                 borderRadius: '50%',
               }}
             >
@@ -146,7 +153,7 @@ export const CustomMenu = ({ currentUserId }: any) => {
     getItem(
       <div onClick={() => router.push('/teleports')}>Teleports</div>,
       'Teleport',
-      <AppstoreOutlined />
+      <CodeSandboxOutlined />
     ),
     getItem(
       <div onClick={() => router.push('/playground')}>Playground</div>,
@@ -156,7 +163,7 @@ export const CustomMenu = ({ currentUserId }: any) => {
     getItem(
       <div onClick={() => router.push('/my-knowledge')}>My Knowledge</div>,
       'my-knowledge',
-      <AppstoreOutlined />
+      <FolderOutlined />
     ),
   ]
   return (

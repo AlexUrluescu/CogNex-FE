@@ -18,6 +18,8 @@ class TeleportsFlow {
   async createNewTeleport(teleport: ITeleport) {
     const newTeleport = await this.teleportsRepository.createTeleport(teleport)
 
+    console.log('newTeleport', newTeleport)
+
     store.dispatch(addNewTeleport(newTeleport.teleport))
 
     this.teleportList[newTeleport._id] = newTeleport
