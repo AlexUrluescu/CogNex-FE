@@ -62,6 +62,33 @@ class ChatFlow {
     }
   }
 
+  async userUnsubscribed(userId: string, chatId: string) {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/unsubscribed`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, chatId }),
+      })
+
+      const data = await res.json()
+
+      if (data.chat === null) {
+        alert(data.message)
+      }
+
+      if (data.chat === undefined || data.ok === false) {
+        return
+      }
+
+      store.dispatch(updateChatById({ ...data.chat }))
+      this.chatList[data.chat._id] = { ...data.chat }
+    } catch (error) {
+      return error
+    }
+  }
+
   async getInfoFromChromaDb(query: string, chatId: string) {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/info-chat`, {

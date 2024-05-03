@@ -1,6 +1,6 @@
 import { IChat } from '@/domain/chat'
 import { height } from '@fortawesome/free-solid-svg-icons/fa0'
-import { Button, Flex, message } from 'antd'
+import { Button, Flex, Popconfirm, message } from 'antd'
 import React from 'react'
 import { Tabs } from 'antd'
 import type { TabsProps } from 'antd'
@@ -23,6 +23,13 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
     messageApi.open({
       type: 'success',
       content: 'You have subcribed successfully',
+    })
+  }
+
+  const successUnsubscribed = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'You have unsubcribed successfully',
     })
   }
 
@@ -89,6 +96,19 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
     success()
   }
 
+  const handleUnsubcribe = async () => {
+    console.log('handleUnsubcribe')
+    const userId = currentUser._id
+    const chatId = chat._id
+
+    if (chatId === undefined) {
+      return
+    }
+
+    ChatFlow.userUnsubscribed(userId, chatId)
+    successUnsubscribed()
+  }
+
   return (
     <Flex vertical gap={30}>
       {contextHolder}
@@ -104,7 +124,19 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
             <Button type="primary" onClick={handleSubcribe}>
               Subscribe
             </Button>
-          ) : null}
+          ) : (
+            <Popconfirm
+              title={`Unsubscribed from ${chat.name}`}
+              description="Are you sure to unsubscribed this chat?"
+              onConfirm={handleUnsubcribe}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button danger type="primary">
+                Unsubscribed
+              </Button>
+            </Popconfirm>
+          )}
         </Flex>
       </Flex>
       <Flex style={{}}>
