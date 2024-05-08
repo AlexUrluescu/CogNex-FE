@@ -174,12 +174,12 @@ export const TeleportsView = () => {
   return (
     <Flex vertical gap={20}>
       {contextHolder}
-      <Flex align="center" gap={30}>
-        <span> Find a user</span>
+      <Flex align="center" gap={15}>
+        <span>Explore</span>
         <Select
-          style={{ width: 200 }}
+          style={{ width: '100%' }}
           showSearch={true}
-          placeholder="Explore"
+          placeholder="Find your user"
           optionFilterProp="children"
           onChange={onChange}
           onSearch={onSearch}

@@ -10,6 +10,7 @@ import { ChatDisplay } from '@/components/ChatDisplay'
 import { ChatFlow } from '@/flows/chat'
 import { ChatDetails } from '@/components/ChatDetails'
 import { ChatSettings } from '@/components/ChatSettings'
+import { getRateAverage } from '@/utils'
 
 interface IPublicChatIdView {
   chat: IChat
@@ -107,6 +108,10 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
 
     ChatFlow.userUnsubscribed(userId, chatId)
     successUnsubscribed()
+  }
+
+  if (chat.reviews === undefined) {
+    return
   }
 
   return (

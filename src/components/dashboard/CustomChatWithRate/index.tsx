@@ -1,4 +1,5 @@
 import { IChat } from '@/domain/chat'
+import { getRateAverage } from '@/utils'
 import { StarFilled, StarOutlined } from '@ant-design/icons'
 import { Button, Flex, Tag } from 'antd'
 import { useRouter } from 'next/router'
@@ -8,7 +9,7 @@ interface ICustomChat {
   chat: IChat
 }
 
-export const CustomChat: React.FC<ICustomChat> = ({ chat }) => {
+export const CustomChatWithRate: React.FC<ICustomChat> = ({ chat }) => {
   const router = useRouter()
 
   console.log(chat.reviews)
@@ -51,11 +52,14 @@ export const CustomChat: React.FC<ICustomChat> = ({ chat }) => {
         ></div>
         <h4 style={{ height: '20%', fontWeight: 400 }}>{chat.name}</h4>
       </Flex>
-      <Flex gap={20}>
+      <Flex gap={20} align="center">
         <Tag color="purple">{chat.category}</Tag>
-        <span>
-          {calculateAverageRate(chat.reviews)} <StarFilled style={{ color: 'gold' }} />
-        </span>
+
+        {getRateAverage(chat.reviews) !== 0 ? (
+          <Flex align="center" gap={3}>
+            {getRateAverage(chat.reviews)} <StarFilled style={{ color: 'gold' }} />
+          </Flex>
+        ) : null}
       </Flex>
 
       <Flex gap={10} justify="center" align="center" style={{ width: '100%', marginTop: 30 }}>

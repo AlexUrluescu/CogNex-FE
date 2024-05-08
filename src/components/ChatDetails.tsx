@@ -13,6 +13,8 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
 import Image from 'next/image'
+import { getRateAverage } from '@/utils'
+import { StarFilled } from '@ant-design/icons'
 
 const { TextArea } = Input
 
@@ -76,11 +78,21 @@ export const ChatDetails: React.FC<IChatDetails> = ({ chat }) => {
         return
       }
 
+      setUserReview({
+        rate: 1,
+        message: '',
+        userId: currentUser._id,
+        date: dateCreated,
+      })
       store.dispatch(updateChatById({ ...data.chat }))
       ChatFlow.chatList[data.chat._id] = { ...data.chat }
     } catch (error) {
       return error
     }
+  }
+
+  if (chat.reviews === undefined) {
+    return
   }
 
   return (
@@ -116,7 +128,14 @@ export const ChatDetails: React.FC<IChatDetails> = ({ chat }) => {
 
       <Flex gap={10} align="center">
         <span className="title">Reviews average: </span>
-        <span>testing ...</span>
+
+        {getRateAverage(chat.reviews) !== 0 ? (
+          <span>
+            {getRateAverage(chat.reviews)} <StarFilled style={{ color: 'gold' }} />
+          </span>
+        ) : (
+          <span>No reviews yet</span>
+        )}
       </Flex>
 
       <Flex gap={10} style={{ paddingBottom: 30 }}>
@@ -131,11 +150,12 @@ export const ChatDetails: React.FC<IChatDetails> = ({ chat }) => {
       >
         <Flex align="center" gap={20}>
           <span className="title">Review this chat: </span>
-          <Flex style={{ width: '100%' }} justify="space-between" align="center">
+          <Flex style={{ width: '90%' }} justify="space-between" align="center">
             <Rate
               onChange={(rate) => setUserReview({ ...userReview, rate: rate })}
               allowHalf
-              defaultValue={1}
+              defaultValue={userReview.rate}
+              value={userReview.rate}
             />
             <Button type="primary" onClick={handleReview}>
               Send review
@@ -146,6 +166,7 @@ export const ChatDetails: React.FC<IChatDetails> = ({ chat }) => {
         <Flex>
           <Flex style={{ width: '75%' }} gap={15}>
             <TextArea
+              value={userReview.message}
               style={{ height: 100 }}
               onChange={(e) => setUserReview({ ...userReview, message: e.target.value })}
               placeholder="Write your review ..."
