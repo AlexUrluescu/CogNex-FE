@@ -86,7 +86,8 @@ const Header = () => {
     <Flex
       align="center"
       style={{
-        backgroundColor: '#02182B',
+        backgroundColor: '#064ADA',
+        // backgroundColor: '#265ac9',
         padding: '20px 30px',
         color: 'white',
         width: '100%',
@@ -96,21 +97,11 @@ const Header = () => {
         zIndex: 100,
       }}
     >
-      <Flex style={{ width: '18%' }}>
-        <h2>Teleport</h2>
+      <Flex style={{ width: '20%' }}>
+        <h2 style={{ fontSize: 30, marginLeft: 30 }}>Teleport</h2>
       </Flex>
-      <Flex align="center" justify="space-between" style={{ width: '82%' }}>
-        <Select
-          style={{ width: '80%' }}
-          showSearch={true}
-          placeholder="Explore"
-          optionFilterProp="children"
-          onChange={onChange}
-          onSearch={onSearch}
-          filterOption={filterOption}
-          options={allUsersForSearch}
-        />
-        <span style={{ width: '20%' }}>
+      <Flex justify="end" style={{ width: '80%' }}>
+        <span style={{}}>
           <Dropdown
             menu={{ items }}
             placement="bottom"
@@ -119,13 +110,13 @@ const Header = () => {
           >
             <Flex justify="end" style={{ cursor: 'pointer' }} onClick={(e) => e.preventDefault()}>
               <Flex gap={10} align="center">
-                {currentUser.name}
+                <span style={{ fontSize: 17 }}>{currentUser.name}</span>
 
                 <Image
                   width={35}
                   height={35}
                   src={currentUser.photo}
-                  style={{ borderRadius: '50%' }}
+                  style={{ borderRadius: '50%', border: '1px solid white' }}
                   alt={''}
                 />
               </Flex>
