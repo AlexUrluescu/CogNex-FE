@@ -1,6 +1,6 @@
 import { IChat, IChat2 } from '@/domain/chat'
 import { ChatRepository } from '@/repositories/chat'
-import { addNewChat, updateChatById } from '@/state/appData/appDataSlice'
+import { addNewChat, deleteChat, updateChatById } from '@/state/appData/appDataSlice'
 import { store } from '@/state/store'
 
 class ChatFlow {
@@ -33,6 +33,16 @@ class ChatFlow {
     const success = await this.chatRepository.deleteOldPdfs(currentUserId)
 
     return success
+  }
+
+  async deleteChat(chatId: string) {
+    const chatDeletedId = await this.chatRepository.deleteChat(chatId)
+
+    store.dispatch(deleteChat(chatDeletedId.chat))
+
+    this.chatList[chatDeletedId.chat] && delete this.chatList[chatDeletedId.chat]
+
+    return chatDeletedId
   }
 
   async userSubscribed(userId: string, chatId: string) {

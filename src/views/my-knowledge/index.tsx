@@ -100,7 +100,7 @@ export const MyKnowledgeView = () => {
                   chat.files.map((file) => (
                     <Card key={index} style={{ maxWidth: 250, minWidth: 200 }}>
                       <Flex vertical align="center" gap={20}>
-                        <h4>{file.name}</h4>
+                        <span style={{ fontSize: 17, fontWeight: 400 }}>{file.name}</span>
                         <Flex gap={10}>
                           <Button type="primary" onClick={() => handleViewDocument(file)}>
                             View

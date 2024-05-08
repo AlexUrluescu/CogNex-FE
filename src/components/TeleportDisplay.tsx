@@ -41,7 +41,7 @@ export const TeleportDisplay: React.FC<ITeleportDisplay> = ({ color, id }) => {
   return (
     <Flex gap={5} vertical style={{ height: '100vh' }}>
       <Flex
-        style={{ height: '65vh', padding: 20, borderRadius: 8, border: '1px solid gray' }}
+        style={{ height: '60vh', padding: 20, borderRadius: 8, border: '1px solid #EDEDED' }}
         vertical
         gap={10}
       >

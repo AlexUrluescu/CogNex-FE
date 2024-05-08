@@ -1,6 +1,6 @@
 import { IChat } from '@/domain/chat'
 import { height } from '@fortawesome/free-solid-svg-icons/fa0'
-import { Button, Flex, message } from 'antd'
+import { Button, Flex, Tag, message } from 'antd'
 import React from 'react'
 import { Tabs } from 'antd'
 import type { TabsProps } from 'antd'
@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux'
 import { ChatDisplay } from '@/components/ChatDisplay'
 import { ChatFlow } from '@/flows/chat'
 import { ChatDetails } from '@/components/ChatDetails'
+import { ChatSettings } from '@/components/ChatSettings'
 
 interface IPrivateChatIdView {
   chat: IChat
@@ -60,11 +61,7 @@ export const PrivateChatIdView: React.FC<IPrivateChatIdView> = ({ chat }) => {
         {
           key: '3',
           label: 'Settings',
-          children: (
-            <Button disabled={true} onClick={handleGetDocs}>
-              GET DOCUMENTS
-            </Button>
-          ),
+          children: <ChatSettings chat={chat} currentUser={currentUser} />,
         },
       ]
     : [
@@ -95,12 +92,15 @@ export const PrivateChatIdView: React.FC<IPrivateChatIdView> = ({ chat }) => {
   return (
     <Flex vertical gap={30}>
       {contextHolder}
-      <Flex justify="space-between">
+      <Flex gap={10}>
         <Flex gap={10}>
           <div
             style={{ width: 30, height: 30, backgroundColor: chat.color, borderRadius: '50%' }}
           ></div>
           <h2>{chat.name}</h2>
+        </Flex>
+        <Flex align="center">
+          <Tag color="purple">{chat.category}</Tag>
         </Flex>
         <Flex>
           {isChatUser === undefined && isChatOwner === false ? (

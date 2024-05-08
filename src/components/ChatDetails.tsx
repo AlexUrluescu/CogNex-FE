@@ -4,7 +4,7 @@ import { UserFlow } from '@/flows/users'
 import { updateChatById } from '@/state/appData/appDataSlice'
 import { getCurrentUser } from '@/state/appData/selectors'
 import { store } from '@/state/store'
-import { Button, Card, Flex, Input, Rate } from 'antd'
+import { Button, Card, Empty, Flex, Input, Rate } from 'antd'
 import { SearchProps } from 'antd/es/input/Search'
 import { format } from 'date-fns'
 import Link from 'next/link'
@@ -114,34 +114,89 @@ export const ChatDetails: React.FC<IChatDetails> = ({ chat }) => {
         <span>{chat.dateCreated}</span>
       </Flex>
 
-      <Flex gap={10}>
+      <Flex gap={10} align="center">
+        <span className="title">Reviews average: </span>
+        <span>testing ...</span>
+      </Flex>
+
+      <Flex gap={10} style={{ paddingBottom: 30 }}>
         <span className="title">Description: </span>
         <span>{chat.description}</span>
       </Flex>
 
-      <Flex gap={10} style={{ width: '90%' }}>
-        <span className="title">Review this chat: </span>
-        <span>
-          <Flex style={{ width: '135%' }}>
-            <Flex style={{ width: '75%' }} gap={15}>
-              <TextArea
-                style={{ width: 400, height: 100 }}
-                onChange={(e) => setUserReview({ ...userReview, message: e.target.value })}
-                placeholder="Write your review ..."
-              />
-              <Rate
-                onChange={(rate) => setUserReview({ ...userReview, rate: rate })}
-                allowHalf
-                defaultValue={1}
-              />
+      <Flex
+        vertical
+        gap={10}
+        style={{ width: '90%', borderTop: '1px solid #EDEDED', paddingTop: 30 }}
+      >
+        <Flex align="center" gap={20}>
+          <span className="title">Review this chat: </span>
+          <Flex style={{ width: '100%' }} justify="space-between" align="center">
+            <Rate
+              onChange={(rate) => setUserReview({ ...userReview, rate: rate })}
+              allowHalf
+              defaultValue={1}
+            />
+            <Button type="primary" onClick={handleReview}>
+              Send review
+            </Button>
+          </Flex>
+        </Flex>
+
+        <Flex>
+          <Flex style={{ width: '75%' }} gap={15}>
+            <TextArea
+              style={{ height: 100 }}
+              onChange={(e) => setUserReview({ ...userReview, message: e.target.value })}
+              placeholder="Write your review ..."
+            />
+          </Flex>
+        </Flex>
+      </Flex>
+
+      <Flex style={{ marginTop: 20 }}>
+        {chat.reviews !== undefined && chat.vizibility !== 'private' ? (
+          <Flex vertical style={{ width: '90%' }}>
+            <Flex
+              justify="space-between"
+              align="center"
+              style={{ borderBottom: '1px solid #EFEFEF', padding: '10px 0px' }}
+            >
+              <span style={{ fontSize: '16px', fontWeight: 600 }}>Reviews</span>
             </Flex>
-            <Flex justify="end" style={{ width: '25%' }}>
-              <Button type="primary" onClick={handleReview}>
-                Send review
-              </Button>
+            <Flex vertical gap={20} style={{ padding: 10, maxHeight: 300, overflowY: 'scroll' }}>
+              {chat.reviews.length > 0 ? (
+                chat.reviews.map((review, index) => (
+                  <Flex gap={10} vertical key={index} align="space-between" justify="center">
+                    <Flex justify="space-between" align="start">
+                      <Flex align="center" gap={10}>
+                        <Flex>
+                          <Image
+                            width={35}
+                            height={35}
+                            src={UserFlow.userList[review.userId].photo}
+                            style={{ borderRadius: '50%' }}
+                            alt={''}
+                          />
+                        </Flex>
+                        <Flex vertical>
+                          <span>{UserFlow.userList[review.userId].name}</span>
+                          <span style={{ fontSize: 10 }}>{review.date}</span>
+                        </Flex>
+                      </Flex>
+                      <Flex>
+                        <Rate value={review.rate} disabled={true} />
+                      </Flex>
+                    </Flex>
+                    <Flex style={{ marginLeft: 45 }}>{review.message}</Flex>
+                  </Flex>
+                ))
+              ) : (
+                <Empty description="No reviews yet" />
+              )}
             </Flex>
           </Flex>
-        </span>
+        ) : null}
       </Flex>
 
       <Flex style={{ marginTop: 50 }} vertical gap={40}>
@@ -183,57 +238,9 @@ export const ChatDetails: React.FC<IChatDetails> = ({ chat }) => {
                 </Flex>
               ))
             ) : (
-              <p>No users subscribed to this chat</p>
+              <Empty description="No users subscribed yet" />
             )}
           </Flex>
-        </Flex>
-        <Flex style={{ marginTop: 20 }}>
-          {chat.reviews !== undefined && chat.vizibility !== 'private' ? (
-            <Flex vertical style={{ width: '90%' }}>
-              <Flex
-                justify="space-between"
-                align="center"
-                style={{ borderBottom: '1px solid #EFEFEF', padding: '10px 0px' }}
-              >
-                <span style={{ fontSize: '16px', fontWeight: 600 }}>Reviews</span>
-              </Flex>
-              <Flex vertical gap={20} style={{ padding: 10, maxHeight: 300, overflowY: 'scroll' }}>
-                {chat.reviews.length > 0 ? (
-                  chat.reviews.map((review, index) => (
-                    <Flex gap={10} vertical key={index} align="space-between" justify="center">
-                      <Flex justify="space-between" align="start">
-                        <Flex align="center" gap={10}>
-                          <Flex>
-                            <Image
-                              width={35}
-                              height={35}
-                              src={UserFlow.userList[review.userId].photo}
-                              style={{ borderRadius: '50%' }}
-                              alt={''}
-                            />
-                          </Flex>
-                          <Flex vertical>
-                            <span>{UserFlow.userList[review.userId].name}</span>
-                            <span style={{ fontSize: 10 }}>{review.date}</span>
-                          </Flex>
-                        </Flex>
-                        <Flex>
-                          <Rate value={review.rate} disabled={true} />
-                        </Flex>
-                      </Flex>
-                      <Flex style={{ marginLeft: 45 }}>{review.message}</Flex>
-
-                      {/* <Button onClick={() => router.push(`/my-account/${user._id}`)} type="primary">
-                      View Profile
-                    </Button> */}
-                    </Flex>
-                  ))
-                ) : (
-                  <p>No reviews for this chat</p>
-                )}
-              </Flex>
-            </Flex>
-          ) : null}
         </Flex>
       </Flex>
     </Flex>

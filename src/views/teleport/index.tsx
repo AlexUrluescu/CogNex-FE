@@ -1,17 +1,18 @@
 import { ChatDetails } from '@/components/ChatDetails'
 import { ChatDisplay } from '@/components/ChatDisplay'
-import { ITeleport } from '@/domain/teleports'
+import { ITeleport, ITeleport2 } from '@/domain/teleports'
 import { getCurrentUser } from '@/state/appData/selectors'
-import { Button, Flex } from 'antd'
+import { Button, Flex, Tag } from 'antd'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Tabs } from 'antd'
 import type { TabsProps } from 'antd'
 import { TeleportDetails } from '@/components/TeleportDetails'
 import { TeleportDisplay } from '@/components/TeleportDisplay'
+import { TeleportSettings } from '@/components/teleport/teleportSettings'
 
 interface ITeleportChatIdView {
-  teleport: ITeleport
+  teleport: ITeleport2
 }
 
 export const TeleportChatIdView: React.FC<ITeleportChatIdView> = ({ teleport }) => {
@@ -51,25 +52,21 @@ export const TeleportChatIdView: React.FC<ITeleportChatIdView> = ({ teleport }) 
     {
       key: '3',
       label: 'Settings',
-      children: (
-        <Button disabled={true} onClick={handleGetDocs}>
-          GET DOCUMENTS
-        </Button>
-      ),
+      children: <TeleportSettings teleport={teleport} />,
     },
   ]
 
   return (
     <Flex vertical gap={30}>
-      <Flex justify="space-between">
+      <Flex gap={10}>
         <Flex gap={10}>
           <div
             style={{ width: 30, height: 30, backgroundColor: teleport.color, borderRadius: '50%' }}
           ></div>
           <h2>{teleport.name}</h2>
         </Flex>
-        <Flex align="center" style={{ border: '2px solid black', padding: 10, borderRadius: 12 }}>
-          <span className="rainbow-text">TELEPORT</span>
+        <Flex align="center">
+          <Tag color="purple">{teleport.category}</Tag>
         </Flex>
       </Flex>
       <Flex style={{}}>

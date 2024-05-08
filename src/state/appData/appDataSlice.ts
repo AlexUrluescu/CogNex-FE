@@ -1,5 +1,5 @@
 import { IChat } from '@/domain/chat'
-import { ITeleport } from '@/domain/teleports'
+import { ITeleport, ITeleport2 } from '@/domain/teleports'
 import { IUser2 } from '@/domain/user'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
@@ -7,7 +7,7 @@ interface IAppDataState {
   currentUser: IUser2
   users: IUser2[]
   chats: IChat[]
-  teleports: ITeleport[]
+  teleports: ITeleport2[]
 }
 
 const initialState: IAppDataState = {
@@ -38,7 +38,7 @@ const appDataSlice = createSlice({
       state.chats = action.payload
     },
 
-    setAllTeleports: (state, action: PayloadAction<ITeleport[]>) => {
+    setAllTeleports: (state, action: PayloadAction<ITeleport2[]>) => {
       state.teleports = action.payload
     },
 
@@ -50,8 +50,16 @@ const appDataSlice = createSlice({
       state.chats.push(action.payload)
     },
 
-    addNewTeleport: (state, action: PayloadAction<ITeleport>) => {
+    addNewTeleport: (state, action: PayloadAction<ITeleport2>) => {
       state.teleports.push(action.payload)
+    },
+
+    deleteTeleport(state, action: { type: string; payload: string }) {
+      state.teleports = state.teleports.filter((teleport) => teleport._id !== action.payload)
+    },
+
+    deleteChat(state, action: { type: string; payload: string }) {
+      state.chats = state.chats.filter((chat) => chat._id !== action.payload)
     },
 
     resetCurrentUser: (state, action: PayloadAction<IUser2>) => {
@@ -68,6 +76,8 @@ export const {
   updateChatById,
   addNewChat,
   addNewTeleport,
+  deleteTeleport,
+  deleteChat,
   resetCurrentUser,
 } = appDataSlice.actions
 export default appDataSlice.reducer

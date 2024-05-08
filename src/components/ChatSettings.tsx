@@ -1,6 +1,6 @@
 import { IChat } from '@/domain/chat'
-import { Button, Card, Flex, Input, Popconfirm, PopconfirmProps, Spin, message } from 'antd'
-import React, { FormEvent, useState } from 'react'
+import { Button, Card, Flex, Input, Popconfirm, PopconfirmProps, Select, Spin, message } from 'antd'
+import React, { FormEvent, useReducer, useState } from 'react'
 import KnowledgeCard from './KnowledgeCard'
 import { IUser } from '@/domain/user'
 import Link from 'next/link'
@@ -11,6 +11,8 @@ import DraggerUpload from './DraggerUpload'
 import axios from 'axios'
 import { ChatFlow } from '@/flows/chat'
 import { store } from '@/state/store'
+import { categoryOptions } from '@/utils'
+import { useRouter } from 'next/router'
 
 interface IChatSettings {
   chat: IChat
@@ -22,6 +24,8 @@ interface IFiles {
   documentId: string
 }
 
+const { TextArea } = Input
+
 export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => {
   const [editDetails, setEditDetails] = useState<boolean>(false)
   const [editDocuments, setEditDocuments] = useState<boolean>(false)
@@ -29,6 +33,7 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
   const [files, setFiles] = useState<any[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const dispatch = useDispatch()
+  const router = useRouter()
   const handleGetDocs = () => {
     if (chat._id === undefined) {
       return
@@ -38,6 +43,9 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
   if (currentUser._id === undefined) {
     return
   }
+
+  const filterOption = (input: string, option?: { label: string; value: string }) =>
+    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
 
   const uploadPdf = async () => {
     try {
@@ -162,8 +170,17 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
 
   const btnUploadDisabled = files.length > 0
 
+  const handleDeleteChat = async (chatId: string) => {
+    console.log(chatId)
+    const chatDeletedId = await ChatFlow.deleteChat(chatId)
+
+    if (chatDeletedId) {
+      router.push('/playground')
+    }
+  }
+
   return (
-    <Flex vertical gap={25} style={{ padding: ' 0 25px' }}>
+    <Flex vertical gap={25}>
       <Flex vertical>
         <Flex
           style={{
@@ -206,7 +223,7 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
               chat.files?.map((file, index) => (
                 <Card key={index} style={{ maxWidth: 250, minWidth: 200 }}>
                   <Flex vertical align="center" gap={20}>
-                    <h5>{file.name}</h5>
+                    <span style={{ fontSize: 17, fontWeight: 400 }}>{file.name}</span>
                     <Flex gap={10}>
                       <Button type="primary" onClick={() => handleViewDocument(file)}>
                         View
@@ -276,7 +293,17 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
           <Flex gap={10} align="start">
             <span className="title">Category: </span>
             {editDetails === true ? (
-              <Input style={{ width: '85%' }} defaultValue={chat.category}></Input>
+              <Select
+                style={{ width: 200 }}
+                defaultValue={chat.category}
+                showSearch
+                placeholder="Select a person"
+                optionFilterProp="children"
+                //   onChange={handleChangeCategory}
+                // onSearch={onSearch}
+                filterOption={filterOption}
+                options={categoryOptions}
+              />
             ) : (
               <span>{chat.category}</span>
             )}
@@ -304,11 +331,52 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
           <Flex gap={10}>
             <span className="title">Description: </span>
             {editDetails === true ? (
-              <Input style={{ width: '85%' }} defaultValue={chat.description}></Input>
+              <TextArea
+                style={{ width: '85%' }}
+                // onChange={handleFormCreateChatChange}
+                name="description"
+                // value={chat.description}
+                defaultValue={chat.description}
+              />
             ) : (
+              // <Input style={{ width: '85%' }} defaultValue={chat.description}></Input>
               <span>{chat.description}</span>
             )}
           </Flex>
+        </Flex>
+      </Flex>
+      <Flex vertical style={{ marginTop: 40 }}>
+        <Flex
+          style={{
+            borderBottom: '1px solid #ECEBEB',
+            padding: '10px 0px',
+          }}
+          align="center"
+          justify="space-between"
+        >
+          <span style={{ fontSize: 25, fontWeight: 500, color: 'red' }}>Danger Zone</span>
+        </Flex>
+        <Flex
+          justify="space-between"
+          align="center"
+          style={{ border: '1px solid red', borderRadius: 8, padding: 10 }}
+        >
+          <Flex vertical>
+            <p style={{ fontWeight: 600 }}>Delete this chat</p>
+            <p>Once you delete a chat, there is no going back. Please be certain.</p>
+          </Flex>
+
+          <Popconfirm
+            title={`Delete ${chat.name} chat`}
+            description="Are you sure to delete this chat?"
+            onConfirm={() => handleDeleteChat(chat._id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="primary" danger>
+              DELETE
+            </Button>
+          </Popconfirm>
         </Flex>
       </Flex>
     </Flex>
