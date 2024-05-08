@@ -119,8 +119,8 @@ const Header = () => {
           >
             <Flex justify="end" style={{ cursor: 'pointer' }} onClick={(e) => e.preventDefault()}>
               <Flex gap={10} align="center">
-                {/* <UserOutlined /> */}
                 {currentUser.name}
+
                 <Image
                   width={35}
                   height={35}

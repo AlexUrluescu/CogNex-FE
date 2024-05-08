@@ -92,3 +92,15 @@ export const categoryOptions = [
   { value: 'Herbalism', label: 'Herbalism' },
   { value: 'Marine Biology', label: 'Marine Biology' },
 ]
+
+export const getRateAverage = (reviews: any[]) => {
+  const total = reviews.reduce((accumulator, currentValue) => accumulator + currentValue.rate, 0)
+  const average = total / reviews.length
+  console.log(average)
+
+  if (average) {
+    return average
+  } else {
+    return 0
+  }
+}
