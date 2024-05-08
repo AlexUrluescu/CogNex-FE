@@ -1,7 +1,12 @@
 import { ITeleport } from '@/domain/teleports'
 import { TeleportsRepository } from '@/repositories/teleports'
 
-import { addNewChat, addNewTeleport, updateChatById } from '@/state/appData/appDataSlice'
+import {
+  addNewChat,
+  addNewTeleport,
+  deleteTeleport,
+  updateChatById,
+} from '@/state/appData/appDataSlice'
 import { store } from '@/state/store'
 
 class TeleportsFlow {
@@ -18,11 +23,24 @@ class TeleportsFlow {
   async createNewTeleport(teleport: ITeleport) {
     const newTeleport = await this.teleportsRepository.createTeleport(teleport)
 
+    console.log('newTeleport', newTeleport)
+
     store.dispatch(addNewTeleport(newTeleport.teleport))
 
     this.teleportList[newTeleport._id] = newTeleport
 
     return newTeleport
+  }
+
+  async deleteTeleport(teleportId: string) {
+    const teleportDeletedId = await this.teleportsRepository.deleteTeleport(teleportId)
+
+    store.dispatch(deleteTeleport(teleportDeletedId.teleport))
+
+    this.teleportList[teleportDeletedId.teleport] &&
+      delete this.teleportList[teleportDeletedId.teleport]
+
+    return teleportDeletedId
   }
 
   async userSubscribed(userId: string, chatId: string) {

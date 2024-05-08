@@ -1,6 +1,6 @@
 import { IChat, IChat2 } from '@/domain/chat'
 import { ChatRepository } from '@/repositories/chat'
-import { addNewChat, updateChatById } from '@/state/appData/appDataSlice'
+import { addNewChat, deleteChat, updateChatById } from '@/state/appData/appDataSlice'
 import { store } from '@/state/store'
 
 class ChatFlow {
@@ -35,9 +35,46 @@ class ChatFlow {
     return success
   }
 
+  async deleteChat(chatId: string) {
+    const chatDeletedId = await this.chatRepository.deleteChat(chatId)
+
+    store.dispatch(deleteChat(chatDeletedId.chat))
+
+    this.chatList[chatDeletedId.chat] && delete this.chatList[chatDeletedId.chat]
+
+    return chatDeletedId
+  }
+
   async userSubscribed(userId: string, chatId: string) {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/subscribed`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, chatId }),
+      })
+
+      const data = await res.json()
+
+      if (data.chat === null) {
+        alert(data.message)
+      }
+
+      if (data.chat === undefined || data.ok === false) {
+        return
+      }
+
+      store.dispatch(updateChatById({ ...data.chat }))
+      this.chatList[data.chat._id] = { ...data.chat }
+    } catch (error) {
+      return error
+    }
+  }
+
+  async userUnsubscribed(userId: string, chatId: string) {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/unsubscribed`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

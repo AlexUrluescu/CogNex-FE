@@ -1,7 +1,4 @@
-import { IChat } from '@/domain/chat'
 import { ITeleport } from '@/domain/teleports'
-import { IUser } from '@/domain/user'
-import { UserLogin } from '@/types'
 
 export class TeleportsRepository {
   async createTeleport(teleport: ITeleport) {
@@ -16,9 +13,23 @@ export class TeleportsRepository {
 
       const data = await res.json()
 
-      //   if (data.user === undefined || data.sucess === false) {
-      //     return
-      //   }
+      return data
+    } catch (error) {
+      return error
+    }
+  }
+
+  async deleteTeleport(teleportId: string) {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/delete_teleport`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ teleportId }),
+      })
+
+      const data = await res.json()
 
       return data
     } catch (error) {

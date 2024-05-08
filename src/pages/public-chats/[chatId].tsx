@@ -14,11 +14,7 @@ const PublicChatIdPage = () => {
     return null
   }
 
-  return (
-    <Layout>
-      <PublicChatIdView chat={chat} />
-    </Layout>
-  )
+  return <PublicChatIdView chat={chat} />
 }
 
 export default PublicChatIdPage

@@ -3,11 +3,7 @@ import { MyTeleportsView } from '@/views/my-teleports'
 import React from 'react'
 
 const MyTeleportsPage = () => {
-  return (
-    <Layout>
-      <MyTeleportsView />
-    </Layout>
-  )
+  return <MyTeleportsView />
 }
 
 export default MyTeleportsPage

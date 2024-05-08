@@ -25,6 +25,18 @@ export interface ITeleport {
   description: string
 }
 
+export interface ITeleport2 {
+  _id: string
+  creator: string
+  name: string
+  category: string
+  chats: string[]
+  teleportUser: string
+  color: string
+  dateCreated: string
+  description: string
+}
+
 export class Teleport implements ITeleport {
   _id: string
   creator: string

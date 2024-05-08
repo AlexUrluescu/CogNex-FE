@@ -55,9 +55,23 @@ export class ChatRepository {
 
       const data = await res.json()
 
-      //   if (data.user === undefined || data.sucess === false) {
-      //     return
-      //   }
+      return data
+    } catch (error) {
+      return error
+    }
+  }
+
+  async deleteChat(chatId: string) {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/delete_chat`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ chatId }),
+      })
+
+      const data = await res.json()
 
       return data
     } catch (error) {

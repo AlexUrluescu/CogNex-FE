@@ -1,6 +1,6 @@
 import { IChat } from '@/domain/chat'
 import { height } from '@fortawesome/free-solid-svg-icons/fa0'
-import { Button, Flex, message } from 'antd'
+import { Button, Flex, Popconfirm, Tag, message } from 'antd'
 import React from 'react'
 import { Tabs } from 'antd'
 import type { TabsProps } from 'antd'
@@ -22,7 +22,14 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
   const success = () => {
     messageApi.open({
       type: 'success',
-      content: 'This is a success message',
+      content: 'You have subcribed successfully',
+    })
+  }
+
+  const successUnsubscribed = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'You have unsubcribed successfully',
     })
   }
 
@@ -89,6 +96,19 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
     success()
   }
 
+  const handleUnsubcribe = async () => {
+    console.log('handleUnsubcribe')
+    const userId = currentUser._id
+    const chatId = chat._id
+
+    if (chatId === undefined) {
+      return
+    }
+
+    ChatFlow.userUnsubscribed(userId, chatId)
+    successUnsubscribed()
+  }
+
   return (
     <Flex vertical gap={30}>
       {contextHolder}
@@ -98,12 +118,27 @@ export const PublicChatIdView: React.FC<IPublicChatIdView> = ({ chat }) => {
             style={{ width: 30, height: 30, backgroundColor: chat.color, borderRadius: '50%' }}
           ></div>
           <h2>{chat.name}</h2>
+          <Flex align="center">
+            <Tag color="purple">{chat.category}</Tag>
+          </Flex>
         </Flex>
         <Flex>
           {isChatUser === undefined && isChatOwner === false ? (
             <Button type="primary" onClick={handleSubcribe}>
               Subscribe
             </Button>
+          ) : currentUser._id !== chat.creator ? (
+            <Popconfirm
+              title={`Unsubscribed from ${chat.name}`}
+              description="Are you sure to unsubscribed this chat?"
+              onConfirm={handleUnsubcribe}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button danger type="primary">
+                Unsubscribed
+              </Button>
+            </Popconfirm>
           ) : null}
         </Flex>
       </Flex>

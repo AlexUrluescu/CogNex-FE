@@ -14,11 +14,7 @@ const PrivateChatIdPage = () => {
     return null
   }
 
-  return (
-    <Layout>
-      <PrivateChatIdView chat={chat} />
-    </Layout>
-  )
+  return <PrivateChatIdView chat={chat} />
 }
 
 export default PrivateChatIdPage
