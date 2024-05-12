@@ -1,6 +1,17 @@
 import { IChat } from '@/domain/chat'
-import { Button, Card, Flex, Input, Popconfirm, PopconfirmProps, Select, Spin, message } from 'antd'
-import React, { FormEvent, useReducer, useState } from 'react'
+import {
+  Button,
+  Card,
+  ColorPicker,
+  Flex,
+  Input,
+  Popconfirm,
+  PopconfirmProps,
+  Select,
+  Spin,
+  message,
+} from 'antd'
+import React, { ChangeEventHandler, FormEvent, useReducer, useState } from 'react'
 import KnowledgeCard from './KnowledgeCard'
 import { IUser } from '@/domain/user'
 import Link from 'next/link'
@@ -32,6 +43,7 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
   const [addDocuments, setAddDocuments] = useState<boolean>(false)
   const [files, setFiles] = useState<any[]>([])
   const [loading, setLoading] = useState<boolean>(false)
+  const [chatEdit, setChatEdit] = useState<IChat>(chat)
   const dispatch = useDispatch()
   const router = useRouter()
   const handleGetDocs = () => {
@@ -110,8 +122,51 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
     setEditDetails(true)
   }
 
-  const handleFinishDetails = () => {
+  const handleFinishDetails = async () => {
+    console.log(chatEdit)
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/edit_chat`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ chat: chatEdit }),
+      })
+
+      const data = await res.json()
+      console.log('data', data)
+
+      dispatch(updateChatById(data.chat))
+    } catch (error) {
+      return error
+    }
+
     setEditDetails(false)
+  }
+
+  const handleVizibilityChat = async (chatId: string, chatVizibility: string) => {
+    let chatCopy = { ...chat }
+    chatCopy.vizibility = chatVizibility === 'public' ? 'private' : 'public'
+
+    console.log(chatCopy)
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/change_vizibility_chat`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ chat: chatCopy }),
+      })
+
+      const data = await res.json()
+      console.log('data', data)
+
+      dispatch(updateChatById(data.chat))
+    } catch (error) {
+      return error
+    }
   }
 
   const handleEditDocuments = () => {
@@ -177,6 +232,22 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
     if (chatDeletedId) {
       router.push('/playground')
     }
+  }
+
+  const handleColorChange = (color: string) => {
+    setChatEdit({ ...chatEdit, color: color })
+  }
+
+  const handleChangeCategory = (value: string) => {
+    setChatEdit({ ...chatEdit, category: value })
+  }
+
+  const handleInputsChange = (e: any) => {
+    console.log('name', e.target.name)
+    console.log('value', e.target.value)
+    const { name, value } = e.target
+
+    setChatEdit({ ...chatEdit, [name]: value })
   }
 
   return (
@@ -284,7 +355,12 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
           <Flex gap={10} align="start">
             <span className="title">Name: </span>
             {editDetails === true ? (
-              <Input style={{ width: '85%' }} defaultValue={chat.name}></Input>
+              <Input
+                style={{ width: '85%' }}
+                name="name"
+                onChange={handleInputsChange}
+                defaultValue={chatEdit.name}
+              ></Input>
             ) : (
               <span>{chat.name}</span>
             )}
@@ -294,12 +370,12 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
             <span className="title">Category: </span>
             {editDetails === true ? (
               <Select
-                style={{ width: 200 }}
-                defaultValue={chat.category}
+                style={{ width: 200, marginLeft: -10 }}
+                defaultValue={chatEdit.category}
                 showSearch
                 placeholder="Select a person"
                 optionFilterProp="children"
-                //   onChange={handleChangeCategory}
+                onChange={handleChangeCategory}
                 // onSearch={onSearch}
                 filterOption={filterOption}
                 options={categoryOptions}
@@ -309,10 +385,10 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
             )}
           </Flex>
 
-          <Flex gap={10} align="center">
+          {/* <Flex gap={10} align="center">
             <span className="title">Vizibilty: </span>
             <span>{chat.vizibility.charAt(0).toUpperCase() + chat.vizibility.slice(1)}</span>
-          </Flex>
+          </Flex> */}
 
           <Flex gap={10} align="center">
             <span className="title">Owner: </span>
@@ -328,6 +404,27 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
             <span>{chat.dateCreated}</span>
           </Flex>
 
+          <Flex>
+            <span className="title">Color: </span>
+            {editDetails === true ? (
+              <ColorPicker
+                onChange={(color_, hex) => handleColorChange(hex)}
+                defaultValue={chat.color}
+                showText
+              />
+            ) : (
+              <div
+                style={{
+                  backgroundColor: chat.color,
+                  width: 25,
+                  height: 25,
+                  borderRadius: '50%',
+                  marginLeft: 10,
+                }}
+              ></div>
+            )}
+          </Flex>
+
           <Flex gap={10}>
             <span className="title">Description: </span>
             {editDetails === true ? (
@@ -336,7 +433,8 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
                 // onChange={handleFormCreateChatChange}
                 name="description"
                 // value={chat.description}
-                defaultValue={chat.description}
+                defaultValue={chatEdit.description}
+                onChange={handleInputsChange}
               />
             ) : (
               // <Input style={{ width: '85%' }} defaultValue={chat.description}></Input>
@@ -356,27 +454,55 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
         >
           <span style={{ fontSize: 25, fontWeight: 500, color: 'red' }}>Danger Zone</span>
         </Flex>
-        <Flex
-          justify="space-between"
-          align="center"
-          style={{ border: '1px solid red', borderRadius: 8, padding: 10 }}
-        >
-          <Flex vertical>
-            <p style={{ fontWeight: 600 }}>Delete this chat</p>
-            <p>Once you delete a chat, there is no going back. Please be certain.</p>
-          </Flex>
-
-          <Popconfirm
-            title={`Delete ${chat.name} chat`}
-            description="Are you sure to delete this chat?"
-            onConfirm={() => handleDeleteChat(chat._id)}
-            okText="Yes"
-            cancelText="No"
+        <Flex vertical gap={10}>
+          <Flex
+            justify="space-between"
+            align="center"
+            style={{ border: '1px solid red', borderRadius: 8, padding: 10 }}
           >
-            <Button type="primary" danger>
-              DELETE
-            </Button>
-          </Popconfirm>
+            <Flex vertical>
+              <p style={{ fontWeight: 600 }}>Change chat vizibility</p>
+              <p>This chat is currently {chat.vizibility}.</p>
+            </Flex>
+
+            <Popconfirm
+              title={
+                chat.vizibility === 'public'
+                  ? `Change vizibility to private`
+                  : `Change vizibility to public`
+              }
+              description="Are you sure to change the vizibility of this chat?"
+              onConfirm={() => handleVizibilityChat(chat._id, chat.vizibility)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="primary" danger>
+                CHANGE VIZIBILITY
+              </Button>
+            </Popconfirm>
+          </Flex>
+          <Flex
+            justify="space-between"
+            align="center"
+            style={{ border: '1px solid red', borderRadius: 8, padding: 10 }}
+          >
+            <Flex vertical>
+              <p style={{ fontWeight: 600 }}>Delete this chat</p>
+              <p>Once you delete a chat, there is no going back. Please be certain.</p>
+            </Flex>
+
+            <Popconfirm
+              title={`Delete ${chat.name} chat`}
+              description="Are you sure to delete this chat?"
+              onConfirm={() => handleDeleteChat(chat._id)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="primary" danger>
+                DELETE
+              </Button>
+            </Popconfirm>
+          </Flex>
         </Flex>
       </Flex>
     </Flex>

@@ -67,7 +67,7 @@ export const MyKnowledgeView = () => {
   return (
     <Flex vertical gap={40}>
       <Flex>My Knowledge</Flex>
-      <Flex gap={25} style={{ padding: 20 }}>
+      <Flex gap={25} style={{ padding: 20, overflowX: 'scroll' }}>
         {statisticChatsCategories.map((statistic: IStatistic) => (
           <Flex
             key={statistic.name}
@@ -93,7 +93,7 @@ export const MyKnowledgeView = () => {
       <Flex vertical>
         {uniqueArray.map((category, index) => (
           <CollapsibleSection key={index} title={category}>
-            <Flex gap={15}>
+            <Flex gap={15} style={{ overflowX: 'scroll' }}>
               {myChats
                 .filter((chat) => chat.category === category)
                 .map((chat) =>

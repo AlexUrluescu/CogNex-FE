@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import Image from 'next/image'
 import { User } from '@/domain/user'
+import { WarningFilled, WarningOutlined } from '@ant-design/icons'
 
 interface ITeleportDetails {
   teleport: ITeleport
@@ -89,7 +90,8 @@ export const TeleportDetails: React.FC<ITeleportDetails> = ({ teleport }) => {
                     maxWidth: 250,
                     borderRadius: 8,
                     // height: 180,
-                    border: '1px solid #F1F0F0',
+                    border:
+                      chatFound.vizibility === 'public' ? '1px solid #F1F0F0' : '1px solid red',
                   }}
                 >
                   <Flex gap={10} align="center" style={{ paddingBottom: 10 }}>
@@ -102,6 +104,9 @@ export const TeleportDetails: React.FC<ITeleportDetails> = ({ teleport }) => {
                       }}
                     ></div>
                     <span style={{ fontWeight: 400, fontSize: 19 }}>{chatFound.name}</span>
+                    {chatFound.vizibility === 'private' ? (
+                      <WarningFilled style={{ color: 'red' }} />
+                    ) : null}
                   </Flex>
                   <Flex justify="center" align="center" gap={10}>
                     <Image
@@ -123,6 +128,7 @@ export const TeleportDetails: React.FC<ITeleportDetails> = ({ teleport }) => {
                     <Button
                       onClick={() => router.push(`/public-chats/${chatFound._id}`)}
                       type="primary"
+                      disabled={chatFound.vizibility === 'private'}
                     >
                       View
                     </Button>
@@ -134,35 +140,6 @@ export const TeleportDetails: React.FC<ITeleportDetails> = ({ teleport }) => {
               )
             })}
           </Flex>
-          {/* <Flex gap={15} justify="end" style={{ width: '40%', backgroundColor: 'pink' }}>
-            <Flex vertical>
-              {otherTeleportedChats.map((chat) => {
-                const chatFound = ChatFlow.chatList[chat]
-
-                return (
-                  <Flex
-                    key={chatFound._id}
-                    gap={15}
-                    align="center"
-                    style={{ border: '1px solid gray', padding: 5 }}
-                  >
-                    <div
-                      style={{
-                        width: 15,
-                        height: 15,
-                        borderRadius: '50%',
-                        backgroundColor: chatFound.color,
-                      }}
-                    ></div>
-                    <span>{chatFound.name}</span>
-                  </Flex>
-                )
-              })}
-            </Flex>
-            <div style={{ width: 30, height: 30, backgroundColor: 'violet', borderRadius: '50%' }}>
-              image
-            </div>
-          </Flex> */}
         </Flex>
       </Flex>
     </Flex>

@@ -38,8 +38,8 @@ export const CustomChat: React.FC<ICustomChat> = ({ chat }) => {
       style={{
         // backgroundColor: 'red',
         padding: 20,
-        minWidth: 200,
-        maxWidth: 250,
+        minWidth: 220,
+        // maxWidth: 250,
         borderRadius: 8,
         height: 180,
         border: '1px solid #F1F0F0',

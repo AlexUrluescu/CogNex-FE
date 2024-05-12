@@ -23,6 +23,18 @@ class ChatFlow {
     return newChat
   }
 
+  async editChat(chat: IChat2) {
+    const newChat = await this.chatRepository.editChat(chat)
+
+    console.log(newChat)
+
+    // store.dispatch(addNewChat(newChat.chat))
+
+    // this.chatList[newChat._id] = newChat
+
+    return newChat
+  }
+
   async addPdfs(chat: IChat2) {
     const newChat = await this.chatRepository.addPdfs(chat)
 
@@ -120,12 +132,38 @@ class ChatFlow {
       // if (data.response === undefined || data.ok === false) {
       //   return
       // }
-      return
+      return data.response
     } catch (error) {
       return error
     }
   }
 
+  async getInfoFromChromaDbByTeleport(query: string, teleportId: string) {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/info-teleport`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query, teleportId }),
+      })
+
+      const data = await res.json()
+
+      console.log(data)
+
+      // if (data.documents === null) {
+      //   alert(data.message)
+      // }
+
+      // if (data.response === undefined || data.ok === false) {
+      //   return
+      // }
+      return data
+    } catch (error) {
+      return error
+    }
+  }
   getChatsList() {
     return this.chatList
   }

@@ -30,7 +30,7 @@ export const PlaygroundTeleports = () => {
                 border: '1px solid #F1F0F0',
               }}
             >
-              <Flex gap={10} style={{ paddingBottom: 10 }}>
+              <Flex justify="center" gap={10} style={{ paddingBottom: 10 }}>
                 <div
                   style={{
                     width: 20,
@@ -39,7 +39,9 @@ export const PlaygroundTeleports = () => {
                     backgroundColor: teleport.color,
                   }}
                 ></div>
-                <h4 style={{ height: '20%', fontWeight: 400 }}>{teleport.name}</h4>
+                <h4 style={{ height: '20%', fontWeight: 400, textAlign: 'center' }}>
+                  {teleport.name}
+                </h4>
               </Flex>
               <Flex justify="center">
                 <Tag color="purple">{teleport.category}</Tag>

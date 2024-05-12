@@ -24,6 +24,13 @@ export const getChatById = (chatId: string | string[] | undefined) => {
   })
 }
 
+export const getChatsById = (chatIds: string[] | undefined) => {
+  return createSelector([getAllChats], (chats) => {
+    if (!chatIds) return [] // Return an empty array if chatIds is undefined
+    return chats.filter((chat) => chatIds.includes(chat._id))
+  })
+}
+
 export const getTeleportById = (teleportId: string | string[] | undefined) => {
   return createSelector([getAllTeleports], (teleports) => {
     return teleports.find((teleport) => teleport._id === teleportId)

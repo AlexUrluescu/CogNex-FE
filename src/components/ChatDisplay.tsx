@@ -1,9 +1,17 @@
 import { ChatFlow } from '@/flows/chat'
 import { RobotOutlined, UserOutlined, WarningOutlined } from '@ant-design/icons'
-import { Button, Flex, Input } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Button, Flex, Input, Spin } from 'antd'
+import React, { ReactNode, useEffect, useState } from 'react'
+import Image from 'next/image'
+import { getCurrentUser } from '@/state/appData/selectors'
+import { useSelector } from 'react-redux'
 
 interface IMessage {
+  entity: 'user' | 'bot'
+  message: string | ReactNode
+}
+
+interface IMessageUser {
   entity: 'user' | 'bot'
   message: string
 }
@@ -16,40 +24,75 @@ interface IChatDisplay {
 
 export const ChatDisplay: React.FC<IChatDisplay> = ({ chatColor, chatId, hasRights }) => {
   const [messages, setMessages] = useState<IMessage[]>([{ entity: 'bot', message: 'Hello there' }])
-  const [userMessage, setUserMessage] = useState<IMessage>({ entity: 'user', message: '' })
+  const [userMessage, setUserMessage] = useState<IMessageUser>({ entity: 'user', message: '' })
+  const [botMessage, setBotMessage] = useState<IMessage>({ entity: 'bot', message: '' })
+  const currentUser = useSelector(getCurrentUser)
+  const [inputQuestion, setInputQuestion] = useState<string>('')
+
+  const messaje: IMessage[] = [{ entity: 'bot', message: 'Hello there' }]
 
   useEffect(() => {
+    messaje.push({ entity: 'bot', message: 'Hello there' })
     setMessages([{ entity: 'bot', message: 'Hello there' }])
     setUserMessage({ entity: 'user', message: '' })
   }, [chatId])
   const handleInputChange = (e: any) => {
     const { value } = e.target
 
-    const userMessage: IMessage = {
+    const userMessage: IMessageUser = {
       entity: 'user',
       message: value,
     }
 
+    console.log('userMessage', userMessage)
+
     setUserMessage(userMessage)
   }
 
-  const handleSend = () => {
+  const handleSend = async () => {
     setMessages([...messages, userMessage])
+    setUserMessage({ entity: 'user', message: '' })
 
-    ChatFlow.getInfoFromChromaDb(userMessage.message, chatId)
+    const array = [...messages, userMessage]
+    let newArray = [...array]
 
+    newArray.push({ entity: 'bot', message: <Spin /> })
+    setMessages(newArray)
+
+    const chatResponse = await ChatFlow.getInfoFromChromaDb(userMessage.message, chatId)
+    // const chatResponse = 'hola'
+
+    const array2 = [...messages, userMessage]
+    let newArray2 = [...array2]
+
+    newArray2.push({ entity: 'bot', message: chatResponse })
+
+    setMessages(newArray2)
     setUserMessage({ entity: 'user', message: '' })
   }
+
+  useEffect(() => {
+    if (botMessage.message === '') {
+      return
+    }
+    setMessages([...messages, botMessage])
+  }, [botMessage])
   return (
     <Flex gap={5} vertical style={{ height: '100vh' }}>
       <Flex
-        style={{ height: '60vh', padding: 20, borderRadius: 8, border: '1px solid #EDEDED' }}
+        style={{
+          height: '60vh',
+          padding: 20,
+          borderRadius: 8,
+          border: '1px solid #EDEDED',
+          overflowY: 'scroll',
+        }}
         vertical
-        gap={10}
+        gap={15}
       >
         {messages.map((message, index) => (
           <Flex
-            align="center"
+            align="start"
             gap={10}
             key={index}
             justify={message.entity === 'bot' ? 'start' : 'end'}
@@ -66,17 +109,21 @@ export const ChatDisplay: React.FC<IChatDisplay> = ({ chatColor, chatId, hasRigh
               </Flex>
             ) : null}
 
-            <span>{message.message}</span>
+            <span style={{ marginTop: 5 }}>{message.message}</span>
 
             {message.entity === 'user' ? (
               <Flex
                 style={{
-                  padding: 10,
                   borderRadius: '50%',
-                  backgroundColor: chatColor,
                 }}
               >
-                <UserOutlined style={{ color: 'white' }} />
+                <Image
+                  width={35}
+                  height={35}
+                  src={currentUser.photo}
+                  style={{ borderRadius: '50%' }}
+                  alt={''}
+                />
               </Flex>
             ) : null}
           </Flex>
@@ -98,11 +145,12 @@ export const ChatDisplay: React.FC<IChatDisplay> = ({ chatColor, chatId, hasRigh
         />
         <Button
           onClick={handleSend}
-          disabled={true}
-          // disabled={hasRights === false ? true : false}
+          type="primary"
+          // disabled={true}
+          disabled={hasRights === false ? true : false}
           style={{ width: '10%' }}
         >
-          Sendd
+          Send
         </Button>
       </Flex>
     </Flex>

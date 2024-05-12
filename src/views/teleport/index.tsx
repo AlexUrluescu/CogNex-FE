@@ -3,21 +3,20 @@ import { ChatDisplay } from '@/components/ChatDisplay'
 import { ITeleport, ITeleport2 } from '@/domain/teleports'
 import { getCurrentUser } from '@/state/appData/selectors'
 import { Button, Flex, Tag } from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Tabs } from 'antd'
 import type { TabsProps } from 'antd'
 import { TeleportDetails } from '@/components/TeleportDetails'
 import { TeleportDisplay } from '@/components/TeleportDisplay'
 import { TeleportSettings } from '@/components/teleport/teleportSettings'
+import { ChatFlow } from '@/flows/chat'
 
 interface ITeleportChatIdView {
   teleport: ITeleport2
 }
 
 export const TeleportChatIdView: React.FC<ITeleportChatIdView> = ({ teleport }) => {
-  const currentUser = useSelector(getCurrentUser)
-
   const onChange = (key: string) => {
     // console.log(key)
   }
@@ -42,7 +41,7 @@ export const TeleportChatIdView: React.FC<ITeleportChatIdView> = ({ teleport }) 
     {
       key: '1',
       label: 'Teleport',
-      children: <TeleportDisplay color={teleport.color} id={teleport._id} />,
+      children: <TeleportDisplay color={teleport.color} id={teleport._id} chats={teleport.chats} />,
     },
     {
       key: '2',

@@ -256,12 +256,12 @@ export const TeleportsView = () => {
           <Flex justify="center" style={{ width: '33%' }}>
             <div style={{ marginTop: 100, perspective: 1000, perspectiveOrigin: '50% 50%' }}>
               <div className="cube">
-                <div className="front">Fe</div>
-                <div className="back">Be</div>
-                <div className="top">T</div>
-                <div className="bottom">B</div>
-                <div className="left">L</div>
-                <div className="right">R</div>
+                <div className="front"></div>
+                <div className="back"></div>
+                <div className="top"></div>
+                <div className="bottom"></div>
+                <div className="left"></div>
+                <div className="right"></div>
               </div>
             </div>
           </Flex>
@@ -374,7 +374,11 @@ export const TeleportsView = () => {
                         <Flex style={{ width: '100%' }} justify="end">
                           <Checkbox
                             onChange={onChange2}
-                            disabled={!!userAllowed === true ? false : true}
+                            disabled={
+                              !!userAllowed === true
+                                ? false
+                                : true && currentUser._id !== userSelected
+                            }
                             value={chat._id}
                             checked={!!chatsSelected.find((id) => id === chat._id)}
                           ></Checkbox>

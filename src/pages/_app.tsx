@@ -52,6 +52,8 @@ export default function App({ Component, pageProps }: AppProps) {
           return acc
         }, {} as Record<any, IChat>)
 
+        console.log('intra2')
+
         store.dispatch(setAllChats(chats))
       } catch (error) {
         console.log(error)

@@ -1,10 +1,18 @@
-import { RobotOutlined, UserOutlined, WarningOutlined } from '@ant-design/icons'
+import { Chat, IChat } from '@/domain/chat'
+import { ChatFlow } from '@/flows/chat'
+import { setAllChats } from '@/state/appData/appDataSlice'
+import { getAllChats, getChatById, getChatsById } from '@/state/appData/selectors'
+import { store } from '@/state/store'
+import { RobotOutlined, UserOutlined, WarningFilled, WarningOutlined } from '@ant-design/icons'
 import { Button, Flex, Input } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { getAll } from 'firebase/remote-config'
+import React, { useEffect, useMemo, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 interface ITeleportDisplay {
   color: string
   id: string
+  chats: string[]
 }
 
 interface IMessage {
@@ -12,14 +20,23 @@ interface IMessage {
   message: string
 }
 
-export const TeleportDisplay: React.FC<ITeleportDisplay> = ({ color, id }) => {
+export const TeleportDisplay: React.FC<ITeleportDisplay> = ({ color, id, chats }) => {
   const [messages, setMessages] = useState<IMessage[]>([{ entity: 'bot', message: 'Hello there' }])
   const [userMessage, setUserMessage] = useState<IMessage>({ entity: 'user', message: '' })
 
-  useEffect(() => {
-    setMessages([{ entity: 'bot', message: 'Hello there' }])
-    setUserMessage({ entity: 'user', message: '' })
-  }, [id])
+  const testChats = useSelector(getChatsById(chats))
+
+  if (testChats[0] === undefined) {
+    return
+  }
+
+  const disabled = testChats.find((chat) => {
+    if (chat === undefined) {
+      return
+    }
+    return chat.vizibility === 'private'
+  })
+
   const handleInputChange = (e: any) => {
     const { value } = e.target
 
@@ -31,13 +48,16 @@ export const TeleportDisplay: React.FC<ITeleportDisplay> = ({ color, id }) => {
     setUserMessage(userMessage)
   }
 
-  const handleSend = () => {
+  const handleSend = async () => {
     setMessages([...messages, userMessage])
 
-    //   ChatFlow.getInfoFromChromaDb(userMessage.message, chatId) to dooooo
+    const chatResponse = await ChatFlow.getInfoFromChromaDbByTeleport(userMessage.message, id)
+
+    console.log(chatResponse)
 
     setUserMessage({ entity: 'user', message: '' })
   }
+
   return (
     <Flex gap={5} vertical style={{ height: '100vh' }}>
       <Flex
@@ -63,7 +83,6 @@ export const TeleportDisplay: React.FC<ITeleportDisplay> = ({ color, id }) => {
                 <RobotOutlined style={{ color: 'white' }} />
               </Flex>
             ) : null}
-
             <span>{message.message}</span>
 
             {message.entity === 'user' ? (
@@ -79,18 +98,28 @@ export const TeleportDisplay: React.FC<ITeleportDisplay> = ({ color, id }) => {
             ) : null}
           </Flex>
         ))}
+        <Flex>
+          {!!disabled ? (
+            <div>
+              <WarningFilled style={{ color: 'red' }} />{' '}
+              <span style={{ color: 'red' }}>
+                This teleport has private chats, please delete them
+              </span>
+            </div>
+          ) : null}
+        </Flex>
       </Flex>
       <Flex gap={10}>
         <Input
           onChange={handleInputChange}
-          // disabled={hasRights === false ? true : false}
+          disabled={!!disabled}
           placeholder="Type"
           style={{ width: '90%' }}
           value={userMessage.message}
         />
         <Button
           onClick={handleSend}
-          disabled={true}
+          disabled={!!disabled}
           // disabled={hasRights === false ? true : false}
           style={{ width: '10%' }}
         >

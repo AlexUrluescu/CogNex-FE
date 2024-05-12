@@ -43,7 +43,9 @@ export const PlaygroundChats = () => {
 
   console.log('chats', chats)
 
-  const subscribedChats = chats.filter((chat) => chat.users.includes(currentUser._id))
+  const subscribedChats = chats.filter(
+    (chat) => chat.users.includes(currentUser._id) && chat.vizibility === 'public'
+  )
   const myChats = chats.filter((chat) => chat.creator === currentUser._id)
 
   console.log('subscribedChats', subscribedChats)
