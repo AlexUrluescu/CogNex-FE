@@ -8,6 +8,7 @@ import {
   Card,
   Checkbox,
   ColorPicker,
+  Empty,
   Flex,
   Input,
   Radio,
@@ -179,7 +180,7 @@ export const TeleportsView = () => {
         <Select
           style={{ width: '100%' }}
           showSearch={true}
-          placeholder="Find your user"
+          placeholder="Find an user"
           optionFilterProp="children"
           onChange={onChange}
           onSearch={onSearch}
@@ -346,7 +347,7 @@ export const TeleportsView = () => {
           }
         >
           <Card>
-            <Flex gap={20} style={{ overflowX: 'scroll' }}>
+            <Flex gap={20} style={{ overflowX: 'scroll', padding: '10px 0' }}>
               {availablePublicChats.length !== 0 && userSelected !== '' ? (
                 availablePublicChats.map((chat) => {
                   const userAllowed = chat.users.find((userId) => userId === currentUser._id)
@@ -418,7 +419,10 @@ export const TeleportsView = () => {
                   )
                 })
               ) : (
-                <span>No public chats available</span>
+                // <span>No public chats available</span>
+                <Flex justify="center" style={{ width: '100%', padding: 15 }}>
+                  <Empty description="No user selected" />
+                </Flex>
               )}
             </Flex>
           </Card>
@@ -426,7 +430,7 @@ export const TeleportsView = () => {
 
         <CollapsibleSection title="My chats">
           <Card>
-            <Flex gap={20} style={{ width: '100%', overflowX: 'scroll' }}>
+            <Flex gap={20} style={{ width: '100%', overflowX: 'scroll', padding: '10px 0' }}>
               {myChats.length !== 0 ? (
                 myChats.map((chat) => {
                   const userAllowed = chat.users.find((userId) => userId === currentUser._id)
@@ -490,7 +494,9 @@ export const TeleportsView = () => {
                   )
                 })
               ) : (
-                <span>no chats available</span>
+                <Flex justify="center" style={{ width: '100%', padding: 15 }}>
+                  <Empty description="No chats created" />
+                </Flex>
               )}
             </Flex>
           </Card>

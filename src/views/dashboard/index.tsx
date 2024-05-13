@@ -145,8 +145,8 @@ export const DashboardView = () => {
                 userSelectedChats.length > 0 ? (
                   userSelectedChats.map((chat) => <CustomChatWithRate key={chat._id} chat={chat} />)
                 ) : (
-                  <Flex justify="center" style={{ color: 'red', width: '100%' }}>
-                    <span> This user has no public chats available</span>
+                  <Flex justify="center" style={{ width: '100%', padding: 15 }}>
+                    <Empty description="This user has no public chats available" />
                   </Flex>
                 )
               ) : (
@@ -173,7 +173,7 @@ export const DashboardView = () => {
                     style={{ borderBottom: '1px solid #F1F0F0', paddingBottom: 10 }}
                   >
                     <Flex gap={15}>
-                      <InfoCircleOutlined style={{ fontSize: 25 }} />
+                      <InfoCircleOutlined style={{ fontSize: 20 }} />
                       <span style={{ fontSize: 20 }}>Info</span>
                     </Flex>
                     <Flex>
@@ -196,8 +196,20 @@ export const DashboardView = () => {
                     <span>{userSelected.email}</span>
                   </Flex>
                   <Flex align="center">
+                    <span className="title2">Ocupation: </span>
+                    <span>{userSelected.ocupation}</span>
+                  </Flex>
+                  <Flex align="center">
                     <span className="title2">Age: </span>
                     <span>{userSelected.age}</span>
+                  </Flex>
+                  <Flex align="center">
+                    <span className="title2">Country: </span>
+                    <span>{userSelected.country}</span>
+                  </Flex>
+                  <Flex align="center">
+                    <span className="title2">Description: </span>
+                    <span>{userSelected.description}</span>
                   </Flex>
                 </Flex>
               </CollapsibleSection>

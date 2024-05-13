@@ -275,9 +275,15 @@ const Login = () => {
         </Flex>
       </Flex>
 
-      <Modal width={800} title="Personal details" open={showRegisterModal}>
+      <Modal
+        onOk={handleRegisterFormSubmit}
+        okText={'Submit'}
+        width={800}
+        title="Personal details"
+        open={showRegisterModal}
+      >
         <form onSubmit={handleRegisterFormSubmit}>
-          <Flex vertical gap={10}>
+          <Flex vertical gap={10} style={{ marginBottom: 30 }}>
             <Flex align="center">
               <span style={{ width: '15%' }}>Name:</span>
               <Input
@@ -356,7 +362,7 @@ const Login = () => {
             </Flex>
           </Flex>
 
-          <button type="submit">Register</button>
+          {/* <button type="submit">Register</button> */}
         </form>
       </Modal>
     </Flex>

@@ -126,6 +126,19 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
     console.log(chatEdit)
 
     try {
+      console.log('chatEdit', chatEdit)
+      console.log('chat', chat)
+
+      if (
+        chatEdit.name === chat.name &&
+        chatEdit.category === chat.category &&
+        chatEdit.color === chat.color &&
+        chatEdit.description === chat.description
+      ) {
+        console.log('intra')
+        setEditDetails(false)
+        return
+      }
       const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/edit_chat`, {
         method: 'PUT',
         headers: {

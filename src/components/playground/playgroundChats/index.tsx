@@ -217,10 +217,10 @@ export const PlaygroundChats = () => {
             <Empty
               image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
               imageStyle={{ height: 100 }}
-              description={<span>No existing chats</span>}
+              description={<span>No subcribed chats</span>}
             >
               <Button onClick={() => router.push('/')} type="primary">
-                Create Now
+                Explore
               </Button>
             </Empty>
           </Flex>
