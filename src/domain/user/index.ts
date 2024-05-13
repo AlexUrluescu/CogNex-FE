@@ -6,6 +6,9 @@ export interface IUser {
   email: string
   age: string
   photo: string
+  description: string
+  ocupation: string
+  country: string
   files?: string[]
 }
 
@@ -15,6 +18,9 @@ export interface IUser2 {
   email: string
   age: string
   photo: string
+  description: string
+  ocupation: string
+  country: string
   files?: string[]
 }
 
@@ -24,6 +30,9 @@ export class User implements IUser {
   email: string
   age: string
   photo: string
+  description: string
+  ocupation: string
+  country: string
   files?: string[] | undefined
 
   constructor(user: IUser) {
@@ -32,6 +41,9 @@ export class User implements IUser {
     this.email = user.email
     this.age = user.age
     this.photo = user.photo
+    this.description = user.description
+    this.ocupation = user.ocupation
+    this.country = user.country
     this.files = user.files || []
   }
 
@@ -42,6 +54,9 @@ export class User implements IUser {
       email: this.email,
       age: this.age,
       photo: this.photo,
+      description: this.description,
+      ocupation: this.ocupation,
+      country: this.country,
       files: this.files,
     }
   }

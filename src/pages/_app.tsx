@@ -31,6 +31,8 @@ export default function App({ Component, pageProps }: AppProps) {
           return acc
         }, {} as Record<any, IUser>)
 
+        console.log('se fac allusers')
+
         store.dispatch(setAllUsers(data.users))
 
         const user = users[0]
@@ -89,6 +91,8 @@ export default function App({ Component, pageProps }: AppProps) {
       const data = await res.json()
 
       const userLogged = new User({ ...data.user })
+
+      console.log('userLogged', userLogged)
 
       store.dispatch(setCurrentUser(userLogged.toJSON()))
 

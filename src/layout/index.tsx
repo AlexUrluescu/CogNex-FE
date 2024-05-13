@@ -24,9 +24,16 @@ const Layout = ({ children }: any) => {
   return (
     <Flex style={{ height: '100vh' }}>
       <Header />
-      <Flex style={{ width: '100%', marginTop: 70 }}>
+      <Flex
+        justify="center"
+        style={{
+          width: '100%',
+          marginTop: 70,
+          backgroundColor: currentUser.name === '' ? '#F1F0F0' : 'white',
+        }}
+      >
         <Flex vertical style={{ width: '20%' }}>
-          <CustomMenu currentUserId={currentUser._id} />
+          {currentUser.name !== '' ? <CustomMenu currentUserId={currentUser._id} /> : null}
           {/* <Flex justify="center" style={{ padding: 20 }}>
             <Button style={{ width: 150 }} onClick={showModal}>
               New Chat

@@ -445,8 +445,8 @@ export const TeleportsView = () => {
                           : '1px solid #F1F0F0',
                         padding: '10px',
                         borderRadius: '8px',
-                        maxWidth: 250,
-                        minWidth: 200,
+                        // maxWidth: 250,
+                        minWidth: 230,
                       }}
                       align="center"
                     >
@@ -467,7 +467,7 @@ export const TeleportsView = () => {
                               borderRadius: '50%',
                             }}
                           ></span>
-                          <span>{chat.name}</span>
+                          <p>{chat.name}</p>
                         </Flex>
                         <Flex justify="center">
                           <Tag color="purple">{chat.category}</Tag>
@@ -725,11 +725,18 @@ export const TeleportsView = () => {
                     : null}
                 </Flex>
                 {userSelected !== '' ? (
-                  <img
-                    style={{ width: 35, height: 35, borderRadius: '50%' }}
+                  <Image
+                    width={35}
+                    height={35}
                     src={UserFlow.userList[userSelected].photo}
+                    style={{ borderRadius: '50%' }}
+                    alt={''}
                   />
-                ) : null}
+                ) : // <img
+                //   style={{ width: 35, height: 35, borderRadius: '50%' }}
+                //   src={UserFlow.userList[userSelected].photo}
+                // />
+                null}
               </Flex>
             </Flex>
             <Flex vertical gap={20}>

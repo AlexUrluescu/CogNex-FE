@@ -1,5 +1,5 @@
 import Layout from '@/layout'
-import { getChatById, getUserById } from '@/state/appData/selectors'
+import { getAllUsers, getChatById, getCurrentUser, getUserById } from '@/state/appData/selectors'
 import { MyAccountView } from '@/views/my-account'
 import { PrivateChatIdView } from '@/views/private-chats/PrivateChatIdView'
 import { useRouter } from 'next/router'
@@ -9,9 +9,15 @@ const MyAccountPage = () => {
   const router = useRouter()
   const { userId } = router.query
 
-  const user = useSelector(getUserById(userId))
+  // const currentUser = useSelector(getCurrentUser)
 
-  if (!user) {
+  const allUsers = useSelector(getAllUsers)
+  console.log('allUsers', allUsers)
+
+  const user = useSelector(getUserById(userId))
+  console.log('user', user)
+
+  if (user === undefined) {
     return null
   }
 

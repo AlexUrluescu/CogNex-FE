@@ -75,7 +75,7 @@ export const CustomMenu = ({ currentUserId }: any) => {
   const items: MenuItem[] = [
     // getItem(<span onClick={() => router.push('/')}>Main Chat</span>, 'sub1', <RobotOutlined />),
     getItem(
-      <div onClick={() => router.push('/dashboard')}>
+      <div onClick={() => router.push('/')}>
         <span>Dashboard</span>
       </div>,
       'sub5',

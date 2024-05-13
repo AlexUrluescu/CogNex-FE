@@ -219,7 +219,7 @@ export const PlaygroundChats = () => {
               imageStyle={{ height: 100 }}
               description={<span>No existing chats</span>}
             >
-              <Button onClick={showModal} type="primary">
+              <Button onClick={() => router.push('/')} type="primary">
                 Create Now
               </Button>
             </Empty>

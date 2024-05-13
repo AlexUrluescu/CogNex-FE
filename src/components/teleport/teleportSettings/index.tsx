@@ -2,7 +2,7 @@ import { ITeleport, ITeleport2 } from '@/domain/teleports'
 import { TeleportsFlow } from '@/flows/teleports'
 import { UserFlow } from '@/flows/users'
 import { categoryOptions } from '@/utils'
-import { Button, Card, Flex, Input, Popconfirm, Select, Spin, Tag } from 'antd'
+import { Button, Card, ColorPicker, Flex, Input, Popconfirm, Select, Spin, Tag } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -22,6 +22,7 @@ export const TeleportSettings: React.FC<ITeleportSettings> = ({ teleport }) => {
   const [editDocuments, setEditDocuments] = useState<boolean>(false)
   const [addDocuments, setAddDocuments] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
+  const [teleportEdit, setTeleportEdit] = useState<ITeleport>(teleport)
 
   const dispatch = useDispatch()
 
@@ -46,7 +47,26 @@ export const TeleportSettings: React.FC<ITeleportSettings> = ({ teleport }) => {
     setEditDetails(true)
   }
 
-  const handleFinishDetails = () => {
+  const handleFinishDetails = async () => {
+    console.log(teleportEdit)
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/edit_teleport`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ teleport: teleportEdit }),
+      })
+
+      const data = await res.json()
+      console.log('data', data)
+
+      dispatch(updateTeleportById(data.teleport))
+    } catch (error) {
+      return error
+    }
+
     setEditDetails(false)
   }
 
@@ -81,6 +101,22 @@ export const TeleportSettings: React.FC<ITeleportSettings> = ({ teleport }) => {
     } catch (error) {
       return error
     }
+  }
+
+  const handleColorChange = (color: string) => {
+    setTeleportEdit({ ...teleportEdit, color: color })
+  }
+
+  const handleInputsChange = (e: any) => {
+    console.log('name', e.target.name)
+    console.log('value', e.target.value)
+    const { name, value } = e.target
+
+    setTeleportEdit({ ...teleportEdit, [name]: value })
+  }
+
+  const handleChangeCategory = (value: string) => {
+    setTeleportEdit({ ...teleportEdit, category: value })
   }
 
   return (
@@ -240,7 +276,12 @@ export const TeleportSettings: React.FC<ITeleportSettings> = ({ teleport }) => {
           <Flex gap={10} align="start">
             <span className="title">Name: </span>
             {editDetails === true ? (
-              <Input style={{ width: '85%' }} defaultValue={teleport.name}></Input>
+              <Input
+                style={{ width: '85%' }}
+                name="name"
+                onChange={handleInputsChange}
+                defaultValue={teleportEdit.name}
+              ></Input>
             ) : (
               <span>{teleport.name}</span>
             )}
@@ -250,12 +291,12 @@ export const TeleportSettings: React.FC<ITeleportSettings> = ({ teleport }) => {
             <span className="title">Category: </span>
             {editDetails === true ? (
               <Select
-                style={{ width: 200 }}
-                defaultValue={teleport.category}
+                style={{ width: 200, marginLeft: -10 }}
+                defaultValue={teleportEdit.category}
                 showSearch
                 placeholder="Select a person"
                 optionFilterProp="children"
-                //   onChange={handleChangeCategory}
+                onChange={handleChangeCategory}
                 // onSearch={onSearch}
                 filterOption={filterOption}
                 options={categoryOptions}
@@ -266,9 +307,9 @@ export const TeleportSettings: React.FC<ITeleportSettings> = ({ teleport }) => {
           </Flex>
 
           {/* <Flex gap={10} align="center">
-        <span className="title">Vizibilty: </span>
-        <span>{teleport.vizibility.charAt(0).toUpperCase() + chat.vizibility.slice(1)}</span>
-      </Flex> */}
+            <span className="title">Vizibilty: </span>
+            <span>{chat.vizibility.charAt(0).toUpperCase() + chat.vizibility.slice(1)}</span>
+          </Flex> */}
 
           <Flex gap={10} align="center">
             <span className="title">Owner: </span>
@@ -284,6 +325,27 @@ export const TeleportSettings: React.FC<ITeleportSettings> = ({ teleport }) => {
             <span>{teleport.dateCreated}</span>
           </Flex>
 
+          <Flex>
+            <span className="title">Color: </span>
+            {editDetails === true ? (
+              <ColorPicker
+                onChange={(color_, hex) => handleColorChange(hex)}
+                defaultValue={teleport.color}
+                showText
+              />
+            ) : (
+              <div
+                style={{
+                  backgroundColor: teleport.color,
+                  width: 25,
+                  height: 25,
+                  borderRadius: '50%',
+                  marginLeft: 10,
+                }}
+              ></div>
+            )}
+          </Flex>
+
           <Flex gap={10}>
             <span className="title">Description: </span>
             {editDetails === true ? (
@@ -292,7 +354,8 @@ export const TeleportSettings: React.FC<ITeleportSettings> = ({ teleport }) => {
                 // onChange={handleFormCreateChatChange}
                 name="description"
                 // value={chat.description}
-                defaultValue={teleport.description}
+                defaultValue={teleportEdit.description}
+                onChange={handleInputsChange}
               />
             ) : (
               // <Input style={{ width: '85%' }} defaultValue={chat.description}></Input>

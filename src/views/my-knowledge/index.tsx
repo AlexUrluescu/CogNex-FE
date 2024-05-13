@@ -1,7 +1,7 @@
 import KnowledgeCard from '@/components/KnowledgeCard'
 import { CollapsibleSection } from '@/components/collapsibleSection'
 import { getChatsAsCreator, getCurrentUser } from '@/state/appData/selectors'
-import { Button, Card, Flex } from 'antd'
+import { Button, Card, Empty, Flex } from 'antd'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import type { SelectProps } from 'antd'
@@ -67,53 +67,62 @@ export const MyKnowledgeView = () => {
   return (
     <Flex vertical gap={40}>
       <Flex>My Knowledge</Flex>
-      <Flex gap={25} style={{ padding: 20, overflowX: 'scroll' }}>
-        {statisticChatsCategories.map((statistic: IStatistic) => (
-          <Flex
-            key={statistic.name}
-            align="center"
-            vertical
-            style={{
-              padding: 20,
-              minWidth: 200,
-              maxWidth: 250,
-              borderRadius: 8,
-              height: 180,
-              border: '1px solid #F1F0F0',
-            }}
-          >
-            <h4 style={{ height: '20%', fontWeight: 400 }}>{statistic.name}</h4>
-            <Flex justify="center" align="center" style={{ height: '80%', width: '100%' }}>
-              <span style={{ fontSize: 45 }}> {statistic.repeat}</span>
-            </Flex>
+      {statisticChatsCategories.length > 0 ? (
+        <Flex vertical gap={40}>
+          {' '}
+          <Flex gap={25} style={{ padding: 20, overflowX: 'scroll' }}>
+            {statisticChatsCategories.map((statistic: IStatistic) => (
+              <Flex
+                key={statistic.name}
+                align="center"
+                vertical
+                style={{
+                  padding: 20,
+                  minWidth: 200,
+                  maxWidth: 250,
+                  borderRadius: 8,
+                  height: 180,
+                  border: '1px solid #F1F0F0',
+                }}
+              >
+                <h4 style={{ height: '20%', fontWeight: 400 }}>{statistic.name}</h4>
+                <Flex justify="center" align="center" style={{ height: '80%', width: '100%' }}>
+                  <span style={{ fontSize: 45 }}> {statistic.repeat}</span>
+                </Flex>
+              </Flex>
+            ))}
           </Flex>
-        ))}
-      </Flex>
+          <Flex vertical>
+            {uniqueArray.map((category, index) => (
+              <CollapsibleSection key={index} title={category}>
+                <Flex gap={15} style={{ overflowX: 'scroll' }}>
+                  {myChats
+                    .filter((chat) => chat.category === category)
+                    .map((chat) =>
+                      chat.files.map((file) => (
+                        <Card key={index} style={{ maxWidth: 250, minWidth: 200 }}>
+                          <Flex vertical align="center" gap={20}>
+                            <span style={{ fontSize: 17, fontWeight: 400 }}>{file.name}</span>
+                            <Flex gap={10}>
+                              <Button type="primary" onClick={() => handleViewDocument(file)}>
+                                View
+                              </Button>
+                            </Flex>
+                          </Flex>
+                        </Card>
+                      ))
+                    )}
+                </Flex>
+              </CollapsibleSection>
+            ))}
+          </Flex>
+        </Flex>
+      ) : (
+        <Flex justify="center" style={{ width: '100%' }}>
+          <Empty description="No knowledge uploaded" />
+        </Flex>
+      )}
 
-      <Flex vertical>
-        {uniqueArray.map((category, index) => (
-          <CollapsibleSection key={index} title={category}>
-            <Flex gap={15} style={{ overflowX: 'scroll' }}>
-              {myChats
-                .filter((chat) => chat.category === category)
-                .map((chat) =>
-                  chat.files.map((file) => (
-                    <Card key={index} style={{ maxWidth: 250, minWidth: 200 }}>
-                      <Flex vertical align="center" gap={20}>
-                        <span style={{ fontSize: 17, fontWeight: 400 }}>{file.name}</span>
-                        <Flex gap={10}>
-                          <Button type="primary" onClick={() => handleViewDocument(file)}>
-                            View
-                          </Button>
-                        </Flex>
-                      </Flex>
-                    </Card>
-                  ))
-                )}
-            </Flex>
-          </CollapsibleSection>
-        ))}
-      </Flex>
       {/* <Flex>
         {currentUser.files?.map((file, index) => (
           <KnowledgeCard key={index} title={file} userId={currentUser._id} />

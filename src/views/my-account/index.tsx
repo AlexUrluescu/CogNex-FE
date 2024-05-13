@@ -18,7 +18,7 @@ export const MyAccountView: React.FC<IMyAccountView> = ({ user }) => {
     <Flex vertical gap={30}>
       <Flex align="center">
         <Flex align="center" style={{ width: 60, height: 60 }}>
-          <Image width={45} height={35} style={{ borderRadius: '50%' }} src={user.photo} alt={''} />
+          <Image width={50} height={50} style={{ borderRadius: '50%' }} src={user.photo} alt={''} />
         </Flex>
         <h2>{user.name}</h2>
       </Flex>

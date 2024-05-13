@@ -11,6 +11,8 @@ import Image from 'next/image'
 const Header = () => {
   const currentUser = useSelector(getCurrentUser)
 
+  console.log('currentUser', currentUser)
+
   const allUsers = useSelector(getAllUsers)
 
   const router = useRouter()
@@ -54,6 +56,9 @@ const Header = () => {
                     name: '',
                     age: '',
                     photo: '',
+                    description: '',
+                    ocupation: '',
+                    country: '',
                   })
                 )
 
@@ -109,17 +114,19 @@ const Header = () => {
             trigger={['click']}
           >
             <Flex justify="end" style={{ cursor: 'pointer' }} onClick={(e) => e.preventDefault()}>
-              <Flex gap={10} align="center">
-                <span style={{ fontSize: 17 }}>{currentUser.name}</span>
+              {currentUser.name !== '' ? (
+                <Flex gap={10} align="center">
+                  <span style={{ fontSize: 17 }}>{currentUser.name}</span>
 
-                <Image
-                  width={35}
-                  height={35}
-                  src={currentUser.photo}
-                  style={{ borderRadius: '50%', border: '1px solid white' }}
-                  alt={''}
-                />
-              </Flex>
+                  <Image
+                    width={35}
+                    height={35}
+                    src={currentUser.photo}
+                    style={{ borderRadius: '50%', border: '1px solid white' }}
+                    alt={''}
+                  />
+                </Flex>
+              ) : null}
             </Flex>
           </Dropdown>
         </span>
