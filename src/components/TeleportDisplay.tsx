@@ -32,18 +32,27 @@ export const TeleportDisplay: React.FC<ITeleportDisplay> = ({ color, id, chats }
   const [botMessage, setBotMessage] = useState<IMessage>({ entity: 'bot', message: '' })
 
   const currentUser = useSelector(getCurrentUser)
-  const messaje: IMessage[] = [{ entity: 'bot', message: 'Hello there' }]
+
   const testChats = useSelector(getChatsById(chats))
 
-  if (testChats[0] === undefined) {
-    return
-  }
+  const messaje: IMessage[] = [{ entity: 'bot', message: 'Hello there' }]
 
   useEffect(() => {
     messaje.push({ entity: 'bot', message: 'Hello there' })
     setMessages([{ entity: 'bot', message: 'Hello there' }])
     setUserMessage({ entity: 'user', message: '' })
   }, [id])
+
+  useEffect(() => {
+    if (botMessage.message === '') {
+      return
+    }
+    setMessages([...messages, botMessage])
+  }, [botMessage])
+
+  if (testChats[0] === undefined) {
+    return
+  }
 
   const disabled = testChats.find((chat) => {
     if (chat === undefined) {
@@ -63,16 +72,6 @@ export const TeleportDisplay: React.FC<ITeleportDisplay> = ({ color, id, chats }
     setUserMessage(userMessage)
   }
 
-  // const handleSend = async () => {
-  //   setMessages([...messages, userMessage])
-
-  //   const chatResponse = await ChatFlow.getInfoFromChromaDbByTeleport(userMessage.message, id)
-
-  //   console.log(chatResponse)
-
-  //   setUserMessage({ entity: 'user', message: '' })
-  // }
-
   const handleSend = async () => {
     setMessages([...messages, userMessage])
     setUserMessage({ entity: 'user', message: '' })
@@ -84,7 +83,6 @@ export const TeleportDisplay: React.FC<ITeleportDisplay> = ({ color, id, chats }
     setMessages(newArray)
 
     const chatResponse = await ChatFlow.getInfoFromChromaDbByTeleport(userMessage.message, id)
-    // const chatResponse = 'hola'
 
     const array2 = [...messages, userMessage]
     let newArray2 = [...array2]
@@ -94,13 +92,6 @@ export const TeleportDisplay: React.FC<ITeleportDisplay> = ({ color, id, chats }
     setMessages(newArray2)
     setUserMessage({ entity: 'user', message: '' })
   }
-
-  useEffect(() => {
-    if (botMessage.message === '') {
-      return
-    }
-    setMessages([...messages, botMessage])
-  }, [botMessage])
 
   return (
     <Flex gap={5} vertical style={{ height: '100vh' }}>
