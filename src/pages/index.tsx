@@ -1,13 +1,7 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
-import ChatPage from "@/components/ChatPage";
-
-const inter = Inter({ subsets: ["latin"] });
+import HomeView from '@/views/home'
+import Layout from '@/layout'
+import { DashboardView } from '@/views/dashboard'
 
 export default function Home() {
-  return (
-    <main>
-      <ChatPage />
-    </main>
-  );
+  return <DashboardView />
 }

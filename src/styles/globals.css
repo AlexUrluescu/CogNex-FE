@@ -1,0 +1,22 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family:    BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';;
+
+}
+
+.title{
+    font-size: 16px;
+    font-weight: 600;
+    width: 15%;
+    margin-right: 50px;
+}
+
+.title2{
+    font-size: 16px;
+    font-weight: 600;
+    width: 15%;
+}

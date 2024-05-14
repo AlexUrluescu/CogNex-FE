@@ -1,5 +1,5 @@
 import { useState } from "react";
-import pdfjs from "pdfjs-dist";
+// import pdfjs from "pdfjs-dist";
 
 function YourComponent() {
   // const [numPages, setNumPages] = useState(null);
