@@ -27,7 +27,6 @@ export const ChatDisplay: React.FC<IChatDisplay> = ({ chatColor, chatId, hasRigh
   const [userMessage, setUserMessage] = useState<IMessageUser>({ entity: 'user', message: '' })
   const [botMessage, setBotMessage] = useState<IMessage>({ entity: 'bot', message: '' })
   const currentUser = useSelector(getCurrentUser)
-  const [inputQuestion, setInputQuestion] = useState<string>('')
 
   const messaje: IMessage[] = [{ entity: 'bot', message: 'Hello there' }]
 

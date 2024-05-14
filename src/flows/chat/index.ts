@@ -159,7 +159,7 @@ class ChatFlow {
       // if (data.response === undefined || data.ok === false) {
       //   return
       // }
-      return data
+      return data.response
     } catch (error) {
       return error
     }
