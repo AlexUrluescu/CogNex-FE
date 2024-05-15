@@ -42,7 +42,6 @@ export const MyAccountView: React.FC<IMyAccountView> = ({ user }) => {
         userEdit.description === user.description &&
         userEdit.age === user.age
       ) {
-        console.log('intra')
         setEditProfile(false)
         return
       }
@@ -55,7 +54,6 @@ export const MyAccountView: React.FC<IMyAccountView> = ({ user }) => {
       })
 
       const data = await res.json()
-      console.log('data', data)
 
       dispatch(updateUserById(data.user))
     } catch (error) {

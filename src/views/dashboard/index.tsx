@@ -35,7 +35,6 @@ export const DashboardView = () => {
     })
     .filter((user) => user.id !== currentUser._id)
 
-  console.log(myPublicChats)
   function calculateTotalUsers(array: IChat[]) {
     let totalUsers = 0
     array.forEach((obj) => {
@@ -51,10 +50,8 @@ export const DashboardView = () => {
   const totalUsers = calculateTotalUsers(myPublicChats)
 
   const onChange = (value: string) => {
-    console.log('value', value)
     const user = UserFlow.userList[value]
 
-    console.log('user', user)
     setUserSelected(user)
 
     const chats = ChatFlow.getChatsByCreatorId(value)

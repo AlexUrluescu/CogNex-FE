@@ -48,8 +48,6 @@ export const TeleportSettings: React.FC<ITeleportSettings> = ({ teleport }) => {
   }
 
   const handleFinishDetails = async () => {
-    console.log(teleportEdit)
-
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/edit_teleport`, {
         method: 'PUT',
@@ -60,7 +58,6 @@ export const TeleportSettings: React.FC<ITeleportSettings> = ({ teleport }) => {
       })
 
       const data = await res.json()
-      console.log('data', data)
 
       dispatch(updateTeleportById(data.teleport))
     } catch (error) {
@@ -82,9 +79,6 @@ export const TeleportSettings: React.FC<ITeleportSettings> = ({ teleport }) => {
   }
 
   const handleChatDelete = async (chatId: string, teleportId: string) => {
-    console.log(chatId)
-    console.log(teleportId)
-
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/delete-chat-from-teleport`, {
         method: 'DELETE',
@@ -95,7 +89,6 @@ export const TeleportSettings: React.FC<ITeleportSettings> = ({ teleport }) => {
       })
 
       const data = await res.json()
-      console.log(data)
 
       dispatch(updateTeleportById(data.teleport))
     } catch (error) {
@@ -108,8 +101,6 @@ export const TeleportSettings: React.FC<ITeleportSettings> = ({ teleport }) => {
   }
 
   const handleInputsChange = (e: any) => {
-    console.log('name', e.target.name)
-    console.log('value', e.target.value)
     const { name, value } = e.target
 
     setTeleportEdit({ ...teleportEdit, [name]: value })

@@ -1,4 +1,4 @@
-import { IChat, IChat2 } from '@/domain/chat'
+import { Chat, IChat, IChat2 } from '@/domain/chat'
 import { ChatRepository } from '@/repositories/chat'
 import { addNewChat, deleteChat, updateChatById } from '@/state/appData/appDataSlice'
 import { store } from '@/state/store'
@@ -18,15 +18,13 @@ class ChatFlow {
     const newChat = await this.chatRepository.createChat(chat)
     store.dispatch(addNewChat(newChat.chat))
 
-    this.chatList[newChat._id] = newChat
+    this.chatList[newChat.chat._id] = new Chat(newChat.chat)
 
     return newChat
   }
 
   async editChat(chat: IChat2) {
     const newChat = await this.chatRepository.editChat(chat)
-
-    console.log(newChat)
 
     // store.dispatch(addNewChat(newChat.chat))
 
@@ -123,8 +121,6 @@ class ChatFlow {
 
       const data = await res.json()
 
-      console.log(data)
-
       // if (data.documents === null) {
       //   alert(data.message)
       // }
@@ -149,8 +145,6 @@ class ChatFlow {
       })
 
       const data = await res.json()
-
-      console.log(data)
 
       // if (data.documents === null) {
       //   alert(data.message)

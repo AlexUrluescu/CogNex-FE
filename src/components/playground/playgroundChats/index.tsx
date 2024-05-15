@@ -41,15 +41,10 @@ export const PlaygroundChats = () => {
   const [value, setValue] = useState(1)
   const [loading, setLoading] = useState(false)
 
-  console.log('chats', chats)
-
   const subscribedChats = chats.filter(
     (chat) => chat.users.includes(currentUser._id) && chat.vizibility === 'public'
   )
   const myChats = chats.filter((chat) => chat.creator === currentUser._id)
-
-  console.log('subscribedChats', subscribedChats)
-  console.log('myChats', myChats)
 
   const uploadPdf = async () => {
     try {

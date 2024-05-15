@@ -43,8 +43,6 @@ export const ChatDisplay: React.FC<IChatDisplay> = ({ chatColor, chatId, hasRigh
       message: value,
     }
 
-    console.log('userMessage', userMessage)
-
     setUserMessage(userMessage)
   }
 

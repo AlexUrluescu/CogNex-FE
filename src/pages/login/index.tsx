@@ -104,10 +104,6 @@ const Login = () => {
     }
     setUser({ name: data.user.displayName, email: data.user.email, photo: data.user.photoURL })
 
-    // const t = { email: user.email }
-
-    // console.log('t', t)
-
     const loggedUser = await RegisterFlow.loginUser2(t)
 
     if (loggedUser === undefined) {
@@ -146,8 +142,6 @@ const Login = () => {
         return acc
       }, {} as Record<any, IUser>)
 
-      console.log('se fac allusers')
-
       store.dispatch(setAllUsers(data.users))
 
       const user = users[0]
@@ -169,8 +163,6 @@ const Login = () => {
         acc[chat._id] = new Chat(chat)
         return acc
       }, {} as Record<any, IChat>)
-
-      console.log('intra2')
 
       store.dispatch(setAllChats(chats))
     } catch (error) {
@@ -202,7 +194,6 @@ const Login = () => {
     const newUser = await RegisterFlow.registerNewUser(contentRegisterForm)
 
     if (newUser !== undefined) {
-      console.log('newUser', newUser.user)
       const test = {
         _id: '662f7709b186052514e6649a',
         name: 'alex',
@@ -214,7 +205,7 @@ const Login = () => {
       const userStringify = JSON.stringify(newUser.user)
       localStorage.setItem('user', userStringify)
       const user = new User({ ...newUser.user })
-      console.log('user', user)
+
       fetchAllUsers()
       fetchAllChats()
       fetchAllTeleports()

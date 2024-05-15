@@ -18,10 +18,6 @@ export const CreateChat = ({
   setFiles,
   files,
 }: any) => {
-  const onChange3 = (value: string) => {
-    console.log(`selected ${value}`)
-  }
-
   const onSearch = (value: string) => {
     console.log('search:', value)
   }

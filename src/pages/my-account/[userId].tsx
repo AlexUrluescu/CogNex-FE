@@ -9,13 +9,7 @@ const MyAccountPage = () => {
   const router = useRouter()
   const { userId } = router.query
 
-  // const currentUser = useSelector(getCurrentUser)
-
-  const allUsers = useSelector(getAllUsers)
-  console.log('allUsers', allUsers)
-
   const user = useSelector(getUserById(userId))
-  console.log('user', user)
 
   if (user === undefined) {
     return null

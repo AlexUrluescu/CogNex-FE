@@ -11,8 +11,6 @@ interface ICustomChat {
 export const CustomChat: React.FC<ICustomChat> = ({ chat }) => {
   const router = useRouter()
 
-  console.log(chat.reviews)
-
   if (chat.reviews === undefined) {
     return
   }
@@ -20,7 +18,6 @@ export const CustomChat: React.FC<ICustomChat> = ({ chat }) => {
   const calculateAverageRate = (reviews: any[]) => {
     const total = reviews.reduce((accumulator, currentValue) => accumulator + currentValue.rate, 0)
     const average = total / reviews.length
-    console.log(average)
 
     if (average) {
       return average

@@ -8,8 +8,6 @@ export const PlaygroundTeleports = () => {
   const currentUser = useSelector(getCurrentUser)
   const myTeleports = useSelector(getTeleportsAsCreator(currentUser._id))
 
-  console.log('myTeleports', myTeleports)
-
   return (
     <Flex>
       {myTeleports.length > 0 ? (

@@ -123,19 +123,13 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
   }
 
   const handleFinishDetails = async () => {
-    console.log(chatEdit)
-
     try {
-      console.log('chatEdit', chatEdit)
-      console.log('chat', chat)
-
       if (
         chatEdit.name === chat.name &&
         chatEdit.category === chat.category &&
         chatEdit.color === chat.color &&
         chatEdit.description === chat.description
       ) {
-        console.log('intra')
         setEditDetails(false)
         return
       }
@@ -148,7 +142,6 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
       })
 
       const data = await res.json()
-      console.log('data', data)
 
       dispatch(updateChatById(data.chat))
     } catch (error) {
@@ -162,8 +155,6 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
     let chatCopy = { ...chat }
     chatCopy.vizibility = chatVizibility === 'public' ? 'private' : 'public'
 
-    console.log(chatCopy)
-
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_ROUTE}/change_vizibility_chat`, {
         method: 'PUT',
@@ -174,7 +165,6 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
       })
 
       const data = await res.json()
-      console.log('data', data)
 
       dispatch(updateChatById(data.chat))
     } catch (error) {
@@ -239,7 +229,6 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
   const btnUploadDisabled = files.length > 0
 
   const handleDeleteChat = async (chatId: string) => {
-    console.log(chatId)
     const chatDeletedId = await ChatFlow.deleteChat(chatId)
 
     if (chatDeletedId) {
@@ -256,8 +245,6 @@ export const ChatSettings: React.FC<IChatSettings> = ({ chat, currentUser }) => 
   }
 
   const handleInputsChange = (e: any) => {
-    console.log('name', e.target.name)
-    console.log('value', e.target.value)
     const { name, value } = e.target
 
     setChatEdit({ ...chatEdit, [name]: value })

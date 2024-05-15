@@ -11,8 +11,6 @@ import Image from 'next/image'
 const Header = () => {
   const currentUser = useSelector(getCurrentUser)
 
-  console.log('currentUser', currentUser)
-
   const allUsers = useSelector(getAllUsers)
 
   const router = useRouter()

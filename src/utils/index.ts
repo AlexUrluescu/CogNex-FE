@@ -96,6 +96,7 @@ export const categoryOptions = [
 export const occupationOptions = [
   { value: 'Software Engineer', label: 'Software Engineer' },
   { value: 'Data Analyst', label: 'Data Analyst' },
+  { value: 'Educational Organization', label: 'Educational Organization' },
   { value: 'Student', label: 'Student' },
   { value: 'Marketing Manager', label: 'Marketing Manager' },
   { value: 'Graphic Designer', label: 'Graphic Designer' },
@@ -387,7 +388,6 @@ export const countryOptions = [
 export const getRateAverage = (reviews: any[]) => {
   const total = reviews.reduce((accumulator, currentValue) => accumulator + currentValue.rate, 0)
   const average = total / reviews.length
-  console.log(average)
 
   if (average) {
     return average
