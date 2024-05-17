@@ -96,6 +96,7 @@ export const categoryOptions = [
 export const occupationOptions = [
   { value: 'Software Engineer', label: 'Software Engineer' },
   { value: 'Data Analyst', label: 'Data Analyst' },
+  { value: 'Company', label: 'Company' },
   { value: 'Educational Organization', label: 'Educational Organization' },
   { value: 'Student', label: 'Student' },
   { value: 'Marketing Manager', label: 'Marketing Manager' },
